@@ -9,12 +9,72 @@ package com.rong360.creditassitant;
 
 public final class R {
     public static final class attr {
+        /** <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+<p>May be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>May be an integer value, such as "<code>100</code>".
+<p>May be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>May be a floating point value, such as "<code>1.2</code>".
+<p>May be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>May be a fractional value, which is a floating point number appended with either % or %p, such as "<code>14.5%</code>".
+The % suffix always means a percentage of the base size; the optional %p suffix provides a size relative to
+some parent container.
+         */
+        public static final int titleBarStyle=0x7f010000;
+    }
+    public static final class color {
+        public static final int bkg_color=0x7f040000;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int bkg_title=0x7f020000;
+        public static final int ic_back=0x7f020001;
+        public static final int ic_customer_normal=0x7f020002;
+        public static final int ic_customer_pressed=0x7f020003;
+        public static final int ic_customers=0x7f020004;
+        public static final int ic_follow=0x7f020005;
+        public static final int ic_follow_normal=0x7f020006;
+        public static final int ic_follow_pressed=0x7f020007;
+        public static final int ic_history=0x7f020008;
+        public static final int ic_history_normal=0x7f020009;
+        public static final int ic_history_pressed=0x7f02000a;
+        public static final int ic_indictator=0x7f02000b;
+        public static final int ic_indictator_normal=0x7f02000c;
+        public static final int ic_indictator_pressed=0x7f02000d;
+        public static final int ic_launcher=0x7f02000e;
+        public static final int ic_setting=0x7f02000f;
+        public static final int ic_setting_normal=0x7f020010;
+        public static final int ic_setting_pressed=0x7f020011;
+        public static final int tab_indicator=0x7f020012;
+        public static final int tab_indicator_normal=0x7f020013;
+        public static final int tab_indicator_pressed=0x7f020014;
+    }
+    public static final class id {
+        public static final int back=0x7f070006;
+        public static final int home=0x7f070002;
+        public static final int iv_indictator=0x7f070004;
+        public static final int new_event=0x7f070001;
+        public static final int realtabcontent=0x7f070000;
+        public static final int tv_title=0x7f070003;
+        public static final int widget_container=0x7f070005;
+    }
+    public static final class layout {
+        public static final int base_tab_host=0x7f030000;
+        public static final int bottom_tab_host=0x7f030001;
+        public static final int fragment_customers=0x7f030002;
+        public static final int fragment_history=0x7f030003;
+        public static final int fragment_setting=0x7f030004;
+        public static final int fragment_task=0x7f030005;
+        public static final int ic_indictator=0x7f030006;
+        public static final int tab_indicator_bottom=0x7f030007;
+        public static final int widget_titlebar=0x7f030008;
+        public static final int widget_titlebar_left=0x7f030009;
     }
     public static final class string {
-        public static final int app_name=0x7f030000;
+        public static final int app_name=0x7f050000;
     }
     public static final class style {
         /** 
@@ -38,10 +98,12 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f040000;
+        public static final int AppBaseTheme=0x7f060000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f040001;
+        public static final int AppTheme=0x7f060001;
+        public static final int Theme=0x7f060003;
+        public static final int TitleBarStyle=0x7f060002;
     }
 }
