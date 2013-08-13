@@ -5,11 +5,28 @@
     android:orientation="vertical" >
     
     
-    <TextView 
+    <LinearLayout
+        android:id="@+id/ll_no_customer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="customers"
-        />
+        >
+		<TextView 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="您未存入客户"
+		    />
+		
+		<Button 
+		    android:id="@+id/btnImport"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="从通讯录导入客户"
+		    android:paddingTop="10dp"
+		    android:paddingBottom="10dp"
+		    android:paddingLeft="30dp"
+		    android:paddingRight="30dp"
+		    />
+    </LinearLayout>
 
 </LinearLayout>

@@ -30,51 +30,67 @@ some parent container.
         public static final int bkg_color=0x7f040000;
     }
     public static final class drawable {
-        public static final int bkg_title=0x7f020000;
-        public static final int ic_back=0x7f020001;
-        public static final int ic_customer_normal=0x7f020002;
-        public static final int ic_customer_pressed=0x7f020003;
-        public static final int ic_customers=0x7f020004;
-        public static final int ic_follow=0x7f020005;
-        public static final int ic_follow_normal=0x7f020006;
-        public static final int ic_follow_pressed=0x7f020007;
-        public static final int ic_history=0x7f020008;
-        public static final int ic_history_normal=0x7f020009;
-        public static final int ic_history_pressed=0x7f02000a;
-        public static final int ic_indictator=0x7f02000b;
-        public static final int ic_indictator_normal=0x7f02000c;
-        public static final int ic_indictator_pressed=0x7f02000d;
-        public static final int ic_launcher=0x7f02000e;
-        public static final int ic_setting=0x7f02000f;
-        public static final int ic_setting_normal=0x7f020010;
-        public static final int ic_setting_pressed=0x7f020011;
-        public static final int tab_indicator=0x7f020012;
-        public static final int tab_indicator_normal=0x7f020013;
-        public static final int tab_indicator_pressed=0x7f020014;
+        public static final int bkg_blue=0x7f020000;
+        public static final int bkg_blue_normal=0x7f020001;
+        public static final int bkg_blue_pressed=0x7f020002;
+        public static final int bkg_green=0x7f020003;
+        public static final int bkg_green_normal=0x7f020004;
+        public static final int bkg_green_pressed=0x7f020005;
+        public static final int bkg_title=0x7f020006;
+        public static final int ic_add=0x7f020007;
+        public static final int ic_add_normal=0x7f020008;
+        public static final int ic_add_pressed=0x7f020009;
+        public static final int ic_back=0x7f02000a;
+        public static final int ic_customer_normal=0x7f02000b;
+        public static final int ic_customer_pressed=0x7f02000c;
+        public static final int ic_customers=0x7f02000d;
+        public static final int ic_follow=0x7f02000e;
+        public static final int ic_follow_normal=0x7f02000f;
+        public static final int ic_follow_pressed=0x7f020010;
+        public static final int ic_group_send=0x7f020011;
+        public static final int ic_group_send_normal=0x7f020012;
+        public static final int ic_group_send_pressed=0x7f020013;
+        public static final int ic_history=0x7f020014;
+        public static final int ic_history_normal=0x7f020015;
+        public static final int ic_history_pressed=0x7f020016;
+        public static final int ic_indictator=0x7f020017;
+        public static final int ic_indictator_normal=0x7f020018;
+        public static final int ic_indictator_pressed=0x7f020019;
+        public static final int ic_launcher=0x7f02001a;
+        public static final int ic_setting=0x7f02001b;
+        public static final int ic_setting_normal=0x7f02001c;
+        public static final int ic_setting_pressed=0x7f02001d;
+        public static final int tab_indicator=0x7f02001e;
+        public static final int tab_indicator_normal=0x7f02001f;
+        public static final int tab_indicator_pressed=0x7f020020;
     }
     public static final class id {
-        public static final int back=0x7f070006;
-        public static final int home=0x7f070002;
-        public static final int iv_indictator=0x7f070004;
-        public static final int new_event=0x7f070001;
-        public static final int realtabcontent=0x7f070000;
-        public static final int tv_title=0x7f070003;
-        public static final int widget_container=0x7f070005;
+        public static final int back=0x7f050009;
+        public static final int btnImport=0x7f050003;
+        public static final int iv_indictator=0x7f050007;
+        public static final int left=0x7f050005;
+        public static final int ll_no_customer=0x7f050002;
+        public static final int newCustomer=0x7f050000;
+        public static final int new_event=0x7f050004;
+        public static final int realtabcontent=0x7f050001;
+        public static final int tv_title=0x7f050006;
+        public static final int widget_container=0x7f050008;
     }
     public static final class layout {
-        public static final int base_tab_host=0x7f030000;
-        public static final int bottom_tab_host=0x7f030001;
-        public static final int fragment_customers=0x7f030002;
-        public static final int fragment_history=0x7f030003;
-        public static final int fragment_setting=0x7f030004;
-        public static final int fragment_task=0x7f030005;
-        public static final int ic_indictator=0x7f030006;
-        public static final int tab_indicator_bottom=0x7f030007;
-        public static final int widget_titlebar=0x7f030008;
-        public static final int widget_titlebar_left=0x7f030009;
+        public static final int activity_add_customer=0x7f030000;
+        public static final int base_tab_host=0x7f030001;
+        public static final int bottom_tab_host=0x7f030002;
+        public static final int fragment_customers=0x7f030003;
+        public static final int fragment_history=0x7f030004;
+        public static final int fragment_setting=0x7f030005;
+        public static final int fragment_task=0x7f030006;
+        public static final int ic_indictator=0x7f030007;
+        public static final int tab_indicator_bottom=0x7f030008;
+        public static final int widget_titlebar=0x7f030009;
+        public static final int widget_titlebar_left=0x7f03000a;
     }
     public static final class string {
-        public static final int app_name=0x7f050000;
+        public static final int app_name=0x7f060000;
     }
     public static final class style {
         /** 
@@ -98,12 +114,12 @@ some parent container.
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
-        public static final int Theme=0x7f060003;
-        public static final int TitleBarStyle=0x7f060002;
+        public static final int AppTheme=0x7f070001;
+        public static final int Theme=0x7f070003;
+        public static final int TitleBarStyle=0x7f070002;
     }
 }

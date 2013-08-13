@@ -134,7 +134,7 @@ public abstract class BaseFragment extends Fragment implements IFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.back || item.getItemId() == R.id.home) {
+		if (item.getItemId() == R.id.back) {
 			mContext.onBackPressed();
 		}
 		return super.onOptionsItemSelected(item);
@@ -142,7 +142,7 @@ public abstract class BaseFragment extends Fragment implements IFragment {
 
 	public TitleBarCenter getSupportActionBarCenter(boolean isShow) {
 		if (mCenter == null) {
-			mCenter = new TitleBarCenter(mContext);
+			mCenter = new TitleBarCenter(mContext, this);
 			if (mContainer != null) {
 				mContainer.addView(mCenter);
 			}
@@ -156,7 +156,7 @@ public abstract class BaseFragment extends Fragment implements IFragment {
 	
 	public TitleBarLeft getSupportActionBarLeft() {
 		if (mLeft == null) {
-			mLeft = new TitleBarLeft(mContext);
+			mLeft = new TitleBarLeft(mContext, this);
 			if (mContainer != null) {
 				mContainer.addView(mLeft);
 			}

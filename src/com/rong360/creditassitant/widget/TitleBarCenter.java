@@ -35,7 +35,7 @@ import com.rong360.creditassitant.widget.FitTextView.ITitle;
 public class TitleBarCenter extends RelativeLayout implements OnClickListener, ITitle {
 	private static final String TAG = TitleBarCenter.class.getSimpleName();
 
-	private View mLeft;
+	private Button mLeft;
 	private TextView mTitle;
 	private View mIndictator;
 	private Fragment mFragment;
@@ -72,7 +72,7 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener, I
 	}
 
 	private void initElements() {
-		mLeft = findViewById(R.id.home);
+		mLeft = (Button) findViewById(R.id.left);
 		mTitle = (TextView) findViewById(R.id.tv_title);
 		mIndictator = findViewById(R.id.iv_indictator);
 		mLeft.setOnClickListener(this);
@@ -85,6 +85,18 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener, I
 		} else {
 			mIndictator.setVisibility(View.GONE);
 		}
+	}
+	
+	public void hideLeft() {
+		mLeft.setVisibility(View.INVISIBLE);
+	}
+	
+	public void showLeft() {
+		mLeft.setVisibility(View.VISIBLE);
+	}
+	
+	public void setLeftText(String handle) {
+//		mLeft.
 	}
 
 	private void initHomeAndBack() {
@@ -110,11 +122,12 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener, I
 			itemView.setId(menuItem.getItemId());
 			itemView.setBackgroundDrawable(menuItem.getIcon());
 			itemView.setOnClickListener(this);
-			itemView.setPadding(margin, 0, margin, 0);
+//			itemView.setPadding(margin, 0, margin, 0);
 			mMenuItemMap.put(itemView, menuItem);
 			addView(itemView);
 			RelativeLayout.LayoutParams param = (LayoutParams) itemView
 					.getLayoutParams();
+			param.rightMargin = margin;
 			param.addRule(RelativeLayout.CENTER_VERTICAL);
 			if (lastId == 0) {
 				param.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);

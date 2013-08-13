@@ -70,7 +70,7 @@ public class TitleBarLeft extends RelativeLayout implements OnClickListener, ITi
 	}
 
 	private void initElements() {
-		mBack = findViewById(R.id.home);
+		mBack = findViewById(R.id.back);
 		mTitle = (TextView) findViewById(R.id.tv_title);
 		mBack.setOnClickListener(this);
 	}
@@ -98,11 +98,12 @@ public class TitleBarLeft extends RelativeLayout implements OnClickListener, ITi
 			itemView.setId(menuItem.getItemId());
 			itemView.setBackgroundDrawable(menuItem.getIcon());
 			itemView.setOnClickListener(this);
-			itemView.setPadding(margin, 0, margin, 0);
+//			itemView.setPadding(margin, 0, margin, 0);
 			mMenuItemMap.put(itemView, menuItem);
 			addView(itemView);
 			RelativeLayout.LayoutParams param = (LayoutParams) itemView
 					.getLayoutParams();
+			param.rightMargin = margin;
 			param.addRule(RelativeLayout.CENTER_VERTICAL);
 			if (lastId == 0) {
 				param.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
