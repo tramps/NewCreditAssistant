@@ -65,29 +65,33 @@ some parent container.
         public static final int tab_indicator_pressed=0x7f020020;
     }
     public static final class id {
-        public static final int back=0x7f050009;
-        public static final int btnImport=0x7f050003;
-        public static final int iv_indictator=0x7f050007;
-        public static final int left=0x7f050005;
-        public static final int ll_no_customer=0x7f050002;
+        public static final int back=0x7f05000b;
+        public static final int btnImport=0x7f050004;
+        public static final int iv_indictator=0x7f050009;
+        public static final int left=0x7f050007;
+        public static final int ll_no_customer=0x7f050003;
+        public static final int lv_index=0x7f050001;
         public static final int newCustomer=0x7f050000;
-        public static final int new_event=0x7f050004;
-        public static final int realtabcontent=0x7f050001;
-        public static final int tv_title=0x7f050006;
-        public static final int widget_container=0x7f050008;
+        public static final int new_event=0x7f050006;
+        public static final int realtabcontent=0x7f050002;
+        public static final int tvName=0x7f050005;
+        public static final int tv_title=0x7f050008;
+        public static final int widget_container=0x7f05000a;
     }
     public static final class layout {
         public static final int activity_add_customer=0x7f030000;
-        public static final int base_tab_host=0x7f030001;
-        public static final int bottom_tab_host=0x7f030002;
-        public static final int fragment_customers=0x7f030003;
-        public static final int fragment_history=0x7f030004;
-        public static final int fragment_setting=0x7f030005;
-        public static final int fragment_task=0x7f030006;
-        public static final int ic_indictator=0x7f030007;
-        public static final int tab_indicator_bottom=0x7f030008;
-        public static final int widget_titlebar=0x7f030009;
-        public static final int widget_titlebar_left=0x7f03000a;
+        public static final int activity_import_contact=0x7f030001;
+        public static final int base_tab_host=0x7f030002;
+        public static final int bottom_tab_host=0x7f030003;
+        public static final int fragment_customers=0x7f030004;
+        public static final int fragment_history=0x7f030005;
+        public static final int fragment_setting=0x7f030006;
+        public static final int fragment_task=0x7f030007;
+        public static final int ic_indictator=0x7f030008;
+        public static final int list_item_contact=0x7f030009;
+        public static final int tab_indicator_bottom=0x7f03000a;
+        public static final int widget_titlebar=0x7f03000b;
+        public static final int widget_titlebar_left=0x7f03000c;
     }
     public static final class string {
         public static final int app_name=0x7f060000;

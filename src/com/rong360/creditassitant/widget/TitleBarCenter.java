@@ -95,8 +95,9 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener, I
 		mLeft.setVisibility(View.VISIBLE);
 	}
 	
-	public void setLeftText(String handle) {
-//		mLeft.
+	public void setLeftButton(String handle, int bkgResId) {
+		mLeft.setText(handle);
+		mLeft.setBackgroundResource(bkgResId);
 	}
 
 	private void initHomeAndBack() {

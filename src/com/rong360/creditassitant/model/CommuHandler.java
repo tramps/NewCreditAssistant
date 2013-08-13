@@ -29,6 +29,12 @@ public class CommuHandler {
 	private static String[] callLogProjection = new String[] {
 			CallLog.Calls.NUMBER, CallLog.Calls.TYPE, CallLog.Calls.DATE,
 			CallLog.Calls.DURATION };
+	
+	private static String[] contactProjection = new String[] {
+		ContactsContract.CommonDataKinds.Phone.NUMBER,
+		ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+		ContactsContract.CommonDataKinds.Phone.LAST_TIME_CONTACTED
+	};
 
 	private static final String MAX_DATE = "max_date";
 
@@ -168,6 +174,29 @@ public class CommuHandler {
 		
 		Log.i(TAG, "contacts: " + phones.toString());
 		return phones;
+	}
+	
+	public static ArrayList<Contact> getAllContacts(Context context) {
+		ArrayList<Contact> contacts = new ArrayList<Contact>();
+		Cursor c = context.getContentResolver().
+				query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
+						contactProjection, null, null, 
+						"sort_key COLLATE LOCALIZED asc");
+		if (c != null) {
+			while (c.moveToNext()) {
+				Contact contact = new Contact();
+				contact.setCreateTime(c.getLong(c.getColumnIndex(contactProjection[2])));
+				contact.setName(c.getString(c.getColumnIndex(contactProjection[1])));
+				contact.setTel(c.getString(c.getColumnIndex(contactProjection[0])));
+				
+				contacts.add(contact);
+			}
+			
+			c.close();
+		}
+		
+		Log.i(TAG, "contacts: " + contacts.size());
+		return contacts;
 	}
 
 }

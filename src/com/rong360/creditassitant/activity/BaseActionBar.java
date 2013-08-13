@@ -15,6 +15,7 @@ import com.rong360.creditassitant.widget.TitleBarLeft;
 
 public abstract class BaseActionBar extends Activity{
 	private static final String TAG = BaseActionBar.class.getSimpleName();
+	private static final String CANCEL_TITLE = "取消";
 	
 	private ITitle mTitleBar;
 	private RelativeLayout mContainer;
@@ -60,6 +61,17 @@ public abstract class BaseActionBar extends Activity{
 			onBackPressed();
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public ITitle getSupportActionBar() {
+		if (mTitleBar == null) {
+			TitleBarCenter center = new TitleBarCenter(this);
+			mContainer.addView(center);
+			mTitleBar = center;
+			center.setLeftButton(CANCEL_TITLE, R.drawable.bkg_blue);
+		}
+		
+		return mTitleBar; 
 	}
 	
 	
