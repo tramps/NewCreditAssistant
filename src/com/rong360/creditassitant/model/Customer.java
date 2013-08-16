@@ -30,19 +30,27 @@ public class Customer implements Serializable {
 	private boolean mIsFavored;
 	
 	private String mLastFollowComment;
+	private long mAlarmTime;
 	
-	private int mProgress;
+	private String mProgress;
 	private int mSource;
 	
 	private int mOrderNo;
 	private boolean mIsImported;  //type 
 	
+	public long getAlarmTime() {
+	    return mAlarmTime;
+	}
 	
-	public int getProgress() {
+	public void setAlarmTime(long alarm) {
+	    mAlarmTime = alarm;
+	}
+	
+	public String getProgress() {
 		return mProgress;
 	}
 	
-	public void setProgress(int progress) {
+	public void setProgress(String progress) {
 		mProgress = progress;
 	}
 	

@@ -2,6 +2,8 @@ package com.rong360.creditassitant.model;
 
 import java.io.Serializable;
 
+import com.rong360.creditassitant.util.SpellConverter;
+
 public class Contact implements Serializable {
 
 	/**
@@ -19,8 +21,16 @@ public class Contact implements Serializable {
 	public void setTel(String mTel) {
 		this.mTel = mTel;
 	}
+	public String getSpell() {
+	    if (mName == null) {
+		return "#";
+	    } else {
+		return SpellConverter.getSpells(mName).getFirstSpell();
+	    }
+	}
+	
 	public String getName() {
-		return mName;
+	    return mName;
 	}
 	public void setName(String mName) {
 		this.mName = mName;

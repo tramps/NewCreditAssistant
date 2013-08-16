@@ -28,6 +28,7 @@ some parent container.
     }
     public static final class color {
         public static final int bkg_color=0x7f040000;
+        public static final int bkg_import=0x7f040001;
     }
     public static final class drawable {
         public static final int bkg_blue=0x7f020000;
@@ -37,46 +38,67 @@ some parent container.
         public static final int bkg_green_normal=0x7f020004;
         public static final int bkg_green_pressed=0x7f020005;
         public static final int bkg_title=0x7f020006;
-        public static final int ic_add=0x7f020007;
-        public static final int ic_add_normal=0x7f020008;
-        public static final int ic_add_pressed=0x7f020009;
-        public static final int ic_back=0x7f02000a;
-        public static final int ic_customer_normal=0x7f02000b;
-        public static final int ic_customer_pressed=0x7f02000c;
-        public static final int ic_customers=0x7f02000d;
-        public static final int ic_follow=0x7f02000e;
-        public static final int ic_follow_normal=0x7f02000f;
-        public static final int ic_follow_pressed=0x7f020010;
-        public static final int ic_group_send=0x7f020011;
-        public static final int ic_group_send_normal=0x7f020012;
-        public static final int ic_group_send_pressed=0x7f020013;
-        public static final int ic_history=0x7f020014;
-        public static final int ic_history_normal=0x7f020015;
-        public static final int ic_history_pressed=0x7f020016;
-        public static final int ic_indictator=0x7f020017;
-        public static final int ic_indictator_normal=0x7f020018;
-        public static final int ic_indictator_pressed=0x7f020019;
-        public static final int ic_launcher=0x7f02001a;
-        public static final int ic_setting=0x7f02001b;
-        public static final int ic_setting_normal=0x7f02001c;
-        public static final int ic_setting_pressed=0x7f02001d;
-        public static final int tab_indicator=0x7f02001e;
-        public static final int tab_indicator_normal=0x7f02001f;
-        public static final int tab_indicator_pressed=0x7f020020;
+        public static final int bkg_white=0x7f020007;
+        public static final int bkg_white_normal=0x7f020008;
+        public static final int bkg_white_pressed=0x7f020009;
+        public static final int ic_add=0x7f02000a;
+        public static final int ic_add_normal=0x7f02000b;
+        public static final int ic_add_pressed=0x7f02000c;
+        public static final int ic_back=0x7f02000d;
+        public static final int ic_checkbox=0x7f02000e;
+        public static final int ic_checkbox_normal=0x7f02000f;
+        public static final int ic_checkbox_pressed=0x7f020010;
+        public static final int ic_customer_normal=0x7f020011;
+        public static final int ic_customer_pressed=0x7f020012;
+        public static final int ic_customers=0x7f020013;
+        public static final int ic_follow=0x7f020014;
+        public static final int ic_follow_normal=0x7f020015;
+        public static final int ic_follow_pressed=0x7f020016;
+        public static final int ic_group_send=0x7f020017;
+        public static final int ic_group_send_normal=0x7f020018;
+        public static final int ic_group_send_pressed=0x7f020019;
+        public static final int ic_history=0x7f02001a;
+        public static final int ic_history_normal=0x7f02001b;
+        public static final int ic_history_pressed=0x7f02001c;
+        public static final int ic_indictator=0x7f02001d;
+        public static final int ic_indictator_normal=0x7f02001e;
+        public static final int ic_indictator_pressed=0x7f02001f;
+        public static final int ic_launcher=0x7f020020;
+        public static final int ic_radio=0x7f020021;
+        public static final int ic_radio_normal=0x7f020022;
+        public static final int ic_radio_pressed=0x7f020023;
+        public static final int ic_setting=0x7f020024;
+        public static final int ic_setting_normal=0x7f020025;
+        public static final int ic_setting_pressed=0x7f020026;
+        public static final int tab_indicator=0x7f020027;
+        public static final int tab_indicator_normal=0x7f020028;
+        public static final int tab_indicator_pressed=0x7f020029;
     }
     public static final class id {
-        public static final int back=0x7f05000b;
-        public static final int btnImport=0x7f050004;
-        public static final int iv_indictator=0x7f050009;
-        public static final int left=0x7f050007;
-        public static final int ll_no_customer=0x7f050003;
-        public static final int lv_index=0x7f050001;
+        public static final int back=0x7f050014;
+        public static final int btnImport=0x7f050009;
+        public static final int btn_import=0x7f050004;
+        public static final int btn_select=0x7f050003;
+        public static final int cb_choose=0x7f05000b;
+        public static final int fl_content=0x7f050001;
+        public static final int ivStar=0x7f05000e;
+        public static final int iv_indictator=0x7f050016;
+        public static final int ll_no_customer=0x7f050008;
+        public static final int lv_customers=0x7f05000a;
+        public static final int lv_index=0x7f050005;
         public static final int newCustomer=0x7f050000;
-        public static final int new_event=0x7f050006;
-        public static final int realtabcontent=0x7f050002;
-        public static final int tvName=0x7f050005;
-        public static final int tv_title=0x7f050008;
-        public static final int widget_container=0x7f05000a;
+        public static final int new_event=0x7f050013;
+        public static final int realtabcontent=0x7f050007;
+        public static final int rl_import=0x7f050002;
+        public static final int tvHead=0x7f050012;
+        public static final int tvLoan=0x7f05000f;
+        public static final int tvName=0x7f05000d;
+        public static final int tvProgress=0x7f050011;
+        public static final int tvSource=0x7f050010;
+        public static final int tv_hint=0x7f050006;
+        public static final int tv_name=0x7f05000c;
+        public static final int tv_title=0x7f050015;
+        public static final int widget_container=0x7f050017;
     }
     public static final class layout {
         public static final int activity_add_customer=0x7f030000;
@@ -89,9 +111,12 @@ some parent container.
         public static final int fragment_task=0x7f030007;
         public static final int ic_indictator=0x7f030008;
         public static final int list_item_contact=0x7f030009;
-        public static final int tab_indicator_bottom=0x7f03000a;
-        public static final int widget_titlebar=0x7f03000b;
-        public static final int widget_titlebar_left=0x7f03000c;
+        public static final int list_item_customer_content=0x7f03000a;
+        public static final int list_item_customer_head=0x7f03000b;
+        public static final int list_item_head=0x7f03000c;
+        public static final int tab_indicator_bottom=0x7f03000d;
+        public static final int widget_titlebar=0x7f03000e;
+        public static final int widget_titlebar_left=0x7f03000f;
     }
     public static final class string {
         public static final int app_name=0x7f060000;

@@ -1,5 +1,6 @@
 package com.rong360.creditassitant.model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,13 +24,19 @@ public class CustomerHandler extends BaseDbHandler {
 
 	private static final String BANK = "bank";
 	private static final String CASH = "cash";
-	private static final String IDENTITY = "id";
+	private static final String IDENTITY = "identity";
 	private static final String HOUSE = "house";
 	private static final String CAR = "car";
 	private static final String CREDIT_RECORD = "credit_record";
 	private static final String LOCATION = "location";
 
 	private static final String TIME = "time";
+	private static final String ALARM_TIME = "alarm_time";
+	
+	private static final String PROGRESS = "progress";
+	private static final String SOURCE = "source";
+	private static final String ORDER_NO = "order_no";
+	
 
 	private static final String IS_FOLLOW = "is_follow";
 	private static final String IS_FAVORED = "is_favored";
@@ -42,8 +49,10 @@ public class CustomerHandler extends BaseDbHandler {
 			+ " LONG, " + NAME + " TEXT, " + TEL + " TEXT, " + LOAN + " LONG, "
 			+ BANK + " LONG, " + CASH + " LONG, " + IDENTITY + " TEXT, "
 			+ HOUSE + " TEXT, " + CAR + " TEXT, " + CREDIT_RECORD + " TEXT, "
-			+ LOCATION + " TEXT, " + IS_FOLLOW + " INTEGER, " + LAST_FOLLOW_COMMENT
-			+ " TEXT, " + IS_FAVORED + " INTEGER, " + HAS_CHECKED + " INTEGER, "
+			+ LOCATION + " TEXT, " + IS_FOLLOW + " INTEGER, " 
+			+ IS_FAVORED + " INTEGER, " + HAS_CHECKED + " INTEGER, "
+			+ PROGRESS + " TEXT, " + SOURCE + " TEXT, " + ORDER_NO + " TEXT, "
+			+ LAST_FOLLOW_COMMENT + " TEXT, " + ALARM_TIME + " LONG, " 
 
 			+ " UNIQUE (" + ID + ")" + "); ";
 
@@ -85,6 +94,11 @@ public class CustomerHandler extends BaseDbHandler {
 		customer.setIsFavored(c.getLong(c.getColumnIndex(IS_FAVORED)) == 1);
 		customer.setHasChecked(c.getInt(c.getColumnIndex(HAS_CHECKED)) == 1);
 		customer.setLastFollowComment(c.getString(c.getColumnIndex(LAST_FOLLOW_COMMENT)));
+		customer.setAlarmTime(c.getLong(c.getColumnIndex(ALARM_TIME)));
+		
+		customer.setProgress(c.getString(c.getColumnIndex(PROGRESS)));
+		customer.setSource(c.getInt(c.getColumnIndex(SOURCE)));
+		customer.setOrderNo(c.getInt(c.getColumnIndex(ORDER_NO)));
 		
 		return customer;
 	}
@@ -136,16 +150,16 @@ public class CustomerHandler extends BaseDbHandler {
 			return 0;
 	}
 
-	public Cursor getAllCustomers() {
+	private Cursor queryAllCustomers() {
 		SQLiteDatabase db = mHelper.getWritableDatabase();
 		String sql = "select * from customer order by time";
 		return db.rawQuery(sql, null);
 	}
 	
 	
-	public List<Customer> getCustomerList() {
-		Cursor c = getAllCustomers();
-		List<Customer> rs = new LinkedList<Customer>();
+	public ArrayList<Customer> getAllCustomers() {
+		Cursor c = queryAllCustomers();
+		ArrayList<Customer> rs = new ArrayList<Customer>();
 
 		Customer customer;
 		while (c.moveToNext()) {
@@ -191,6 +205,10 @@ public class CustomerHandler extends BaseDbHandler {
 		cv.put(IS_FAVORED, customer.isIsFavored());
 		cv.put(HAS_CHECKED, customer.isHasChecked());
 		cv.put(LAST_FOLLOW_COMMENT, customer.getLastFollowComment());
+		cv.put(ALARM_TIME, customer.getAlarmTime());
+		cv.put(PROGRESS, customer.getProgress());
+		cv.put(SOURCE, customer.getSource());
+		cv.put(ORDER_NO, customer.getOrderNo());
 
 		try {
 			SQLiteDatabase db = mHelper.getWritableDatabase();
@@ -220,11 +238,19 @@ public class CustomerHandler extends BaseDbHandler {
 		cv.put(CAR, customer.getCar());
 		cv.put(CREDIT_RECORD, customer.getCreditRecord());
 		cv.put(LOCATION, customer.getLocation());
-		cv.put(TIME, System.currentTimeMillis());
+		if (customer.getTime() == 0) {
+		    cv.put(TIME, System.currentTimeMillis());
+		} else {
+		    cv.put(TIME, customer.getTime());
+		}
 		cv.put(IS_FOLLOW, customer.isIsFollow());
 		cv.put(IS_FAVORED, customer.isIsFavored());
 		cv.put(HAS_CHECKED, customer.isHasChecked());
 		cv.put(LAST_FOLLOW_COMMENT, customer.getLastFollowComment());
+		cv.put(ALARM_TIME, customer.getAlarmTime());
+		cv.put(PROGRESS, customer.getProgress());
+		cv.put(SOURCE, customer.getSource());
+		cv.put(ORDER_NO, customer.getOrderNo());
 
 		try {
 			SQLiteDatabase db = mHelper.getWritableDatabase();

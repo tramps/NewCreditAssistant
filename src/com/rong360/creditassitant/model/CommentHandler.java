@@ -19,14 +19,12 @@ public class CommentHandler extends BaseDbHandler {
 	private static final String ID = "_id";
 	private static final String CUSTOMER_ID = "customer_id";
 	private static final String COMMENT = "comment";
-	private static final String ALARM_TIME = "alarm_time";
 	private static final String REVISE_TIME = "revise_time";
 
 	private static final String TABLE_NAME = "comment";
 	private static final String CREATE_SQL = "CREATE TABLE " + TABLE_NAME
 			+ " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + CUSTOMER_ID
-			+ " INTEGER, " + COMMENT + " TEXT, " + ALARM_TIME + " TEXT, "
-			+ REVISE_TIME + " LONG, "
+			+ " INTEGER, " + COMMENT + " TEXT, " + REVISE_TIME + " LONG, "
 
 			+ " UNIQUE (" + ID + ")" + "); ";
 	
@@ -57,7 +55,6 @@ public class CommentHandler extends BaseDbHandler {
 		Comment comment = new Comment();
 		comment.setId(c.getInt(c.getColumnIndex(ID)));
 		comment.setCustomerId(c.getInt(c.getColumnIndex(CUSTOMER_ID)));
-		comment.setAlarmTime(c.getLong(c.getColumnIndex(ALARM_TIME)));
 		comment.setReviseTime(c.getLong(c.getColumnIndex(REVISE_TIME)));
 		comment.setComment(c.getString(c.getColumnIndex(COMMENT)));
 
@@ -116,7 +113,6 @@ public class CommentHandler extends BaseDbHandler {
 		ContentValues cv = new ContentValues();
 		cv.put(CUSTOMER_ID, comment.getCustomerId());
 		cv.put(COMMENT, comment.getComment());
-		cv.put(ALARM_TIME, comment.getAlarmTime());
 		cv.put(REVISE_TIME, System.currentTimeMillis());
 
 		try {
@@ -135,7 +131,6 @@ public class CommentHandler extends BaseDbHandler {
 		cv.put(ID, comment.getId());
 		cv.put(CUSTOMER_ID, comment.getCustomerId());
 		cv.put(COMMENT, comment.getComment());
-		cv.put(ALARM_TIME, comment.getAlarmTime());
 		cv.put(REVISE_TIME, System.currentTimeMillis());
 
 		try {

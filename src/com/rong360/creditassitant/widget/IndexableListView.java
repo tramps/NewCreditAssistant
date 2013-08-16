@@ -35,13 +35,11 @@ public class IndexableListView extends ListView {
 	public void setFastScrollEnabled(boolean enabled) {
 		mIsFastScrollEnabled = enabled;
 		if (mIsFastScrollEnabled) {
-			if (mScroller == null)
-				mScroller = new IndexScroller(getContext(), this);
-		} else {
-			if (mScroller != null) {
-				mScroller.hide();
-				mScroller = null;
+			if (mScroller == null) {
+			    mScroller = new IndexScroller(getContext(), this);
 			}
+			mScroller.show();
+			
 		}
 	}
 
@@ -60,20 +58,20 @@ public class IndexableListView extends ListView {
 		if (mScroller != null && mScroller.onTouchEvent(ev))
 			return true;
 		
-		if (mGestureDetector == null) {
-			mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
-
-				@Override
-				public boolean onFling(MotionEvent e1, MotionEvent e2,
-						float velocityX, float velocityY) {
-					// If fling happens, index bar shows
-					mScroller.show();
-					return super.onFling(e1, e2, velocityX, velocityY);
-				}
-				
-			});
-		}
-		mGestureDetector.onTouchEvent(ev);
+//		if (mGestureDetector == null) {
+//			mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+//
+//				@Override
+//				public boolean onFling(MotionEvent e1, MotionEvent e2,
+//						float velocityX, float velocityY) {
+//					// If fling happens, index bar shows
+//					mScroller.show();
+//					return super.onFling(e1, e2, velocityX, velocityY);
+//				}
+//				
+//			});
+//		}
+//		mGestureDetector.onTouchEvent(ev);
 		
 		return super.onTouchEvent(ev);
 	}

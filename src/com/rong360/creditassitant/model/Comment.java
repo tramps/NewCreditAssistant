@@ -11,7 +11,6 @@ public class Comment implements Serializable{
 	private int mId;
 	private int mCustomerId;
 	private String mComment;
-	private long mAlarmTime;
 	private long mReviseTime;			//when comment add/revised ;
 	
 	
@@ -32,12 +31,6 @@ public class Comment implements Serializable{
 	}
 	public void setComment(String mComment) {
 		this.mComment = mComment;
-	}
-	public long getAlarmTime() {
-		return mAlarmTime;
-	}
-	public void setAlarmTime(long mAlarmTime) {
-		this.mAlarmTime = mAlarmTime;
 	}
 	public long getReviseTime() {
 		return mReviseTime;

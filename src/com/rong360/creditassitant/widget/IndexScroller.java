@@ -56,24 +56,23 @@ public class IndexScroller {
 	}
 
 	public void draw(Canvas canvas) {
-		Log.i(TAG, "mState" + mState);
-		
-		if (mState == STATE_HIDDEN)
-			return;
+//		Log.i(TAG, "mState" + mState);
 		
 		// mAlphaRate determines the rate of opacity
 		Paint indexbarPaint = new Paint();
-		indexbarPaint.setColor(Color.BLACK);
-		indexbarPaint.setAlpha((int) (64 * mAlphaRate));
+		indexbarPaint.setColor(0x7a7a7a);
+		indexbarPaint.setAlpha((int) (255 * mAlphaRate));
 		indexbarPaint.setAntiAlias(true);
 		canvas.drawRoundRect(mIndexbarRect, 5 * mDensity, 5 * mDensity, indexbarPaint);
 		
 //		Log.i(TAG, "mAlphaRate" + mAlphaRate);
 //		Log.i(TAG, "mIndexbarRect" + mIndexbarRect);
 		
+//		if (mState == STATE_HIDDEN)
+//			return;
 		if (mSections != null && mSections.length > 0) {
 			// Preview is shown when mCurrentSection is set
-			if (mCurrentSection >= 0) {
+			if (mCurrentSection >= 0 && mState != STATE_HIDDEN) {
 				Paint previewPaint = new Paint();
 				previewPaint.setColor(Color.BLACK);
 				previewPaint.setAlpha(96);
@@ -88,15 +87,15 @@ public class IndexScroller {
 				float previewTextWidth = previewTextPaint.measureText(mSections[mCurrentSection]);
 				float previewSize = 2 * mPreviewPadding + previewTextPaint.descent() - previewTextPaint.ascent();
 				RectF previewRect = new RectF((mListViewWidth - previewSize) / 2
-						, (mListViewHeight - previewSize) / 2
+						, (mListViewHeight - previewSize) / 2 
 						, (mListViewWidth - previewSize) / 2 + previewSize
 						, (mListViewHeight - previewSize) / 2 + previewSize);
-				
-				Log.i(TAG, "previewSize" + previewSize);
-				Log.i(TAG, "previewTextWidth" + previewTextWidth);
-				Log.i(TAG, "previewRect" + previewRect);
-				Log.i(TAG, "mListViewHeight" + mListViewHeight);
-				Log.i(TAG, "mListViewWidth" + mListViewWidth);
+//				
+//				Log.i(TAG, "previewSize" + previewSize);
+//				Log.i(TAG, "previewTextWidth" + previewTextWidth);
+//				Log.i(TAG, "previewRect" + previewRect);
+//				Log.i(TAG, "mListViewHeight" + mListViewHeight);
+//				Log.i(TAG, "mListViewWidth" + mListViewWidth);
 				
 				canvas.drawRoundRect(previewRect, 5 * mDensity, 5 * mDensity, previewPaint);
 				canvas.drawText(mSections[mCurrentSection], previewRect.left + (previewSize - previewTextWidth) / 2 - 1
@@ -111,7 +110,7 @@ public class IndexScroller {
 			
 			float sectionHeight = (mIndexbarRect.height() - 2 * mIndexbarMargin) / mSections.length;
 			float paddingTop = (sectionHeight - (indexPaint.descent() - indexPaint.ascent())) / 2;
-			Log.i(TAG, "paddingTop" + paddingTop);
+//			Log.i(TAG, "paddingTop" + paddingTop);
 			for (int i = 0; i < mSections.length; i++) {
 				float paddingLeft = (mIndexbarWidth - indexPaint.measureText(mSections[i])) / 2;
 //				Log.i(TAG, "paddingLeft" + paddingLeft);
@@ -126,13 +125,13 @@ public class IndexScroller {
 		case MotionEvent.ACTION_DOWN:
 			// If down event occurs inside index bar region, start indexing
 			if (mState != STATE_HIDDEN && contains(ev.getX(), ev.getY())) {
-				setState(STATE_SHOWN);
+//				setState(STATE_SHOWN);
 				
 				// It demonstrates that the motion event started from index bar
 				mIsIndexing = true;
 				// Determine which section the point is in, and move the list to that section
 				mCurrentSection = getSectionByPoint(ev.getY());
-				mListView.setSelection(mIndexer.getPositionForSection(mCurrentSection));
+				mListView.setSelectionFromTop(mIndexer.getPositionForSection(mCurrentSection), 20);
 				return true;
 			}
 			break;
@@ -142,7 +141,7 @@ public class IndexScroller {
 				if (contains(ev.getX(), ev.getY())) {
 					// Determine which section the point is in, and move the list to that section
 					mCurrentSection = getSectionByPoint(ev.getY());
-					mListView.setSelection(mIndexer.getPositionForSection(mCurrentSection));
+					mListView.setSelectionFromTop(mIndexer.getPositionForSection(mCurrentSection), 20);
 				}
 				return true;
 			}
@@ -153,7 +152,7 @@ public class IndexScroller {
 				mCurrentSection = -1;
 			}
 			if (mState == STATE_SHOWN)
-				setState(STATE_HIDING);
+//				setState(STATE_HIDING);
 			break;
 		}
 		return false;
@@ -169,17 +168,17 @@ public class IndexScroller {
 	}
 	
 	public void show() {
-		Log.i(TAG, "mstate:" + mState);
+//		Log.i(TAG, "mstate:" + mState);
 		if (mState == STATE_HIDDEN)
 			setState(STATE_SHOWING);
-		else if (mState == STATE_HIDING)
-			setState(STATE_HIDING);
+//		else if (mState == STATE_HIDING)
+//			setState(STATE_HIDING);
 	}
 	
-	public void hide() {
-		if (mState == STATE_SHOWN)
-			setState(STATE_HIDING);
-	}
+//	public void hide() {
+//		if (mState == STATE_SHOWN)
+//			setState(STATE_HIDING);
+//	}
 	
 	public void setAdapter(Adapter adapter) {
 		if (adapter instanceof SectionIndexer) {
@@ -255,7 +254,7 @@ public class IndexScroller {
 				break;
 			case STATE_SHOWN:
 				// If no action, hide automatically
-				setState(STATE_HIDING);
+//				setState(STATE_HIDING);
 				break;
 			case STATE_HIDING:
 				// Fade out effect

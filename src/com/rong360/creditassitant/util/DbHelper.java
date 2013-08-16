@@ -10,6 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.rong360.creditassitant.model.CommentHandler;
+import com.rong360.creditassitant.model.CustomerHandler;
+
 public class DbHelper extends SQLiteOpenHelper {
 	private static final String TAG = DbHelper.class.getSimpleName();
 	private static final int mVersion = 1;
@@ -17,8 +20,8 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static List<TableInfo> mInfos = new ArrayList<TableInfo>();
 	
 	static {
-//		mInfos.add(CustomerHandler.TABLE_INFO);
-//		mInfos.add(CommentHandler.TABLE_INFO);
+		mInfos.add(CustomerHandler.TABLE_INFO);
+		mInfos.add(CommentHandler.TABLE_INFO);
 //		mInfos.add(NoticeIgnoreHandler.TABLE_INFO);
 	}
 

@@ -72,7 +72,7 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener, I
 	}
 
 	private void initElements() {
-		mLeft = (Button) findViewById(R.id.left);
+		mLeft = (Button) findViewById(R.id.back);
 		mTitle = (TextView) findViewById(R.id.tv_title);
 		mIndictator = findViewById(R.id.iv_indictator);
 		mLeft.setOnClickListener(this);
