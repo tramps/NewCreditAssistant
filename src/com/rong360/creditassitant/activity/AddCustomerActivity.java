@@ -14,9 +14,9 @@ public class AddCustomerActivity extends BaseActionBar {
 		super.onCreate(savedInstanceState);
 		mId = getIntent().getIntExtra(CUSTOMER_ID, -1);
 		if (mId == -1) {
-			getSupportActionBar(true).setTitle("添加客户");
+			getSupportActionBar().setTitle("添加客户");
 		} else {
-			getSupportActionBar(true).setTitle("编辑客户");
+			getSupportActionBar().setTitle("编辑客户");
 		}
 		
 	}

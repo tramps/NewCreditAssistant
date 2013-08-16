@@ -2,10 +2,12 @@ package com.rong360.creditassitant.activity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,10 +25,15 @@ import android.widget.TextView;
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.GlobalValue;
+import com.rong360.creditassitant.widget.ActionItem;
+import com.rong360.creditassitant.widget.QuickAction;
+import com.rong360.creditassitant.widget.QuickAction.OnActionItemClickListener;
 import com.rong360.creditassitant.widget.TitleBarCenter;
 
 public class CustomerManagementFragment extends BaseFragment implements
 	OnClickListener {
+    private static final String TAG = "CustomerManagementFragment";
+    
     private static final int TYPE_HEAD = 0;
     private static final int TYPE_CUSTOMER = 1;
     
@@ -36,13 +43,25 @@ public class CustomerManagementFragment extends BaseFragment implements
     private ArrayList<Customer> mCustomers;
     private ArrayList<Section> mSections;
     private CustomerAdapter mAdapter;
+    private QuickAction mAction;
+    
+    private TitleBarCenter mTitleCenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	TitleBarCenter center = getSupportActionBarCenter(Boolean.TRUE);
-	center.showLeft();
-	center.setTitle("客户管理");
+	mTitleCenter = getSupportActionBarCenter(Boolean.TRUE);
+	mTitleCenter.showLeft();
+	mTitleCenter.setTitle("客户管理");
+	
+	initQuickAction();
+	mTitleCenter.setTitleListener(new OnClickListener() {
+	    
+	    @Override
+	    public void onClick(View v) {
+		mAction.showView(v);
+	    }
+	});
 	setReuseOldViewEnable(true);
 	setHasOptionsMenu(false);
 	
@@ -54,6 +73,28 @@ public class CustomerManagementFragment extends BaseFragment implements
 	mAdapter = new CustomerAdapter(mContext, mSections);
     }
     
+
+    private void initQuickAction() {
+	mAction = new QuickAction(mContext);
+	mAction.addActionItem(new ActionItem(ActionItem.ACTION_ALL, ActionItem.TITLE_ALL));
+	mAction.addActionItem(new ActionItem(ActionItem.ACTION_STAR, ActionItem.TITLE_STAR));
+	mAction.addActionItem(new ActionItem());
+	mAction.addActionItem(new ActionItem(ActionItem.ACTION_POTENTIAL, ActionItem.TITLE_POTENTIAL));
+	mAction.addActionItem(new ActionItem(ActionItem.ACTION_CONSISTENT, ActionItem.TITLE_CONSISTENT));
+	mAction.addActionItem(new ActionItem(ActionItem.ACTION_UPGRADE, ActionItem.TITLE_UPGRADE));
+	mAction.addActionItem(new ActionItem(ActionItem.ACTION_SUCCEED, ActionItem.TITLE_SUCCEED));
+	mAction.addActionItem(new ActionItem(ActionItem.ACTION_FAIL, ActionItem.TITLE_FAIL));
+	mAction.addActionItem(new ActionItem(ActionItem.ACTION_UNCONSISTENT, ActionItem.TITLE_UNCONSISTENT));
+	
+	mAction.setOnActionItemClickListener(new OnActionItemClickListener() {
+	    
+	    @Override
+	    public void onItemClick(QuickAction source, int pos, int actionId) {
+		Log.i(TAG, "action id:" + actionId); 
+	    }
+	});
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -105,7 +146,9 @@ public class CustomerManagementFragment extends BaseFragment implements
 	if (customers.size() == 0) {
 	    return;
 	}
-	Calendar lastCalc = Calendar.getInstance();
+	
+	Log.i(TAG, "customer size: " + mCustomers.size());
+	Calendar lastCalc = Calendar.getInstance(Locale.CHINA);
 	Customer lastCustomer = customers.get(0);
 	lastCalc.setTimeInMillis(lastCustomer.getTime());
 	mSections.add(new Section(TYPE_HEAD, lastCalc.get(Calendar.MONTH) + "month "));
@@ -121,6 +164,8 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    
 	    mSections.add(new Section(TYPE_CUSTOMER, c));
 	}
+	
+	Log.i(TAG, "sections size: " + mSections.size());
     }
 
 

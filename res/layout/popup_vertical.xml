@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="10dp"
+    android:layout_width="wrap_content"
+    android:background="@drawable/bkg_popup"
+    android:layout_height="250dp" >
+    <ScrollView 
+		android:id="@+id/scroller"
+    	android:layout_width="wrap_content"
+    	android:layout_height="250dp"
+    	android:layout_gravity="center"
+    	android:fadingEdgeLength="5dip">
+        
+    	<LinearLayout
+	    	android:id="@+id/tracks"
+	    	android:orientation="vertical"
+	    	android:layout_gravity="center"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"/>
+	</ScrollView >
+	
+    <RelativeLayout 
+        android:id="@+id/rlShift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bkg_bottom">
+        <TextView 
+            android:id="@+id/tvShitf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="高级筛选"
+            />
+        <ImageView 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/ic_shift"
+			android:layout_toLeftOf="@id/tvShitf"
+			android:layout_marginRight="5dp"
+			android:layout_alignBottom="@id/tvShitf"            
+            />
+    </RelativeLayout>
+
+</FrameLayout>
