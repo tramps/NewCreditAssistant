@@ -2,4 +2,6 @@
 <resources>
     <color name="bkg_color">#f2f2f2</color>
     <color name="bkg_import">#202729</color>
+    <color name="customer_label">#999999</color>
+    <color name="customer_content">#333333</color>
 </resources>

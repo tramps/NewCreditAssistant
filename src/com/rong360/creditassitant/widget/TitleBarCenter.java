@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
@@ -106,6 +107,7 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener,
 
     public void setLeftButton(String handle, int bkgResId) {
 	mLeft.setText(handle);
+	mLeft.setTextColor(Color.WHITE);
 	mLeft.setBackgroundResource(bkgResId);
     }
 
@@ -130,7 +132,13 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener,
 	    MenuItem menuItem = mMenuImpl.getItem(i);
 	    Button itemView = new Button(context);
 	    itemView.setId(menuItem.getItemId());
-	    itemView.setBackgroundDrawable(menuItem.getIcon());
+	    if (menuItem.getIcon() != null) {
+		itemView.setBackgroundDrawable(menuItem.getIcon());
+	    } else {
+		itemView.setText(menuItem.getTitle());	
+		itemView.setTextColor(Color.WHITE);
+		itemView.setBackgroundResource(R.drawable.bkg_green);
+	    }
 	    itemView.setOnClickListener(this);
 	    // itemView.setPadding(margin, 0, margin, 0);
 	    mMenuItemMap.put(itemView, menuItem);

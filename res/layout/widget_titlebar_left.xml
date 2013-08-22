@@ -3,25 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <LinearLayout 
+    <RelativeLayout 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:orientation="horizontal">
-        
           <ImageView 
 	        android:id="@+id/back"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:gravity="center"
+	        android:layout_centerVertical="true"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:clickable="true"
+	        android:focusable="true"
 	        android:background="@drawable/ic_back"
 	        />
 
-	    <com.rong360.creditassitant.widget.FitTextView
+	    <TextView
 	        android:id="@+id/tv_title"
-	        android:layout_width="match_parent"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_centerInParent="true"
+	        android:layout_toRightOf="@id/back"
+	        android:layout_alignBottom="@id/back"
+	        android:layout_marginTop="-2dp"
 	        android:gravity="center"
+	        android:layout_centerVertical="true"
 	        android:lines="1"
 	        android:shadowColor="@android:color/black"
 	        android:shadowDx="1"
@@ -30,7 +39,7 @@
 	        android:textAppearance="?android:textAppearanceMedium"
 	        android:textColor="@android:color/white" />
 	    
-    </LinearLayout>
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/widget_container"

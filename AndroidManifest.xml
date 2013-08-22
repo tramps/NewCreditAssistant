@@ -52,6 +52,17 @@
             android:screenOrientation="portrait">
         </activity>
         
+         <activity
+            android:name=".activity.ChooseOptionActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        
+         <activity
+            android:name=".activity.CustomerDetailActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait">
+        </activity>
+        
     </application>
 
 </manifest>

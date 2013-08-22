@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -147,38 +146,38 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	    container = mInflater.inflate(R.layout.action_item_divider, null);
 	} else {
 	    String title = action.getTitle();
-		container = mInflater.inflate(R.layout.action_item_vertical, null);
-		TextView text = (TextView) container.findViewById(R.id.tv_title);
+	    container = mInflater.inflate(R.layout.action_item_vertical, null);
+	    TextView text = (TextView) container.findViewById(R.id.tv_title);
 
-		if (title != null) {
-		    text.setText(title);
-		} else {
-		    text.setVisibility(View.GONE);
-		}
+	    if (title != null) {
+		text.setText(title);
+	    } else {
+		text.setVisibility(View.GONE);
+	    }
 
-		final int pos = mChildPos;
-		final int actionId = action.getActionId();
+	    final int pos = mChildPos;
+	    final int actionId = action.getActionId();
 
-		container.setOnClickListener(new OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-			if (mItemClickListener != null) {
-			    mItemClickListener.onItemClick(QuickAction.this, pos,
-				    actionId);
-			}
-
-			if (!getActionItem(pos).isSticky()) {
-			    mDidAction = true;
-
-			    dismiss();
-			}
+	    container.setOnClickListener(new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+		    if (mItemClickListener != null) {
+			mItemClickListener.onItemClick(QuickAction.this, pos,
+				actionId);
 		    }
-		});
 
-		container.setFocusable(true);
-		container.setClickable(true);
+		    if (!getActionItem(pos).isSticky()) {
+			mDidAction = true;
+
+			dismiss();
+		    }
+		}
+	    });
+
+	    container.setFocusable(true);
+	    container.setClickable(true);
 	}
-	
+
 	mTrack.addView(container, mInsertPos);
 	mChildPos++;
 	mInsertPos++;
@@ -226,11 +225,11 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	    arrowPos = anchorRect.centerX() - xPos;
 
 	} else {
-	    if (anchor.getWidth() > rootWidth) {
-		xPos = anchorRect.centerX() - (rootWidth / 2);
-	    } else {
-		xPos = anchorRect.left;
-	    }
+	    // if (anchor.getWidth() > rootWidth) {
+	     xPos = anchorRect.centerX() - (rootWidth / 2);
+	    // } else {
+//	    xPos = anchorRect.left;
+	    // }
 
 	    arrowPos = anchorRect.centerX() - xPos;
 	}

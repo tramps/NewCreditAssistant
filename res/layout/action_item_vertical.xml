@@ -3,19 +3,22 @@
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:layout_margin="5dp" 
-	android:padding="10dp"
+	android:paddingLeft="1dp"
+	android:layout_gravity="center"
+	android:paddingRight="1dp"
 	android:clickable="true"
 	android:focusable="true">
         	
 	<TextView 
 		android:id="@+id/tv_title"
-		android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent" 
+		android:layout_marginTop="8dp"
+		android:layout_width="150dp" 
+		android:layout_height="fill_parent"
+		android:paddingTop="8dp"
+		android:paddingBottom="8dp" 
 		android:gravity="center"
 		android:text="Chart"
+		android:background="@drawable/bkg_pressed"
 		android:textColor="#fff"/>
 									         
 </LinearLayout>         

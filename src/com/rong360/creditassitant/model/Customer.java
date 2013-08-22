@@ -19,11 +19,11 @@ public class Customer implements Serializable {
 	//optional
 	private long mCash;
 	private long mBank;
-	private int mIdentity;
-	private int mHouse;
-	private int mCar;
-	private int mCreditRecord;
-	private int mLocation;
+	private long mIdentity;
+	private long mHouse;
+	private long mCar;
+	private long mCreditRecord;
+	private long mLocation;
 	
 	private boolean mIsFollow;
 	private boolean mHasChecked; 
@@ -33,9 +33,9 @@ public class Customer implements Serializable {
 	private long mAlarmTime;
 	
 	private String mProgress;
-	private int mSource;
+	private String mSource;
 	
-	private int mOrderNo;
+	private long mOrderNo;
 	private boolean mIsImported;  //type 
 	
 	public long getAlarmTime() {
@@ -54,19 +54,19 @@ public class Customer implements Serializable {
 		mProgress = progress;
 	}
 	
-	public int getSource() {
+	public String getSource() {
 		return mSource;
 	}
 	
-	public void setSource(int source) {
+	public void setSource(String source) {
 		mSource = source;
 	}
 	
-	public int getOrderNo() {
+	public long getOrderNo() {
 		return mOrderNo;
 	}
 	
-	public void setOrderNo(int orderNo) {
+	public void setOrderNo(long orderNo) {
 		mOrderNo = orderNo;
 	}
 	
@@ -120,34 +120,34 @@ public class Customer implements Serializable {
 	public void setBank(long mBank) {
 		this.mBank = mBank;
 	}
-	public int getIdentity() {
+	public long getIdentity() {
 		return mIdentity;
 	}
-	public void setIdentity(int mIdentity) {
+	public void setIdentity(long mIdentity) {
 		this.mIdentity = mIdentity;
 	}
-	public int getHouse() {
+	public long getHouse() {
 		return mHouse;
 	}
-	public void setHouse(int mHouse) {
+	public void setHouse(long mHouse) {
 		this.mHouse = mHouse;
 	}
-	public int getCar() {
+	public long getCar() {
 		return mCar;
 	}
-	public void setCar(int mCar) {
+	public void setCar(long mCar) {
 		this.mCar = mCar;
 	}
-	public int getCreditRecord() {
+	public long getCreditRecord() {
 		return mCreditRecord;
 	}
-	public void setCreditRecord(int mCreditRecord) {
+	public void setCreditRecord(long mCreditRecord) {
 		this.mCreditRecord = mCreditRecord;
 	}
-	public int getLocation() {
+	public long getLocation() {
 		return mLocation;
 	}
-	public void setLocation(int mLocation) {
+	public void setLocation(long mLocation) {
 		this.mLocation = mLocation;
 	}
 	

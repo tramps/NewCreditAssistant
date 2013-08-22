@@ -1,8 +1,597 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.rong360.creditassitant.widget.MySrollview xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/myScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="54dp"
+ 	android:padding="5dp">
+
+<LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="54dp"
+    android:layout_marginBottom="45dp"
+    android:paddingBottom="45dp"
     android:orientation="vertical" >
     
+	<LinearLayout 
+	    android:id="@+id/rlNecessary"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:paddingTop="10dp"
+	    android:paddingBottom="10dp"
+	    android:orientation="vertical"
+	    android:background="@drawable/bkg_round">
+	    
+	    <RelativeLayout 
+	        android:id="@+id/rlName"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        >
+	    <TextView 
+	        android:id="@+id/tvName"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="8dp"
+	        android:text="姓名*"
+	        style="@style/AddCustomerLabel"
+	        />
+	    <EditText 
+	        android:id="@+id/etName"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvName"
+	        android:gravity="right"
+	        style="@style/AddCustomerContent"
+	        android:hint="必填"
+	        />
+	    </RelativeLayout>
+	    
+	    <View 
+	        android:id="@+id/divider_necessary"
+	        android:layout_width="match_parent"
+	        android:layout_height="1dp"
+	        android:background="@drawable/divider_horizontal"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="10dp"
+	        android:layout_below="@id/tvName"
+	        />
+	    
+	     <RelativeLayout 
+	        android:id="@+id/rlTel"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        >
+	     <TextView 
+	         android:id="@+id/tvTel"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_marginLeft="8dp"
+	         style="@style/AddCustomerLabel"
+	         android:text="联系电话*"
+	         />
+	     
+	      <EditText 
+	        android:id="@+id/etTel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvTel"
+	        style="@style/AddCustomerContent"
+	        android:hint="必填"
+	        android:inputType="phone"
+	        android:gravity="right"
+	        />
+	      </RelativeLayout>
+	</LinearLayout>  
+	
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:paddingTop="10dp"
+	    android:paddingBottom="10dp"
+	    android:orientation="vertical"
+	    android:background="@drawable/bkg_round">
+	    
+	    <RelativeLayout 
+	        android:id="@+id/rlLoan"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        >
+	    <TextView 
+	        android:id="@+id/tvLoan"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="8dp"
+	        android:text="贷款金额(万)"
+	        style="@style/AddCustomerLabel"
+	        />
+	    <EditText 
+	        android:id="@+id/etLoan"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvLoan"
+	        android:focusable="true"
+	        android:inputType="numberDecimal"
+	        android:cursorVisible="true"
+	        android:gravity="right"
+	        android:hint=" "
+	        style="@style/AddCustomerContent"
+	        />
+	    </RelativeLayout>
+	    
+	    <View 
+	        android:id="@+id/divider_loan"
+	        android:layout_width="match_parent"
+	        android:layout_height="1dp"
+	        android:background="@drawable/divider_horizontal"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="10dp"
+	        android:layout_below="@id/tvLoan"
+	        />
+	    
+	    <RelativeLayout 
+	          android:id="@+id/rlSource"
+	          android:layout_width="match_parent"
+	          android:layout_height="wrap_content"
+	          >
+	     <TextView 
+	         android:id="@+id/tvSource"
+	         android:layout_marginLeft="8dp"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         style="@style/AddCustomerLabel"
+	         android:text="客户来源"
+	         />
+	     
+	      <TextView 
+	        android:id="@+id/tvCSource"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        style="@style/AddCustomerContent"
+	        android:layout_alignBottom="@id/tvSource"
+	        android:inputType="phone"
+	        android:gravity="right"
+	        />
+	      
+	       <ImageView 
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:src="@drawable/ic_arrow"
+	           android:layout_alignParentRight="true"
+	           android:layout_marginRight="15dp"
+	           android:layout_alignBottom="@id/tvCSource"
+	           />
+	       </RelativeLayout>
+	</LinearLayout>  
+	
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:paddingTop="10dp"
+	    android:paddingBottom="10dp"
+	    android:orientation="vertical"
+	    android:background="@drawable/bkg_round">
+	    
+	    <RelativeLayout 
+	        android:id="@+id/rlProgress"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        >
+	    <TextView 
+	        android:id="@+id/tvProgress"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="8dp"
+	        android:text="客户进度"
+	        style="@style/AddCustomerLabel"
+	        />
+	    <TextView 
+	        android:id="@+id/tvCProgress"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvProgress"
+	        android:gravity="right"
+	        style="@style/AddCustomerContent"
+	        />
+	    
+	    <ImageView 
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:src="@drawable/ic_arrow"
+	           android:layout_alignParentRight="true"
+	           android:layout_marginRight="15dp"
+	           android:layout_alignBottom="@id/tvProgress"
+	           />
+	    </RelativeLayout>
+	    
+	    <View 
+	        android:id="@+id/divider_loan"
+	        android:layout_width="match_parent"
+	        android:layout_height="1dp"
+	        android:background="@drawable/divider_horizontal"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="10dp"
+	        />
+	    
+	     <RelativeLayout 
+	        android:id="@+id/rlAlarm"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        >
+	     <TextView 
+	         android:id="@+id/tvAlarm"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         style="@style/AddCustomerLabel"
+	         android:layout_marginLeft="8dp"
+	         android:text="更新提醒"
+	         />
+	     
+	      <TextView
+	        android:id="@+id/tvCAlarm"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvAlarm"
+	        style="@style/AddCustomerContent"
+	        android:inputType="phone"
+	        android:gravity="right"
+	        />
+	      
+	       <ImageView 
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:src="@drawable/ic_delete_grey"
+	           android:layout_alignParentRight="true"
+	           android:layout_marginRight="15dp"
+	           android:layout_alignBottom="@id/tvAlarm"
+	           />
+	       </RelativeLayout>
+	</LinearLayout>
+	
+	<RelativeLayout 
+	    android:id="@+id/rlComment"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:background="@drawable/bkg_single_round">
+	    
+	    <TextView 
+	        android:id="@+id/tvComment"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="8dp"
+	        android:layout_centerVertical="true"
+	        android:text="客户备注"
+	        style="@style/AddCustomerLabel"
+	        />
+	    <EditText 
+	        android:id="@+id/etComment"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_toRightOf="@id/tvComment"
+	        android:layout_marginRight="50dp"
+	        android:layout_marginLeft="15dp"
+	        android:layout_marginTop="5dp"
+	        android:layout_marginBottom="5dp"
+	        android:background="@android:color/white"
+	        android:gravity="right"
+	        android:hint=" "
+	        style="@style/AddCustomerContent"
+	        />
+	</RelativeLayout>
+	
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:paddingTop="10dp"
+	    android:paddingBottom="10dp"
+	    android:layout_marginBottom="15dp"
+	    android:orientation="vertical"
+	    android:background="@drawable/bkg_round">
+	    
+	    <RelativeLayout 
+	        android:id="@+id/rlBank"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        >
+	    <TextView 
+	        android:id="@+id/tvBank"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="8dp"
+	        android:text="银行流水(元)"
+	        style="@style/AddCustomerLabel"
+	        />
+	    <TextView 
+	        android:id="@+id/tvCBank"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvBank"
+	        android:gravity="right"
+	        style="@style/AddCustomerContent"
+	        />
+	    
+	     <ImageView 
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:src="@drawable/ic_arrow"
+           android:layout_alignParentRight="true"
+           android:layout_marginRight="15dp"
+           android:layout_alignBottom="@id/tvBank"
+           />
+	     </RelativeLayout>
+	    
+	    <View 
+	        android:id="@+id/divider_loan_option_bank"
+	        android:layout_width="match_parent"
+	        android:layout_height="1dp"
+	        android:background="@drawable/divider_horizontal"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="10dp"
+	        android:layout_below="@id/tvBank"
+	        />
+	    
+	    <RelativeLayout 
+	        android:id="@+id/rlCash"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        >
+	    
+	     <TextView 
+	         android:id="@+id/tvCash"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_marginLeft="8dp"
+	         style="@style/AddCustomerLabel"
+	         android:text="现金流水(元)"
+	         />
+	     
+	      <TextView
+	        android:id="@+id/tvCCash"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvCash"
+	        style="@style/AddCustomerContent"
+	        android:gravity="right"
+	        />
+	      
+	       <ImageView 
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:src="@drawable/ic_arrow"
+	           android:layout_alignParentRight="true"
+	           android:layout_marginRight="15dp"
+	           android:layout_alignBottom="@id/tvCash"
+	           />
+	       </RelativeLayout>
+	       <View 
+	        android:id="@+id/divider_loan_optional_cash"
+	        android:layout_width="match_parent"
+	        android:layout_height="1dp"
+	        android:background="@drawable/divider_horizontal"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="10dp"
+	        android:layout_below="@id/tvCash"
+	        />
+	    
+	       <RelativeLayout 
+	           android:id="@+id/rlId"
+	           android:layout_width="match_parent"
+	           android:layout_height="wrap_content"
+	           >
+	     <TextView 
+	         android:id="@+id/tvIdentity"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         style="@style/AddCustomerLabel"
+	         android:layout_marginLeft="8dp"
+	         android:text="身份"
+	         />
+	     
+	      <TextView
+	        android:id="@+id/tvCIdentity"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvIdentity"
+	        style="@style/AddCustomerContent"
+	        android:gravity="right"
+	        />
+	      
+	       <ImageView 
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:src="@drawable/ic_arrow"
+	           android:layout_alignParentRight="true"
+	           android:layout_marginRight="15dp"
+	           android:layout_alignBottom="@id/tvIdentity"
+	           />
+	       </RelativeLayout>
+	       
+	       <View 
+	        android:id="@+id/divider_loan_optional_id"
+	        android:layout_width="match_parent"
+	        android:layout_height="1dp"
+	        android:background="@drawable/divider_horizontal"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="10dp"
+	        android:layout_below="@id/tvIdentity"
+	        />
+	    
+	       
+	       <RelativeLayout 
+	           android:id="@+id/rlCreditRecord"
+	           android:layout_width="match_parent"
+	           android:layout_height="wrap_content"
+	           >
+	     <TextView 
+	         android:id="@+id/tvCreditRecord"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_marginLeft="8dp"
+	         style="@style/AddCustomerLabel"
+	         android:text="信用记录"
+	         />
+	     
+	      <TextView
+	        android:id="@+id/tvCCreditRecord"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvCreditRecord"
+	        style="@style/AddCustomerContent"
+	        android:gravity="right"
+	        />
+	      
+	       <ImageView 
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:src="@drawable/ic_arrow"
+	           android:layout_alignParentRight="true"
+	           android:layout_marginRight="15dp"
+	           android:layout_alignBottom="@id/tvCreditRecord"
+	           />
+	       </RelativeLayout>
+	       
+	       <View 
+	        android:id="@+id/divider_loan_optional_cr"
+	        android:layout_width="match_parent"
+	        android:layout_height="1dp"
+	        android:background="@drawable/divider_horizontal"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="10dp"
+	        android:layout_below="@id/tvCreditRecord"
+	        />
+	    
+	       <RelativeLayout 
+	           android:id="@+id/rlHouse"
+	           android:layout_width="match_parent"
+	           android:layout_height="wrap_content"
+	           >
+	     <TextView 
+	         android:id="@+id/tvHouse"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         style="@style/AddCustomerLabel"
+	         android:text="房产"
+	         android:layout_marginLeft="8dp"
+	         />
+	     
+	      <TextView
+	        android:id="@+id/tvCHouse"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvHouse"
+	        style="@style/AddCustomerContent"
+	        android:gravity="right"
+	        />
+	      
+	       <ImageView 
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:src="@drawable/ic_arrow"
+	           android:layout_alignParentRight="true"
+	           android:layout_marginRight="15dp"
+	           android:layout_alignBottom="@id/tvHouse"
+	           />
+	       </RelativeLayout>
+	       
+	       <View 
+	        android:id="@+id/divider_loan_optional_house"
+	        android:layout_width="match_parent"
+	        android:layout_height="1dp"
+	        android:background="@drawable/divider_horizontal"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="10dp"
+	        android:layout_below="@id/tvHouse"
+	        />
+	       
+	       <RelativeLayout 
+	           android:id="@+id/rlCar"
+	           android:layout_width="match_parent"
+	           android:layout_height="wrap_content"
+	           >
+	    
+	     <TextView 
+	         android:id="@+id/tvCar"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         style="@style/AddCustomerLabel"
+	         android:layout_marginLeft="8dp"
+	         android:text="车辆"
+	         />
+	     
+	      <TextView
+	        android:id="@+id/tvCCar"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="50dp"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvCar"
+	        style="@style/AddCustomerContent"
+	        android:gravity="right"
+	        />
+	      
+	       <ImageView 
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:src="@drawable/ic_arrow"
+	           android:layout_alignParentRight="true"
+	           android:layout_marginRight="15dp"
+	           android:layout_alignBottom="@id/tvCar"
+	           />
+	       </RelativeLayout>
+	       
+	</LinearLayout>
+	
+	<Button 
+	    android:id="@+id/btnDelete"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginBottom="45dp"
+	    android:layout_gravity="center_horizontal"
+	    android:text="删除该客户"
+	    android:textColor="@android:color/white"
+	    android:background="@drawable/ic_delete"
+	    />
 
 </LinearLayout>
+
+</com.rong360.creditassitant.widget.MySrollview>

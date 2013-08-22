@@ -50,7 +50,8 @@ public class GlobalValue {
 	return mCommentHandler;
     }
 
-    public void loadAllCustomerFromDb(List<Customer> customers, Context context) {
+    public void
+	    loadAllCustomerFromDb(List<Customer> customers, Context context) {
 	CustomerHandler hander =
 		GlobalValue.getIns().getCustomerHandler(context);
 	List<Customer> cuses = hander.getAllCustomers();
@@ -136,22 +137,19 @@ public class GlobalValue {
 	    mCustomerList = new ArrayList<Customer>();
 	    mFavorList = new ArrayList<Customer>();
 	}
-	
-	final Comparator cmp = Collator.getInstance(Locale.CHINESE);
 
 	if (mCustomers != null && mIsListDirty) {
 	    Log.i(TAG, "new fav");
 	    mCustomerList.clear();
 	    mCustomerList.addAll(mCustomers.values());
 
-	    // Collections.sort(mCustomerList, new Comparator<Customer>() {
-	    //
-	    // @Override
-	    // public int compare(Customer lhs, Customer rhs) {
-	    // return cmp.compare(lhs.getName(), rhs.getName());
-	    //
-	    // }
-	    // });
+	    Collections.sort(mCustomerList, new Comparator<Customer>() {
+
+		@Override
+		public int compare(Customer lhs, Customer rhs) {
+		    return rhs.getTime() >= lhs.getTime() ? 1 : -1;
+		}
+	    });
 	}
 
 	Log.i(TAG, "getAll : size " + mCustomerList.size());

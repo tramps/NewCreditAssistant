@@ -1,5 +1,57 @@
 <resources>
 
     <string name="app_name">CreditAssistant</string>
-
+    <string-array name="progress">
+        <item>不符客户</item>
+        <item>潜在客户</item>
+        <item>意向客户</item>
+        <item>进件客户</item>
+        <item>成功客户</item>
+        <item>失败客户</item>
+    </string-array>
+    
+    <string-array name="bankCash">
+        <item>未知</item>
+        <item>1500以下</item>
+        <item>1500~2000</item>
+        <item>2000~2500</item>
+        <item>2500~3000</item>
+        <item>3000~3500</item>
+        <item>3500~4000</item>
+        <item>4000~4500</item>
+        <item>4500~5000</item>
+        <item>5000~6000</item>
+        <item>6000~7000</item>
+        <item>7000~8000</item>
+        <item>8000~9000</item>
+        <item>9000~10000</item>
+        <item>10000以上</item>
+    </string-array>
+    
+    <string-array name="identity">
+        <item>未知</item>
+        <item>在职员工</item>
+        <item>个体工商户/企业主</item>
+        <item>无固定职业</item>
+    </string-array>
+    
+	<string-array name="credit">
+        <item>未知</item>
+        <item>无信用记录</item>
+        <item>有信用记录</item>
+        <item>信用记录差</item>
+    </string-array>
+    
+	<string-array name="house">
+        <item>未知</item>
+        <item>名下有房</item>
+        <item>名下无房</item>
+    </string-array>
+    
+	<string-array name="car">
+        <item>未知</item>
+        <item>名下有车</item>
+        <item>名下无车</item>
+    </string-array>
+    
 </resources>

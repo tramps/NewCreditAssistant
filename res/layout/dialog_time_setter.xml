@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.rong360.creditassitant"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <com.rong360.creditassitant.widget.wheel.WheelVerticalView
+        android:id="@+id/wvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+        app:selectionDividerActiveAlpha="100"
+        app:selectionDividerDimmedAlpha="255"
+        app:selectionDividerHeight="1px"
+        app:visibleItems="10" >
+    </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
+    
+    <com.rong360.creditassitant.widget.wheel.WheelVerticalView
+        android:id="@+id/wvHour"
+        android:layout_toRightOf="@id/wvDate"
+        android:layout_marginLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+        app:selectionDividerActiveAlpha="100"
+        app:selectionDividerDimmedAlpha="255"
+        app:selectionDividerHeight="1px"
+        app:visibleItems="10" >
+    </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
+    
+    <com.rong360.creditassitant.widget.wheel.WheelVerticalView
+        android:id="@+id/wvMin"
+        android:layout_toRightOf="@id/wvHour"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+        app:selectionDividerActiveAlpha="100"
+        app:selectionDividerDimmedAlpha="255"
+        app:selectionDividerHeight="1px"
+        app:visibleItems="10" >
+    </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/wvDate"
+        android:orientation="horizontal"
+        >
+    <Button 
+        android:id="@+id/btnCancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="取消"
+        android:padding="10dp"
+        />
+    
+     <Button 
+        android:id="@+id/btnOk"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="确定"
+        android:padding="10dp"
+        />
+    
+    </LinearLayout>
+
+</RelativeLayout>
