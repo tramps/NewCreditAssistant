@@ -1,8 +1,6 @@
 package com.rong360.creditassitant.model;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -22,23 +20,22 @@ public class CustomerHandler extends BaseDbHandler {
     private static final String TEL = "tel";
     private static final String LOAN = "loan";
 
-    private static final String BANK = "bank";
-    private static final String CASH = "cash";
-    private static final String IDENTITY = "identity";
-    private static final String HOUSE = "house";
-    private static final String CAR = "car";
-    private static final String CREDIT_RECORD = "credit_record";
-    private static final String LOCATION = "location";
+    public static final String BANK = "bank";
+    public static final String CASH = "cash";
+    public static final String IDENTITY = "identity";
+    public static final String HOUSE = "house";
+    public static final String CAR = "car";
+    public static final String CREDIT_RECORD = "credit_record";
 
-    private static final String TIME = "time";
-    private static final String ALARM_TIME = "alarm_time";
+    public static final String TIME = "time";
+    public static final String ALARM_TIME = "alarm_time";
 
-    private static final String PROGRESS = "progress";
-    private static final String SOURCE = "source";
+    public static final String PROGRESS = "progress";
+    public static final String SOURCE = "source";
     private static final String ORDER_NO = "order_no";
 
     private static final String IS_FOLLOW = "is_follow";
-    private static final String IS_FAVORED = "is_favored";
+    public static final String IS_FAVORED = "is_favored";
     private static final String LAST_FOLLOW_COMMENT = "last_follow_comment";
     private static final String HAS_CHECKED = "has_checked";
 
@@ -48,7 +45,7 @@ public class CustomerHandler extends BaseDbHandler {
 	    + " LONG, " + NAME + " TEXT, " + TEL + " TEXT, " + LOAN + " LONG, "
 	    + BANK + " LONG, " + CASH + " LONG, " + IDENTITY + " LONG, "
 	    + HOUSE + " LONG, " + CAR + " LONG, " + CREDIT_RECORD + " LONG, "
-	    + LOCATION + " LONG, " + IS_FOLLOW + " INTEGER, " + IS_FAVORED
+	    + IS_FOLLOW + " INTEGER, " + IS_FAVORED
 	    + " INTEGER, " + HAS_CHECKED + " INTEGER, " + PROGRESS + " TEXT, "
 	    + SOURCE + " TEXT, " + ORDER_NO + " TEXT, " + LAST_FOLLOW_COMMENT
 	    + " TEXT, " + ALARM_TIME + " LONG, "
@@ -81,13 +78,12 @@ public class CustomerHandler extends BaseDbHandler {
 	customer.setName(c.getString(c.getColumnIndex(NAME)));
 	customer.setTel(c.getString(c.getColumnIndex(TEL)));
 	customer.setLoan(c.getLong(c.getColumnIndex(LOAN)));
-	customer.setBank(c.getLong(c.getColumnIndex(BANK)));
-	customer.setCash(c.getLong(c.getColumnIndex(CASH)));
-	customer.setIdentity(c.getLong(c.getColumnIndex(IDENTITY)));
-	customer.setHouse(c.getLong(c.getColumnIndex(HOUSE)));
-	customer.setCar(c.getLong(c.getColumnIndex(CAR)));
-	customer.setCreditRecord(c.getLong(c.getColumnIndex(CREDIT_RECORD)));
-	customer.setLocation(c.getLong(c.getColumnIndex(LOCATION)));
+	customer.setBank(c.getInt(c.getColumnIndex(BANK)));
+	customer.setCash(c.getInt(c.getColumnIndex(CASH)));
+	customer.setIdentity(c.getInt(c.getColumnIndex(IDENTITY)));
+	customer.setHouse(c.getInt(c.getColumnIndex(HOUSE)));
+	customer.setCar(c.getInt(c.getColumnIndex(CAR)));
+	customer.setCreditRecord(c.getInt(c.getColumnIndex(CREDIT_RECORD)));
 	customer.setTime(c.getLong(c.getColumnIndex(TIME)));
 	customer.setIsFollow(c.getInt(c.getColumnIndex(IS_FOLLOW)) == 1);
 	customer.setIsFavored(c.getInt(c.getColumnIndex(IS_FAVORED)) == 1);
@@ -114,6 +110,24 @@ public class CustomerHandler extends BaseDbHandler {
 
 	return null;
     }
+    
+    public ArrayList<Customer> getCustomerByFilter (String filter) {
+	String slq = "select * from " + TABLE_NAME + " where " + filter;
+	SQLiteDatabase db = mHelper.getReadableDatabase();
+	Cursor c = db.rawQuery(slq, null);
+	
+	ArrayList<Customer> cuses = new ArrayList<Customer>();
+	
+	Customer customer;
+	while (c.moveToNext()) {
+	    customer = makeCustomer(c);
+	    if (customer != null) {
+		cuses.add(customer);
+	    }
+	}
+	
+	return cuses;
+    }
 
     public Customer getCustomerByNameAndTel(String name, String tel) {
 	String sql =
@@ -123,7 +137,6 @@ public class CustomerHandler extends BaseDbHandler {
 	Cursor c = db.rawQuery(sql, new String[] { name, tel });
 
 	if (c.moveToNext()) {
-	    ;
 	    return makeCustomer(c);
 	}
 
@@ -153,7 +166,7 @@ public class CustomerHandler extends BaseDbHandler {
 
     private Cursor queryAllCustomers() {
 	SQLiteDatabase db = mHelper.getWritableDatabase();
-	String sql = "select * from customer order by time";
+	String sql = "select * from customer order by time desc";
 	return db.rawQuery(sql, null);
     }
 
@@ -200,7 +213,6 @@ public class CustomerHandler extends BaseDbHandler {
 	cv.put(HOUSE, customer.getHouse());
 	cv.put(CAR, customer.getCar());
 	cv.put(CREDIT_RECORD, customer.getCreditRecord());
-	cv.put(LOCATION, customer.getLocation());
 	cv.put(TIME, System.currentTimeMillis());
 	cv.put(IS_FOLLOW, customer.isIsFollow());
 	cv.put(IS_FAVORED, customer.isIsFavored());
@@ -240,7 +252,6 @@ public class CustomerHandler extends BaseDbHandler {
 	cv.put(HOUSE, customer.getHouse());
 	cv.put(CAR, customer.getCar());
 	cv.put(CREDIT_RECORD, customer.getCreditRecord());
-	cv.put(LOCATION, customer.getLocation());
 	if (customer.getTime() == 0) {
 	    cv.put(TIME, System.currentTimeMillis());
 	} else {
@@ -251,7 +262,11 @@ public class CustomerHandler extends BaseDbHandler {
 	cv.put(HAS_CHECKED, customer.isHasChecked());
 	cv.put(LAST_FOLLOW_COMMENT, customer.getLastFollowComment());
 	cv.put(ALARM_TIME, customer.getAlarmTime());
-	cv.put(PROGRESS, customer.getProgress());
+	if (customer.getProgress() == null) {
+	    cv.put(PROGRESS, "潜在客户");
+	} else {
+	    cv.put(PROGRESS, customer.getProgress());
+	}
 	cv.put(SOURCE, customer.getSource());
 	cv.put(ORDER_NO, customer.getOrderNo());
 

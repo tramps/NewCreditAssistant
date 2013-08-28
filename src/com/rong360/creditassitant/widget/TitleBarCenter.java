@@ -29,7 +29,7 @@ import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.activity.BaseActionBar;
-import com.rong360.creditassitant.activity.SendGroupSmsActivity;
+import com.rong360.creditassitant.activity.ChooseCustomerActivity;
 import com.rong360.creditassitant.util.DisplayUtils;
 import com.rong360.creditassitant.widget.FitTextView.ITitle;
 
@@ -180,7 +180,7 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener,
 	if (v == mLeft
 		&& !BaseActionBar.CANCEL_TITLE.equalsIgnoreCase(mLeft.getText()
 			.toString())) {
-	    Intent intent = new Intent(context, SendGroupSmsActivity.class);
+	    Intent intent = new Intent(context, ChooseCustomerActivity.class);
 	    context.startActivity(intent);
 	    return;
 	}

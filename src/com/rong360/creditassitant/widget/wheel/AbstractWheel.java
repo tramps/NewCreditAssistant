@@ -29,7 +29,7 @@ public abstract class AbstractWheel extends View {
     //----------------------------------
 
     /** Default count of visible items */
-    private static final int DEF_VISIBLE_ITEMS = 4;
+    private static final int DEF_VISIBLE_ITEMS = 10;
     private static final boolean DEF_IS_CYCLIC = false;
 
     //----------------------------------

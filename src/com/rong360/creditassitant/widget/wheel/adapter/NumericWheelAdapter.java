@@ -61,6 +61,10 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
         }
         return null;
     }
+    
+    public int getCurrentItem(int index) {
+	return minValue + index;
+    }
 
     @Override
     public int getItemsCount() {

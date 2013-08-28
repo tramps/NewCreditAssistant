@@ -11,6 +11,7 @@ import static com.rong360.creditassitant.widget.ActionItem.TITLE_UPGRADE;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -19,35 +20,40 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.activity.AdvancedFilterActiviy.QueryIndexer;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
 import com.rong360.creditassitant.model.GlobalValue;
+import com.rong360.creditassitant.util.ModelHeler;
+import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.widget.ActionItem;
 import com.rong360.creditassitant.widget.QuickAction;
 import com.rong360.creditassitant.widget.QuickAction.OnActionItemClickListener;
 import com.rong360.creditassitant.widget.TitleBarCenter;
 
-public class CustomerManagementFragment extends BaseFragment implements
+public class ChooseCustomerActivity extends BaseActionBar implements
 	OnClickListener {
     private static final int FILTER_INDEX = 100;
 
-    private static final String TAG = "CustomerManagementFragment";
+    private static final String TAG = "ChooseCustomerActivity";
+    
+    public static final String EXTRA_NEW = "extra_new";
 
     private static final int TYPE_HEAD = 0;
     private static final int TYPE_CUSTOMER = 1;
@@ -56,7 +62,6 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    TITLE_POTENTIAL, TITLE_CONSISTENT, TITLE_UPGRADE, TITLE_SUCCEED,
 	    TITLE_FAIL, TITLE_UNCONSISTENT };
 
-    private Button btnImport;
     private LinearLayout llNoCustomers;
     private ListView lvCustomers;
     private TextView tvHint;
@@ -76,10 +81,25 @@ public class CustomerManagementFragment extends BaseFragment implements
     private TextView tvHeadHint;
     private LinearLayout llHeader;
 
+    private HashMap<Customer, Boolean> mCheckMap;
+    private Button btnSelect;
+    private Button btnImport;
+    private boolean mIsPorted = false;
+    private final String mChoose = "选择";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+	mCustomers = GlobalValue.getIns().getAllCustomers();
+	if (mCustomers.size() == 0) {
+	    GlobalValue.getIns().loadAllCustomerFromDb(mCustomers, this);
+	}
+	mFilteredCustomers = new ArrayList<Customer>();
+	mSections = new ArrayList<ChooseCustomerActivity.Section>();
+	mAdapter = new CustomerAdapter(this, mSections);
+	mQueryIndex = new ArrayList<String>();
+	mCheckMap = new HashMap<Customer, Boolean>();
 	super.onCreate(savedInstanceState);
-	mTitleCenter = getSupportActionBarCenter(Boolean.TRUE);
+	mTitleCenter = getSupportActionBarCenter(true);
 	mTitleCenter.showLeft();
 
 	mFilterIndex = 0;
@@ -91,17 +111,35 @@ public class CustomerManagementFragment extends BaseFragment implements
 		mAction.showView(v);
 	    }
 	});
-	setReuseOldViewEnable(true);
-	setHasOptionsMenu(false);
 
-	mFilteredCustomers = new ArrayList<Customer>();
-	mSections = new ArrayList<CustomerManagementFragment.Section>();
-	mAdapter = new CustomerAdapter(mContext, mSections);
-	mQueryIndex = new ArrayList<String>();
+	initCheckMap();
+
+    }
+
+    private void initCheckMap() {
+	String mCustomerInfo =
+		getIntent().getStringExtra(SendGroupSmsActivity.EXTRA_CUSTOMER);
+	if (mCustomerInfo == null) {
+	    return;
+	}
+	String[] cuses = mCustomerInfo.split("#");
+	Log.i(TAG, "customer :" + cuses.length);
+	for (String c : cuses) {
+	    String[] singel = c.split(";,;");
+	    for (Customer customer : mCustomers) {
+		if (ModelHeler.isTelEqual(customer.getTel(), singel[1])) {
+		    mCheckMap.put(customer, true);
+		    break;
+		}
+	    }
+	}
+	
+	Log.i(TAG, "customer :" + mCheckMap.size());
+	
     }
 
     private void initQuickAction() {
-	mAction = new QuickAction(mContext);
+	mAction = new QuickAction(this);
 	mAction.addActionItem(new ActionItem(ActionItem.ACTION_ALL,
 		ActionItem.TITLE_ALL));
 	mAction.addActionItem(new ActionItem(ActionItem.ACTION_STAR,
@@ -146,7 +184,7 @@ public class CustomerManagementFragment extends BaseFragment implements
     }
 
     private void setAdvanceFilter() {
-	Intent intent = new Intent(mContext, AdvancedFilterActiviy.class);
+	Intent intent = new Intent(this, AdvancedFilterActiviy.class);
 	startActivityForResult(intent, 10002);
 	mTitleCenter.setTitle("高级筛选");
 	mFilterIndex = FILTER_INDEX;
@@ -169,21 +207,6 @@ public class CustomerManagementFragment extends BaseFragment implements
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	menu.add(0, R.id.newCustomer, 0, "new customer").setIcon(
-		R.drawable.ic_add);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-	if (item.getItemId() == R.id.newCustomer) {
-	    Intent intent = new Intent(mContext, AddCustomerActivity.class);
-	    startActivity(intent);
-	}
-	return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onResume() {
 	super.onResume();
 	if (mFilterIndex == FILTER_INDEX) {
@@ -196,12 +219,10 @@ public class CustomerManagementFragment extends BaseFragment implements
     }
 
     @Override
-    protected void initElement() {
-	btnImport = (Button) findViewById(R.id.btnImport);
-	btnImport.setOnClickListener(this);
+    protected void initElements() {
 	tvHint = (TextView) findViewById(R.id.tvHint);
 	llNoCustomers = (LinearLayout) findViewById(R.id.ll_no_customer);
-	lvCustomers = (ListView) findViewById(R.id.lv_customers);
+	lvCustomers = (ListView) findViewById(R.id.lvCustomer);
 	llHeader = (LinearLayout) findViewById(R.id.llHeader);
 	lvCustomers.setAdapter(mAdapter);
 
@@ -215,6 +236,34 @@ public class CustomerManagementFragment extends BaseFragment implements
 		setAdvanceFilter();
 	    }
 	});
+
+	btnImport = (Button) findViewById(R.id.btn_import);
+	btnSelect = (Button) findViewById(R.id.btn_select);
+	btnImport.setOnClickListener(this);
+	btnSelect.setOnClickListener(this);
+
+	lvCustomers.setOnItemClickListener(new OnItemClickListener() {
+
+	    @Override
+	    public void onItemClick(AdapterView<?> parent, View view,
+		    int position, long id) {
+		CheckBox cbChoose =
+			(CheckBox) view.findViewById(R.id.cb_choose);
+		if (mSections.get(position).type == TYPE_HEAD) {
+		    return;
+		}
+		Customer c = (Customer) view.getTag();
+		if (mCheckMap.containsKey(c)) {
+		    mCheckMap.remove(c);
+		    cbChoose.setChecked(Boolean.FALSE);
+		} else {
+		    mCheckMap.put(c, Boolean.FALSE);
+		    cbChoose.setChecked(Boolean.TRUE);
+		}
+		btnImport.setText(mChoose + "(" + mCheckMap.size() + ")");
+	    }
+
+	});
     }
 
     private void initContent() {
@@ -224,18 +273,16 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    lvCustomers.setVisibility(View.GONE);
 	    if (mFilterIndex == 0) {
 		tvHint.setText("您未存入客户");
-		btnImport.setVisibility(View.VISIBLE);
 	    } else if (mFilterIndex == FILTER_INDEX) {
 		tvHint.setText("没有满足查询条件的客户");
-		btnImport.setVisibility(View.INVISIBLE);
 	    } else {
-		btnImport.setVisibility(View.GONE);
 		if (mFilterIndex != FILTER_INDEX) {
 		    tvHint.setText("尚无" + mFilter[mFilterIndex]);
 		}
 	    }
 
 	} else {
+	    Log.i(TAG, "notified");
 	    llNoCustomers.setVisibility(View.GONE);
 	    lvCustomers.setVisibility(View.VISIBLE);
 	    mAdapter.notifyDataSetChanged();
@@ -388,7 +435,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    Log.i(TAG, "head:" + head.toString());
 	    if (filter.length() > 0) {
 		ArrayList<Customer> quaCustomers =
-			GlobalValue.getIns().getCustomerHandler(mContext)
+			GlobalValue.getIns().getCustomerHandler(this)
 				.getCustomerByFilter(filter.toString());
 		mFilteredCustomers.addAll(quaCustomers);
 	    } else {
@@ -400,11 +447,6 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    }
 
 	    return;
-	}
-	
-	mCustomers = GlobalValue.getIns().getAllCustomers();
-	if (mCustomers.size() == 0) {
-	    GlobalValue.getIns().loadAllCustomerFromDb(mCustomers, mContext);
 	}
 	String filter = mFilter[mFilterIndex];
 	if (filter.equalsIgnoreCase(TITLE_ALL)) {
@@ -456,24 +498,61 @@ public class CustomerManagementFragment extends BaseFragment implements
 
     @Override
     protected int getLayout() {
-	return R.layout.fragment_customers;
+	return R.layout.activity_choose_customer;
     }
 
     @Override
     public void onClick(View v) {
 	if (v == btnImport) {
-	    Intent intent = new Intent(mContext, ImportContactActivity.class);
-	    startActivity(intent);
+	    if (!mIsPorted) {
+		boolean isNew = getIntent().getBooleanExtra(EXTRA_NEW, true);
+		Intent intent;
+		if (isNew) {
+		    intent = new Intent(this, SendGroupSmsActivity.class);
+		} else {
+		    intent = new Intent();
+		}
+		StringBuilder sb = new StringBuilder();
+		for (Customer c : mCheckMap.keySet()) {
+		    sb.append(c.getName());
+		    sb.append(";,;");
+		    sb.append(c.getTel());
+		    sb.append(";#;");
+		}
+		Log.i(TAG, sb.toString());
+		String customer = sb.toString().substring(0, sb.length() - 1);
+		intent.putExtra(SendGroupSmsActivity.EXTRA_CUSTOMER, customer);
+		if (isNew) {
+		    startActivity(intent);
+		} else {
+		    setResult(RESULT_OK, intent);
+		}
+		finish();
+	    } else {
+		MyToast.makeText(this, "您已经导过了，亲", Toast.LENGTH_SHORT).show();
+	    }
+
+	} else if (v == btnSelect) {
+	    if (mCheckMap.size() == mFilteredCustomers.size()) {
+		return;
+	    }
+
+	    for (Customer c : mFilteredCustomers) {
+		mCheckMap.put(c, Boolean.TRUE);
+	    }
+
+	    btnImport.setText(mChoose + "(" + mCheckMap.size() + ")");
+	    mAdapter.notifyDataSetChanged();
 	}
     }
 
     private class CustomerAdapter extends BaseAdapter {
 
-	private Context mContext;
+	private Context mContenx;
 	private ArrayList<Section> mSections;
 
 	public CustomerAdapter(Context context, ArrayList<Section> sections) {
-	    mContext = context;
+	    mContenx = context;
 	    mSections = sections;
 	}
 
@@ -504,7 +583,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 	private View initTitle(int position, View convertView) {
 	    if (convertView == null) {
 		convertView =
-			LayoutInflater.from(mContext).inflate(
+			LayoutInflater.from(mContenx).inflate(
 				R.layout.list_item_customer_head, null);
 	    }
 
@@ -516,24 +595,20 @@ public class CustomerManagementFragment extends BaseFragment implements
 	private View initCustomer(int position, View convertView) {
 	    if (convertView == null) {
 		convertView =
-			LayoutInflater.from(mContext).inflate(
-				R.layout.list_item_customer_content, null);
+			LayoutInflater.from(mContenx).inflate(
+				R.layout.list_item_customer_choose, null);
 	    }
 
 	    final Customer c = getItem(position).customer;
-	    convertView.setOnClickListener(new OnClickListener() {
+	    final CheckBox cbChoose =
+		    (CheckBox) convertView.findViewById(R.id.cb_choose);
+	    if (mCheckMap.containsKey(c)) {
+		cbChoose.setChecked(Boolean.TRUE);
+	    } else {
+		cbChoose.setChecked(Boolean.FALSE);
+	    }
 
-		@Override
-		public void onClick(View v) {
-		    Intent intent =
-			    new Intent(mContext, CustomerDetailActivity.class);
-		    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
-			    c.getId());
-		    Log.i(TAG, c.getId() + c.getName());
-		    startActivity(intent);
-		}
-	    });
-
+	    convertView.setTag(c);
 	    TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
 	    ImageView ivStar =
 		    (ImageView) convertView.findViewById(R.id.ivStar);

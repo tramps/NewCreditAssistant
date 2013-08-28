@@ -90,6 +90,10 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
     public ActionItem getActionItem(int index) {
 	return actionItems.get(index);
     }
+    
+    public View getRootView() {
+	return mRootView;
+    }
 
     /**
      * Set root view.
@@ -181,6 +185,10 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	mTrack.addView(container, mInsertPos);
 	mChildPos++;
 	mInsertPos++;
+    }
+    
+    public void dismiss() {
+	mWindow.dismiss();
     }
 
     /**

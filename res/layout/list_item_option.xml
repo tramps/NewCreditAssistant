@@ -16,6 +16,8 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:button="@drawable/ic_radio"
+        android:clickable="false"
+        android:focusable="false"
         android:duplicateParentState="true"
         />
     

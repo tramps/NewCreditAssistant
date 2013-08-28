@@ -19,6 +19,7 @@ public abstract class BaseActionBar extends Activity {
 
     private ITitle mTitleBar;
     private RelativeLayout mContainer;
+    private TitleBarCenter mCenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +65,30 @@ public abstract class BaseActionBar extends Activity {
 	return super.onOptionsItemSelected(item);
     }
 
-    public ITitle getSupportActionBar() {
-	if (mTitleBar == null) {
-	    TitleBarCenter center = new TitleBarCenter(this);
-	    mContainer.addView(center);
-	    mTitleBar = center;
-	    center.setLeftButton(CANCEL_TITLE, R.drawable.bkg_blue);
+    public TitleBarCenter getSupportActionBar() {
+	if (mCenter == null) {
+	    mCenter = new TitleBarCenter(this);
+	    mContainer.addView(mCenter);
+	    mTitleBar = mCenter;
+	    mCenter.setLeftButton(CANCEL_TITLE, R.drawable.bkg_blue);
+	    mTitleBar = mCenter;
+	}
+	
+	return mCenter;
+    }
+    
+    public TitleBarCenter getSupportActionBarCenter(boolean isShow) {
+	if (mCenter == null) {
+	    mCenter = new TitleBarCenter(this);
+	    if (mContainer != null) {
+		mContainer.addView(mCenter);
+	    }
+	    mTitleBar = mCenter;
 	}
 
-	return mTitleBar;
+	mCenter.setLeftButton(CANCEL_TITLE, R.drawable.bkg_blue);
+	mCenter.displayIndicator(isShow);
+	return mCenter;
     }
 
     public ITitle getSupportActionBar(boolean isCenter) {

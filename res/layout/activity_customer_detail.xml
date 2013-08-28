@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.rong360.creditassitant.widget.MySrollview xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:orientation="vertical" >
@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="74dp">
+        android:layout_marginTop="64dp">
     	<RelativeLayout 
     	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:paddingLeft="10dp">
+    	    android:layout_height="wrap_content">
     	    <TextView
     	        android:id="@+id/tvName"
     	        android:layout_marginRight="15dp"
+    	        style="@style/CustomerDetailName"
     	        android:layout_width="wrap_content"
     	        android:layout_height="wrap_content">
     	    </TextView>
@@ -26,6 +26,7 @@
     	        android:id="@+id/tvTel"
     	        android:layout_width="wrap_content"
     	        android:layout_height="wrap_content"
+    	        style="@style/CustomerDetailName"
     	        android:layout_toRightOf="@id/tvName"
     	        android:layout_alignBottom="@id/tvName"
     	        />	    
@@ -35,6 +36,7 @@
     	        android:layout_width="wrap_content"
     	        android:layout_height="wrap_content"
     	        android:layout_below="@id/tvName"
+    	        style="@style/CustomerDetailLoan"
     	        android:layout_alignLeft="@id/tvName"
     	        android:layout_marginTop="10dp"
     	        android:layout_marginRight="15dp"
@@ -44,6 +46,7 @@
     	        android:id="@+id/tvSource"
     	        android:layout_width="wrap_content"
     	        android:layout_height="wrap_content"
+    	        style="@style/CustomerDetailLoan"
     	        android:layout_toRightOf="@id/tvLoan"
     	        android:layout_alignBottom="@id/tvLoan"
     	        />
@@ -255,19 +258,8 @@
 	         android:text="备注"
 	         />
 	     
-	      <TextView
-	        android:id="@+id/tvCCommment"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="20dp"
-	        android:layout_toRightOf="@id/tvComment"
-	        android:background="@android:color/white"
-	        android:layout_alignBottom="@id/tvComment"
-	        style="@style/AddCustomerContent"
-	        android:gravity="left"
-	        />
-	      
 	       <ImageView 
+	           android:id="@+id/ivArrow"
 	           android:layout_width="wrap_content"
 	           android:layout_height="wrap_content"
 	           android:src="@drawable/ic_arrow"
@@ -275,6 +267,26 @@
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvComment"
 	           />
+	       
+	       <TextView
+	        android:id="@+id/tvCCommment"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginRight="20dp"
+	        android:singleLine="true"
+	        android:ellipsize="marquee"
+	        android:scrollHorizontally="true"
+	        android:marqueeRepeatLimit="3"
+	        android:focusable="true"
+	        android:focusableInTouchMode="true"
+	        android:layout_toRightOf="@id/tvComment"
+	        android:layout_toLeftOf="@id/ivArrow"
+	        android:background="@android:color/white"
+	        android:layout_alignBottom="@id/tvComment"
+	        style="@style/AddCustomerContent"
+	        android:gravity="left"
+	        />
 	       </RelativeLayout>
 	</LinearLayout>
     	
@@ -318,6 +330,8 @@
    	     android:id="@+id/llHistory"
    	     android:layout_width="match_parent"
    	     android:layout_height="wrap_content"
+   	     android:layout_marginBottom="45dp"
+   	     android:paddingBottom="35dp"
    	     android:orientation="vertical"
    	     >
    	 </LinearLayout>

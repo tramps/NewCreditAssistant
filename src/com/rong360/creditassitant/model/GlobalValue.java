@@ -1,12 +1,10 @@
 package com.rong360.creditassitant.model;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
@@ -19,11 +17,20 @@ public class GlobalValue {
     private static CustomerHandler mCustomerHander;
     private static CommentHandler mCommentHandler;
     private static NoticeIgnoreHandler mNoticeIgnoreHandler;
+    private static ActionHandler mActionHandler;
 
     public static GlobalValue getIns() {
 	if (mInstance == null)
 	    mInstance = new GlobalValue();
 	return mInstance;
+    }
+    
+    public ActionHandler getActionHandler(Context context) {
+	if (mActionHandler == null) {
+	    mActionHandler = new ActionHandler(context);
+	}
+	
+	return mActionHandler;
     }
 
     public CustomerHandler getCustomerHandler(Context context) {
@@ -78,6 +85,25 @@ public class GlobalValue {
     private ArrayList<String> mPhones;
     private long mPhoneTime;
     private static final long READ_CONTACT_HOURLY = 60 * 60 * 1000;
+    
+    private ArrayList<HistoryMsg> mHistoryMsgs;
+    private boolean mIsMsgDirty = true;
+    
+    
+    public ArrayList<HistoryMsg> getHistoryMsgs(HistoryMsgHandler handler) {
+	if (mHistoryMsgs == null) {
+	    mHistoryMsgs = new ArrayList<HistoryMsg>();
+	}
+	if (mHistoryMsgs.size() == 0 || mIsMsgDirty) {
+	    mHistoryMsgs.addAll(handler.getAllHistoryMsges());
+	    mIsMsgDirty = false;
+	}
+	return mHistoryMsgs;
+    }
+    
+    public void setMsgDirty() {
+	mIsMsgDirty = true;
+    }
 
     public void clearOnLogOut() {
 	clear();

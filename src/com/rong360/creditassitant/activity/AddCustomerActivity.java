@@ -11,10 +11,14 @@ import static com.rong360.creditassitant.activity.ChooseOptionActivity.TITLE_ID;
 import static com.rong360.creditassitant.activity.ChooseOptionActivity.TITLE_PROGRESS;
 import static com.rong360.creditassitant.activity.ChooseOptionActivity.TITLE_SOURCE;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,11 +33,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.model.Action;
+import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.GlobalValue;
-import com.rong360.creditassitant.model.NoticeIgnore;
-import com.rong360.creditassitant.model.NoticeIgnoreHandler;
 import com.rong360.creditassitant.model.TelHelper;
+import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
 import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
 import com.rong360.creditassitant.util.MyToast;
@@ -86,10 +91,14 @@ public class AddCustomerActivity extends BaseActionBar implements
     private HashMap<View, Integer> mValues;
 
     public static final String EXTRA_CUSTOMER_ID = "extra_customer_id";
-    private static final int MAX_NAME_LENGTH = 6;
+    private static final int MAX_NAME_LENGTH = 10;
     private static final int MAX_TEL_LENGTH = 15;
     private int mCustomerId = -1;
     private Customer mCustomer;
+    
+    private Calendar mAlarm;
+    
+    private ArrayList<Action> mActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,15 +106,16 @@ public class AddCustomerActivity extends BaseActionBar implements
 	mInputMap = new HashMap<RelativeLayout, EditText>();
 	mTitleMap = new HashMap<RelativeLayout, String>();
 	mValues = new HashMap<View, Integer>();
-
-	super.onCreate(savedInstanceState);
 	mCustomerId = getIntent().getIntExtra(EXTRA_CUSTOMER_ID, -1);
+	super.onCreate(savedInstanceState);
 	if (mCustomerId == -1) {
 	    getSupportActionBar().setTitle("添加客户");
 	} else {
 	    getSupportActionBar().setTitle("编辑客户");
 	    mCustomer = GlobalValue.getIns().getCusmer(mCustomerId);
 	}
+	
+	mActions = new ArrayList<Action>();
     }
 
     @Override
@@ -147,8 +157,6 @@ public class AddCustomerActivity extends BaseActionBar implements
 
 	initMap();
 	setListener();
-
-	ShowButton();
     }
 
     private void ShowButton() {
@@ -156,6 +164,63 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    btnDelete.setVisibility(View.GONE);
 	} else {
 	    btnDelete.setVisibility(View.VISIBLE);
+	}
+    }
+
+    @Override
+    protected void onResume() {
+	super.onResume();
+	initContent();
+    }
+
+    private void initContent() {
+	if (mCustomer == null) {
+	    return;
+	}
+	etName.setText(mCustomer.getName());
+	etTel.setText(mCustomer.getTel());
+	if (mCustomer.getLoan() != 0) {
+	    etLoan.setText(mCustomer.getLoan() + "");
+	}
+	if (mCustomer.getAlarmTime() != -1) {
+	    tvAlarm.setText(DateUtil.yyyyMMddHHmm.format(new Date(mCustomer
+		    .getAlarmTime())));
+	}
+	if (mCustomer.getLastFollowComment() != null) {
+	    etComment.setText(mCustomer.getLastFollowComment());
+	}
+	if (mCustomer.getProgress() != null) {
+	    String pro = mCustomer.getProgress();
+	    tvProgress.setText(pro);
+	    String[] p = getResources().getStringArray(R.array.progress);
+	    int i = 0;
+	    for (String pp : p) {
+		if (pp.equalsIgnoreCase(pro)) {
+		    mValues.put(tvProgress, i);
+		}
+		i++;
+	    }
+	}
+	if (mCustomer.getSource() != null) {
+	    // todo;
+	    tvSource.setText(mCustomer.getSource());
+	}
+	setChooseValue(tvBank, mCustomer.getBank(), R.array.bankCash);
+	setChooseValue(tvCash, mCustomer.getCash(), R.array.bankCash);
+	setChooseValue(tvId, mCustomer.getIdentity(), R.array.identity);
+	setChooseValue(tvCreditRecord, mCustomer.getCreditRecord(),
+		R.array.credit);
+	setChooseValue(tvHouse, mCustomer.getHouse(), R.array.house);
+	setChooseValue(tvCar, mCustomer.getCar(), R.array.car);
+
+	ShowButton();
+    }
+
+    private void setChooseValue(TextView v, int selected, int arrayId) {
+	String[] arr = getResources().getStringArray(arrayId);
+	if (selected > 0) {
+	    v.setText(arr[selected]);
+	    mValues.put(v, selected);
 	}
     }
 
@@ -209,7 +274,9 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    }
 
 	    save2Db();
-	    go2Detail();
+	    if (mCustomerId == -1) {
+		go2Detail();
+	    }
 	    finish();
 	    return true;
 
@@ -260,7 +327,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    }
 	}
 
-	if (mCustomerId == 0
+	if (mCustomerId == -1
 		&& GlobalValue
 			.getIns()
 			.getCustomerHandler(this)
@@ -292,15 +359,72 @@ public class AddCustomerActivity extends BaseActionBar implements
 	mCustomer.setLoan(getEditText(etLoan));
 	mCustomer.setSource(tvSource.getText().toString());
 	mCustomer.setProgress(tvProgress.getText().toString());
-	mCustomer.setAlarmTime(getValueFromMap(tvAlarm));
+	if (mAlarm != null) {
+	    mCustomer.setAlarmTime(mAlarm.getTimeInMillis());
+	}
 	// TODO
-	mCustomer.setLastFollowComment(etComment.getText().toString().trim());
-	mCustomer.setBank(getValueFromMap(tvBank));
-	mCustomer.setCash(getValueFromMap(tvCash));
-	mCustomer.setIdentity(getValueFromMap(tvId));
-	mCustomer.setCreditRecord(getValueFromMap(tvCreditRecord));
-	mCustomer.setHouse(getValueFromMap(tvHouse));
-	mCustomer.setCar(getValueFromMap(tvCar));
+	String comment = etComment.getText().toString().trim();
+	if (comment.length() > 0 && !comment.equalsIgnoreCase(mCustomer.getLastFollowComment())) {
+	    mCustomer.setLastFollowComment(comment);
+	    Action action = new Action(mCustomerId, ActionHandler.TYPE_COMMENT);
+	    action.setContent(mCustomer.getLastFollowComment());
+	    mActions.add(action);
+	}
+	
+	Resources res = getResources();
+	int bank = getValueFromMap(tvBank);
+	if (mCustomer.getBank() != bank) {
+	    mCustomer.setBank(bank);
+	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
+	    String[] array = res.getStringArray(R.array.bankCash);
+	    action.setContent(TITLE_BANK + "-" + array[bank]);
+	    mActions.add(action);
+	}
+	
+	int cash = getValueFromMap(tvCash);
+	if (mCustomer.getBank() != cash) {
+	    mCustomer.setCash(cash);
+	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
+	    String[] array = res.getStringArray(R.array.bankCash);
+	    action.setContent(TITLE_CASH + "-" + array[cash]);
+	    mActions.add(action);
+	}
+	
+	int identity = getValueFromMap(tvId);
+	if (mCustomer.getIdentity() != identity) {
+	    mCustomer.setIdentity(identity);
+	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
+	    String[] array = res.getStringArray(R.array.identity);
+	    action.setContent(TITLE_ID + "-" + array[identity]);
+	    mActions.add(action);
+	}
+	
+	int credit = getValueFromMap(tvCreditRecord);
+	if (mCustomer.getCreditRecord() != credit) {
+	    mCustomer.setCreditRecord(credit);
+	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
+	    String[] array = res.getStringArray(R.array.credit);
+	    action.setContent(TITLE_CREDI_RECORD + "-" + array[credit]);
+	    mActions.add(action);
+	}
+	
+	int house = getValueFromMap(tvHouse);
+	if (mCustomer.getHouse() != house) {
+	    mCustomer.setHouse(house);
+	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
+	    String[] array = res.getStringArray(R.array.house);
+	    action.setContent(TITLE_HOUSE + "-" + array[house]);
+	    mActions.add(action);
+	}
+	
+	int car = getValueFromMap(tvCar);
+	if (mCustomer.getCar() != car) {
+	    mCustomer.setCar(car);
+	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
+	    String[] array = res.getStringArray(R.array.car);
+	    action.setContent(TITLE_BANK + "-" + array[car]);
+	    mActions.add(action);
+	}
 
 	boolean isSuccess = false;
 	if (mCustomer.getId() == 0) {
@@ -313,15 +437,19 @@ public class AddCustomerActivity extends BaseActionBar implements
 			    .getCustomerHandler(this)
 			    .getCustomerByNameAndTel(mCustomer.getName(),
 				    mCustomer.getTel());
-
+	    mCustomerId = mCustomer.getId();
+	    
+	    Action a = new Action(mCustomerId, ActionHandler.TYPE_NEW);
+	    GlobalValue.getIns().getActionHandler(this).handleAction(a);
+	    
 	    // remove from blacklist
-//	    NoticeIgnoreHandler handler =
-//		    GlobalValue.getIns().getNoticeHandler(this);
-//	    NoticeIgnore ignore = handler.getIgnoreByTel(mCustomer.getTel());
-//
-//	    if (ignore != null) {
-//		handler.remove(ignore);
-//	    }
+	    // NoticeIgnoreHandler handler =
+	    // GlobalValue.getIns().getNoticeHandler(this);
+	    // NoticeIgnore ignore = handler.getIgnoreByTel(mCustomer.getTel());
+	    //
+	    // if (ignore != null) {
+	    // handler.remove(ignore);
+	    // }
 
 	} else {
 	    isSuccess =
@@ -331,17 +459,22 @@ public class AddCustomerActivity extends BaseActionBar implements
 
 	if (isSuccess) {
 	    GlobalValue.getIns().putCustomer(mCustomer);
+	    ActionHandler handler = GlobalValue.getIns().getActionHandler(this);
+	    for (Action a : mActions) {
+		a.setCustomerId(mCustomerId);
+		handler.handleAction(a);
+	    }
 	}
 
 	return isSuccess;
     }
-    
-    private long getValueFromMap(TextView v) {
+
+    private int getValueFromMap(TextView v) {
 	int selected = -1;
 	if (mValues.containsKey(v)) {
-	    selected = mValues.get(v); 
+	    selected = mValues.get(v);
 	}
-	
+
 	return selected;
     }
 
@@ -393,14 +526,37 @@ public class AddCustomerActivity extends BaseActionBar implements
 		    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 	    mySrollview.closeInput(mySrollview, imm);
 	    DialogUtil.showTimePicker(this, mTimePickListener);
+	} else if (v == btnDelete) {
+	    GlobalValue.getIns().getCustomerHandler(this)
+		    .deleteCustomer(mCustomerId);
+	    GlobalValue.getIns().removeCustomer(mCustomerId);
+	    GlobalValue.getIns().getActionHandler(this)
+		    .deleteAction(mCustomerId);
+	    finish();
 	}
     }
 
     private ITimePicker mTimePickListener = new ITimePicker() {
 
 	@Override
-	public void onTimePicked(String time) {
+	public void onTimePicked(String time, Calendar alarm) {
 	    tvAlarm.setText(time);
+	    mAlarm = alarm;
+	    
+	    Action action =
+			new Action(mCustomer.getId(), ActionHandler.TYPE_SET_ALARM);
+		action.setContent(DateUtil.yyyyMMddHHmm.format(alarm.getTime()));
+	    if (mCustomerId == -1) {
+		mActions.add(action);
+		return;
+	    } else {
+		mCustomer.setAlarmTime(alarm.getTimeInMillis());
+		GlobalValue.getIns().putCustomer(mCustomer);
+		GlobalValue.getIns().getCustomerHandler(getBaseContext())
+			.updateCustomer(mCustomer);
+		GlobalValue.getIns().getActionHandler(AddCustomerActivity.this)
+			.handleAction(action);
+	    }
 	}
 
     };

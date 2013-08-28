@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
-        app:selectionDividerActiveAlpha="100"
-        app:selectionDividerDimmedAlpha="255"
+        app:selectionDividerActiveAlpha="10"
+        app:selectionDividerDimmedAlpha="100"
         app:selectionDividerHeight="1px"
         app:visibleItems="10" >
     </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
@@ -24,8 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
-        app:selectionDividerActiveAlpha="100"
-        app:selectionDividerDimmedAlpha="255"
+        app:selectionDividerActiveAlpha="10"
+        app:selectionDividerDimmedAlpha="100"
         app:selectionDividerHeight="1px"
         app:visibleItems="10" >
     </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
@@ -38,8 +38,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
-        app:selectionDividerActiveAlpha="100"
-        app:selectionDividerDimmedAlpha="255"
+        app:selectionDividerActiveAlpha="10"
+        app:selectionDividerDimmedAlpha="100"
         app:selectionDividerHeight="1px"
         app:visibleItems="10" >
     </com.rong360.creditassitant.widget.wheel.WheelVerticalView>

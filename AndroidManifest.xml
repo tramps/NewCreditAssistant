@@ -59,9 +59,29 @@
         
          <activity
             android:name=".activity.CustomerDetailActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait">
         </activity>
+        
+         <activity
+            android:name=".activity.CommentActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        
+         <activity
+            android:name=".activity.AdvancedFilterActiviy"
+            android:screenOrientation="portrait">
+        </activity>
+        
+          <activity
+            android:name=".activity.ChooseCustomerActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        
+           <activity
+            android:name=".activity.ChooseHistorySmsActivity"
+            android:screenOrientation="portrait">
+        </activity>
+          
         
     </application>
 

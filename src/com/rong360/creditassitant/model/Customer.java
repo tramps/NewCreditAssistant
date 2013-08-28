@@ -17,13 +17,12 @@ public class Customer implements Serializable {
 	private long mTime;		//when customer added/revised;
 	
 	//optional
-	private long mCash;
-	private long mBank;
-	private long mIdentity;
-	private long mHouse;
-	private long mCar;
-	private long mCreditRecord;
-	private long mLocation;
+	private int mCash;
+	private int mBank;
+	private int mIdentity;
+	private int mHouse;
+	private int mCar;
+	private int mCreditRecord;
 	
 	private boolean mIsFollow;
 	private boolean mHasChecked; 
@@ -108,49 +107,42 @@ public class Customer implements Serializable {
 	public void setTime(long mTime) {
 		this.mTime = mTime;
 	}
-	public long getCash() {
+	public int getCash() {
 		return mCash;
 	}
-	public void setCash(long mCash) {
+	public void setCash(int mCash) {
 		this.mCash = mCash;
 	}
-	public long getBank() {
+	public int getBank() {
 		return mBank;
 	}
-	public void setBank(long mBank) {
+	public void setBank(int mBank) {
 		this.mBank = mBank;
 	}
-	public long getIdentity() {
+	public int getIdentity() {
 		return mIdentity;
 	}
-	public void setIdentity(long mIdentity) {
+	public void setIdentity(int mIdentity) {
 		this.mIdentity = mIdentity;
 	}
-	public long getHouse() {
+	public int getHouse() {
 		return mHouse;
 	}
-	public void setHouse(long mHouse) {
+	public void setHouse(int mHouse) {
 		this.mHouse = mHouse;
 	}
-	public long getCar() {
+	public int getCar() {
 		return mCar;
 	}
-	public void setCar(long mCar) {
+	public void setCar(int mCar) {
 		this.mCar = mCar;
 	}
-	public long getCreditRecord() {
+	public int getCreditRecord() {
 		return mCreditRecord;
 	}
-	public void setCreditRecord(long mCreditRecord) {
+	public void setCreditRecord(int mCreditRecord) {
 		this.mCreditRecord = mCreditRecord;
 	}
-	public long getLocation() {
-		return mLocation;
-	}
-	public void setLocation(long mLocation) {
-		this.mLocation = mLocation;
-	}
-	
 	public boolean isIsFollow() {
 		return mIsFollow;
 	}

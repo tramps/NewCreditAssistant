@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <RelativeLayout 
+        android:id="@+id/rlQuery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        >
+        <ImageView 
+            android:id="@+id/ivCarriage"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_shift_blue"
+            />
+        
+        <ImageView 
+            android:id="@+id/ivArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_arrow"
+            android:layout_alignBottom="@id/ivCarriage"
+            />
+        
+        <TextView 
+            android:id="@+id/tvHeadHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/ivCarriage"
+            android:layout_toLeftOf="@id/ivArrow"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="-3dp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="sdfadsfsdf"
+            style="@style/AddCustomerContent"
+            android:layout_alignBottom="@id/ivCarriage"
+            />
+        
+    </RelativeLayout>
+
+</LinearLayout>

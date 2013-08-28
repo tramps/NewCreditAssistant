@@ -32,7 +32,7 @@ public class ModelHeler {
     }
 
     public static boolean isTelEqual(String firTel, String secTel) {
-	Log.i(TAG, firTel + " " + secTel);
+//	Log.i(TAG, firTel + " " + secTel);
 	if (firTel == null || secTel == null) {
 	    return false;
 	}
@@ -40,7 +40,7 @@ public class ModelHeler {
 	byte[] secs = secTel.getBytes();
 
 	if (firs.length < 8 || secs.length < 8) {
-	    Log.i(TAG, "length < 8");
+//	    Log.i(TAG, "length < 8");
 	    return false;
 	}
 

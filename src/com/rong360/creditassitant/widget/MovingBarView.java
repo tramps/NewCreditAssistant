@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -42,6 +41,9 @@ public class MovingBarView extends View {
 
     private int mHlvOffset = 0;
     private int mIndex = 0;
+    private String[] mProgress;
+    private IProgressChanged onProgressChanged;
+    private boolean mIsFirst = true;
 
     public MovingBarView(Context context) {
 	this(context, null);
@@ -81,32 +83,48 @@ public class MovingBarView extends View {
 	// Log.i(TAG, "screen width: " + mScreenWidth);
 	// mBarWidth = mWidth;
 	// mInitialOffset = mRect.centerX();
+	mProgress = context.getResources().getStringArray(R.array.progress);
     }
 
     public void setHorizontalListview(HorizontalListView hlv) {
 	mHlv = hlv;
     }
 
+    public void setOnProgressChangedListener(IProgressChanged iProgress) {
+	onProgressChanged = iProgress;
+    }
+
     public void initRect(int width, int height, int offY) {
 	mSingleViewWidth = width;
 	int w = mSlider.getIntrinsicWidth();
 	int h = mSlider.getIntrinsicHeight();
-	Log.i(TAG, "w" + w + " h" + h);
+	// Log.i(TAG, "w" + w + " h" + h);
 	int margin = height - h;
 	mRect = new Rect(0, margin / 2, w, h);
-	Log.i(TAG, mRect.toString());
+	// Log.i(TAG, mRect.toString());
 	if (mRect.left < 10) {
 	    // mRect = new RectF(0, 0, width, height);
 	    int offset = (int) ((mScreenWidth - mRect.width()) / 2);
 	    mRect.offset(offset, 0);
 	    // mRect.offset(offset, 0);
 	}
-	Log.i(TAG, mRect.toString());
+	// Log.i(TAG, mRect.toString());
 	if (mFixedRect == null) {
 	    mFixedRect = new Rect(mRect);
-	    Log.i(TAG, "init");
+	    // Log.i(TAG, "init");
 	}
 
+	if (mIndex > 0 && mIsFirst) {
+	    // Log.i(TAG, "index:" + mIndex);
+	    mHlvOffset = (mIndex) * mSingleViewWidth;
+	    mHlv.setCurrentX(mHlvOffset);
+	    mIsFirst = false;
+	}
+
+    }
+
+    public void setIndex(int index) {
+	mIndex = index;
     }
 
     @Override
@@ -126,8 +144,8 @@ public class MovingBarView extends View {
 	mSlider.setBounds(mRect);
 	mSlider.draw(canvas);
 	// canvas.drawRect(mRect, mPaint);
-	canvas.drawText("Fuck U", mRect.centerX() - 40, mRect.centerY() + 10,
-		mWhitePain);
+	canvas.drawText(mProgress[mIndex], mRect.centerX() - 55,
+		mRect.centerY() + 10, mWhitePain);
     }
 
     @Override
@@ -178,25 +196,34 @@ public class MovingBarView extends View {
 	case MotionEvent.ACTION_UP:
 	case MotionEvent.ACTION_CANCEL:
 	    // float movingOffset = mLastMotionX;
+	    boolean shallMove = false;
 	    int recWidth = (int) mRect.width() / 3;
 	    if (mLastMotionX > mScreenWidth / 2 + recWidth) {
 		mHlvOffset += mSingleViewWidth;
 		mIndex++;
+		shallMove = true;
+		onProgressChanged();
 	    } else if (mLastMotionX < mScreenWidth / 2 - recWidth) {
 		mHlvOffset -= mSingleViewWidth;
 		mIndex--;
+		shallMove = true;
+		onProgressChanged();
 	    }
 
-	    if (mIndex > 3) {
-		mIndex = 3;
+	    if (mIndex == mProgress.length) {
+		mIndex = mProgress.length - 1;
 		mHlvOffset -= mSingleViewWidth;
+		shallMove = false;
 	    } else if (mIndex < 0) {
 		mHlvOffset += mSingleViewWidth;
 		mIndex = 0;
+		shallMove = false;
 	    }
 
-	    moveBottom(mHlvOffset);
-	    Log.i(TAG, "mhlvoffset:" + mHlvOffset);
+	    if (shallMove) {
+		moveBottom(mHlvOffset);
+		Log.i(TAG, "mhlvoffset:" + mHlvOffset);
+	    }
 
 	    post(new SlideBackAnim());
 	    mIsDraging = false;
@@ -205,18 +232,29 @@ public class MovingBarView extends View {
 	return true;
     }
 
+    private void onProgressChanged() {
+	Log.i(TAG, "index: " + mIndex);
+
+	if (mIndex < mProgress.length && mIndex >= 0) {
+	    if (onProgressChanged != null) {
+		Log.i(TAG, "onprogresschanged");
+		onProgressChanged.onProgressChanged(mIndex);
+	    }
+	}
+    }
+
     private class SlideBackAnim extends Thread {
 	int mOffsetX;
 	int mTime = 200;
 
 	public SlideBackAnim() {
 	    mRect.set(mFixedRect);
-	    Log.i(TAG, "offsetX:" + mOffsetX);
+	    // Log.i(TAG, "offsetX:" + mOffsetX);
 	}
 
 	@Override
 	public void run() {
-	    Log.i(TAG, "slide back anim" + mOffsetX);
+	    // Log.i(TAG, "slide back anim" + mOffsetX);
 	    // mRect.offset(mOffsetX, 0);
 	    invalidate();
 	}
@@ -228,5 +266,9 @@ public class MovingBarView extends View {
 
     private boolean isInRect(int x, int y) {
 	return mRect.contains(x, y);
+    }
+
+    public static interface IProgressChanged {
+	public void onProgressChanged(int index);
     }
 }

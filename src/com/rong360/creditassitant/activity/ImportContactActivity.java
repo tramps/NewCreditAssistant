@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.InputFilter.LengthFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.model.Action;
+import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Contact;
 import com.rong360.creditassitant.model.Customer;
@@ -49,7 +50,7 @@ public class ImportContactActivity extends BaseActionBar implements
     private ArrayList<Contact> mContacts;
     private ContactAdapter maAdapter;
     private ArrayList<Item> mItems;
-    
+
     private ArrayList<Customer> mCustomers;
 
     private boolean mIsPorted = false;
@@ -313,13 +314,13 @@ public class ImportContactActivity extends BaseActionBar implements
 	for (Contact c : mCheckMap.keySet()) {
 	    if (containSameTel(mCustomers, c)) {
 		removedContacts.add(c);
-		Log.i(TAG, "same tel: " + c.getName() + c.getTel());
+//		Log.i(TAG, "same tel: " + c.getName() + c.getTel());
 		continue;
 	    }
 	    Customer customer = new Customer();
-	    Log.i(TAG, "before pure: " + c.getTel());
+//	    Log.i(TAG, "before pure: " + c.getTel());
 	    customer.setTel(TelHelper.getPureTel(c.getTel()));
-	    Log.i(TAG, "after pure: " + customer.getTel());
+//	    Log.i(TAG, "after pure: " + customer.getTel());
 	    if (c.getCreateTime() != 0) {
 		customer.setTime(c.getCreateTime());
 	    } else {
@@ -334,8 +335,10 @@ public class ImportContactActivity extends BaseActionBar implements
 		    Log.e(TAG, "insert error");
 		    continue;
 		}
+		Action a = new Action(customer.getId(), ActionHandler.TYPE_NEW);
+		    GlobalValue.getIns().getActionHandler(this).handleAction(a);
 		customer.setIsImported(true);
-		mCustomers.add(0, customer);
+		mCustomers.add(customer);
 		sucCount++;
 	    }
 	}
@@ -344,12 +347,14 @@ public class ImportContactActivity extends BaseActionBar implements
 	    mIsPorted = true;
 	}
 
-//	Log.i(TAG, "before: " + mContacts.size() + " " + mCheckMap.size() + " " + removedContacts.size());
-//	for (Contact c : removedContacts) {
-//	    mContacts.remove(c);
-//	    mCheckMap.remove(c);
-//	}
-//	Log.i(TAG, "after: " + mContacts.size() + " " + mCheckMap.size() + " " + removedContacts.size());
+	// Log.i(TAG, "before: " + mContacts.size() + " " + mCheckMap.size() +
+	// " " + removedContacts.size());
+	// for (Contact c : removedContacts) {
+	// mContacts.remove(c);
+	// mCheckMap.remove(c);
+	// }
+	// Log.i(TAG, "after: " + mContacts.size() + " " + mCheckMap.size() +
+	// " " + removedContacts.size());
 	// mItems.clear();
 	// transfer2Items(mContacts);
 	// maAdapter.notifyDataSetChanged();

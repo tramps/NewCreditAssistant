@@ -16,6 +16,8 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:button="@drawable/ic_checkbox"
+        android:clickable="false"
+        android:focusable="false"
         android:duplicateParentState="true"
         />
     
