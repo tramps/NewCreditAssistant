@@ -21,4 +21,11 @@
         <item name="android:windowAnimationStyle">@style/PushUpAnimation</item>
     </style>
     
+    <style name="Theme.Translucent">
+        <item name="android:windowBackground">@color/translucent_background</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+    
 </resources>

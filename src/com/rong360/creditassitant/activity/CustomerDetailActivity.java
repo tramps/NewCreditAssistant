@@ -28,9 +28,10 @@ import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerAction;
 import com.rong360.creditassitant.model.CustomerHandler;
-import com.rong360.creditassitant.model.GlobalValue;
+import com.rong360.creditassitant.util.AlarmHelper;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
+import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
 import com.rong360.creditassitant.util.DisplayUtils;
 import com.rong360.creditassitant.widget.HorizontalListView;
@@ -77,6 +78,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 		getIntent().getIntExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
 			-1);
 	mCustomer = GlobalValue.getIns().getCusmer(mCustomerId);
+	Log.i(TAG, "oncreate");
 
 	if (mCustomer == null) {
 	    finish();
@@ -257,7 +259,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
     @Override
     public void onClick(View v) {
 	if (v == rlAlarm) {
-	    DialogUtil.showTimePicker(this, mTimePickListener);
+	    DialogUtil.showTimePicker(this, mTimePicker);
 	} else if (v == rlComment) {
 	    Intent intent = new Intent(this, CommentActivity.class);
 	    intent.putExtra(CommentActivity.EXTRA_ID, mCustomerId);
@@ -280,6 +282,8 @@ public class CustomerDetailActivity extends BaseActionBar implements
 		    && !comment.equalsIgnoreCase(mCustomer
 			    .getLastFollowComment())) {
 		mCustomer.setLastFollowComment(comment);
+		GlobalValue.getIns().getCustomerHandler(this).updateCustomer(mCustomer);
+		GlobalValue.getIns().putCustomer(mCustomer);
 		Action action =
 			new Action(mCustomerId, ActionHandler.TYPE_COMMENT);
 		action.setContent(mCustomer.getLastFollowComment());
@@ -290,12 +294,14 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	}
     }
 
-    private ITimePicker mTimePickListener = new ITimePicker() {
+    private ITimePicker mTimePicker = new ITimePicker() {
 
 	@Override
 	public void onTimePicked(String time, Calendar alarm) {
 	    tvAlarm.setText(time);
 	    mCustomer.setAlarmTime(alarm.getTimeInMillis());
+	    mCustomer.setHasChecked(false);
+	    mCustomer.setIsDisplayed(false);
 	    GlobalValue.getIns().putCustomer(mCustomer);
 	    GlobalValue.getIns().getCustomerHandler(getBaseContext())
 		    .updateCustomer(mCustomer);
@@ -305,6 +311,8 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    action.setContent(DateUtil.yyyyMMddHHmm.format(alarm.getTime()));
 	    GlobalValue.getIns().getActionHandler(CustomerDetailActivity.this)
 		    .handleAction(action);
+	    
+	    AlarmHelper.startAlarm(CustomerDetailActivity.this, true);
 	}
 
     };

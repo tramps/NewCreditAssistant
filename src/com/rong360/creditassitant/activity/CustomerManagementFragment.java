@@ -37,7 +37,7 @@ import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.activity.AdvancedFilterActiviy.QueryIndexer;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
-import com.rong360.creditassitant.model.GlobalValue;
+import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.widget.ActionItem;
 import com.rong360.creditassitant.widget.QuickAction;
 import com.rong360.creditassitant.widget.QuickAction.OnActionItemClickListener;
@@ -551,7 +551,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    if (c.getLoan() > 0) {
 		tvLoan.setText(c.getLoan() + "");
 	    } else {
-		tvLoan.setVisibility(View.INVISIBLE);
+		tvLoan.setText("");
 	    }
 	    tvSource.setText(c.getSource());
 	    tvProgress.setText(c.getProgress());

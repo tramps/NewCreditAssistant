@@ -1,22 +1,72 @@
 package com.rong360.creditassitant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.widget.TitleBarCenter;
 
-public class SettingFragment extends BaseFragment {
+public class SettingFragment extends BaseFragment implements OnClickListener{
+    private Button btnSafe;
+    private Button btnLock;
+    
+    private RelativeLayout rlImportContact;
+    private RelativeLayout rlImportPartner;
+    private RelativeLayout rlExport;
+    private RelativeLayout rlSource;
+    private RelativeLayout rlFeedback;
+    private RelativeLayout rlAbout;
 	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		TitleBarCenter center = getSupportActionBarCenter(Boolean.FALSE);
-		center.hideLeft();
-		center.setTitle("设置");
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        TitleBarCenter center = getSupportActionBarCenter(Boolean.FALSE);
+        center.hideLeft();
+        center.setTitle("设置");
+    }
 	
-	@Override
-	protected int getLayout() {
-		return R.layout.fragment_setting;
+    @Override
+    protected int getLayout() {
+	return R.layout.fragment_setting;
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        initContent();
+    }
+    
+    private void initContent() {
+	
+    }
+
+    @Override
+    protected void initElement() {
+	btnSafe = (Button) findViewById(R.id.btnSafe);
+	btnLock = (Button) findViewById(R.id.btnLock);
+	btnSafe.setOnClickListener(this);
+	btnLock.setOnClickListener(this);
+	rlImportContact = (RelativeLayout) findViewById(R.id.rlImportContact);
+	rlImportPartner = (RelativeLayout) findViewById(R.id.rlImportPartner);
+	rlExport = (RelativeLayout) findViewById(R.id.rlExport);
+	rlSource = (RelativeLayout) findViewById(R.id.rlSource);
+	rlFeedback = (RelativeLayout) findViewById(R.id.rlFeedback);
+	rlAbout = (RelativeLayout) findViewById(R.id.rlAbout);
+    }
+
+    @Override
+    public void onClick(View v) {
+	if (v == btnSafe) {
+	    Intent intent = new Intent(mContext, CustomerSafeActivity.class);
+	    IntentUtil.startActivity(mContext, intent);
+	} else {
+	    Intent intent = new Intent(mContext, CustomerLockActivity.class);
+	    IntentUtil.startActivity(mContext, intent);
 	}
+    }
 }

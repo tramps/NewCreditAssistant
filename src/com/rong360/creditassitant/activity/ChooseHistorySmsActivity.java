@@ -15,9 +15,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
-import com.rong360.creditassitant.model.GlobalValue;
 import com.rong360.creditassitant.model.HistoryMsg;
 import com.rong360.creditassitant.model.HistoryMsgHandler;
+import com.rong360.creditassitant.util.GlobalValue;
 
 public class ChooseHistorySmsActivity extends BaseActionBar {
     public static final String EXTRA_SMS = "extra_sms";

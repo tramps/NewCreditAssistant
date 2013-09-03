@@ -36,10 +36,11 @@ import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.Action;
 import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.Customer;
-import com.rong360.creditassitant.model.GlobalValue;
 import com.rong360.creditassitant.model.TelHelper;
+import com.rong360.creditassitant.util.AlarmHelper;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
+import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
 import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.widget.MySrollview;
@@ -91,13 +92,15 @@ public class AddCustomerActivity extends BaseActionBar implements
     private HashMap<View, Integer> mValues;
 
     public static final String EXTRA_CUSTOMER_ID = "extra_customer_id";
+    public static final String EXTRA_TEL = "extra_tel";
     private static final int MAX_NAME_LENGTH = 10;
     private static final int MAX_TEL_LENGTH = 15;
     private int mCustomerId = -1;
     private Customer mCustomer;
-    
+    private String mTel;
+
     private Calendar mAlarm;
-    
+
     private ArrayList<Action> mActions;
 
     @Override
@@ -110,11 +113,13 @@ public class AddCustomerActivity extends BaseActionBar implements
 	super.onCreate(savedInstanceState);
 	if (mCustomerId == -1) {
 	    getSupportActionBar().setTitle("添加客户");
+	    mTel = getIntent().getStringExtra(EXTRA_TEL);
+	    Log.i(TAG, "mtel : " + mTel);
 	} else {
 	    getSupportActionBar().setTitle("编辑客户");
 	    mCustomer = GlobalValue.getIns().getCusmer(mCustomerId);
 	}
-	
+
 	mActions = new ArrayList<Action>();
     }
 
@@ -157,6 +162,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 
 	initMap();
 	setListener();
+	ShowButton();
     }
 
     private void ShowButton() {
@@ -175,6 +181,9 @@ public class AddCustomerActivity extends BaseActionBar implements
 
     private void initContent() {
 	if (mCustomer == null) {
+	    if (mTel != null) {
+		etTel.setText(mTel);
+	    }
 	    return;
 	}
 	etName.setText(mCustomer.getName());
@@ -212,8 +221,6 @@ public class AddCustomerActivity extends BaseActionBar implements
 		R.array.credit);
 	setChooseValue(tvHouse, mCustomer.getHouse(), R.array.house);
 	setChooseValue(tvCar, mCustomer.getCar(), R.array.car);
-
-	ShowButton();
     }
 
     private void setChooseValue(TextView v, int selected, int arrayId) {
@@ -274,9 +281,13 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    }
 
 	    save2Db();
+//	    AlarmHelper.startAlarm(this, true);
 	    if (mCustomerId == -1) {
 		go2Detail();
 	    }
+	    InputMethodManager imm =
+		    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	    mySrollview.closeInput(mySrollview, imm);
 	    finish();
 	    return true;
 
@@ -364,61 +375,62 @@ public class AddCustomerActivity extends BaseActionBar implements
 	}
 	// TODO
 	String comment = etComment.getText().toString().trim();
-	if (comment.length() > 0 && !comment.equalsIgnoreCase(mCustomer.getLastFollowComment())) {
+	if (comment.length() > 0
+		&& !comment.equalsIgnoreCase(mCustomer.getLastFollowComment())) {
 	    mCustomer.setLastFollowComment(comment);
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_COMMENT);
 	    action.setContent(mCustomer.getLastFollowComment());
 	    mActions.add(action);
 	}
-	
+
 	Resources res = getResources();
 	int bank = getValueFromMap(tvBank);
-	if (mCustomer.getBank() != bank) {
+	if (bank != -1 && mCustomer.getBank() != bank) {
 	    mCustomer.setBank(bank);
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
 	    String[] array = res.getStringArray(R.array.bankCash);
 	    action.setContent(TITLE_BANK + "-" + array[bank]);
 	    mActions.add(action);
 	}
-	
+
 	int cash = getValueFromMap(tvCash);
-	if (mCustomer.getBank() != cash) {
+	if (cash != -1 && mCustomer.getBank() != cash) {
 	    mCustomer.setCash(cash);
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
 	    String[] array = res.getStringArray(R.array.bankCash);
 	    action.setContent(TITLE_CASH + "-" + array[cash]);
 	    mActions.add(action);
 	}
-	
+
 	int identity = getValueFromMap(tvId);
-	if (mCustomer.getIdentity() != identity) {
+	if (identity != -1 && mCustomer.getIdentity() != identity) {
 	    mCustomer.setIdentity(identity);
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
 	    String[] array = res.getStringArray(R.array.identity);
 	    action.setContent(TITLE_ID + "-" + array[identity]);
 	    mActions.add(action);
 	}
-	
+
 	int credit = getValueFromMap(tvCreditRecord);
-	if (mCustomer.getCreditRecord() != credit) {
+	if (credit != -1 && mCustomer.getCreditRecord() != credit) {
 	    mCustomer.setCreditRecord(credit);
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
 	    String[] array = res.getStringArray(R.array.credit);
 	    action.setContent(TITLE_CREDI_RECORD + "-" + array[credit]);
 	    mActions.add(action);
 	}
-	
+
 	int house = getValueFromMap(tvHouse);
-	if (mCustomer.getHouse() != house) {
+	if (house != -1 && mCustomer.getHouse() != house) {
 	    mCustomer.setHouse(house);
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
 	    String[] array = res.getStringArray(R.array.house);
 	    action.setContent(TITLE_HOUSE + "-" + array[house]);
 	    mActions.add(action);
 	}
-	
+
 	int car = getValueFromMap(tvCar);
-	if (mCustomer.getCar() != car) {
+	if (car != -1 && mCustomer.getCar() != car) {
 	    mCustomer.setCar(car);
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
 	    String[] array = res.getStringArray(R.array.car);
@@ -437,11 +449,11 @@ public class AddCustomerActivity extends BaseActionBar implements
 			    .getCustomerHandler(this)
 			    .getCustomerByNameAndTel(mCustomer.getName(),
 				    mCustomer.getTel());
-	    mCustomerId = mCustomer.getId();
-	    
+	    // mCustomerId = mCustomer.getId();
+
 	    Action a = new Action(mCustomerId, ActionHandler.TYPE_NEW);
 	    GlobalValue.getIns().getActionHandler(this).handleAction(a);
-	    
+
 	    // remove from blacklist
 	    // NoticeIgnoreHandler handler =
 	    // GlobalValue.getIns().getNoticeHandler(this);
@@ -461,7 +473,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    GlobalValue.getIns().putCustomer(mCustomer);
 	    ActionHandler handler = GlobalValue.getIns().getActionHandler(this);
 	    for (Action a : mActions) {
-		a.setCustomerId(mCustomerId);
+		a.setCustomerId(mCustomer.getId());
 		handler.handleAction(a);
 	    }
 	}
@@ -542,18 +554,23 @@ public class AddCustomerActivity extends BaseActionBar implements
 	public void onTimePicked(String time, Calendar alarm) {
 	    tvAlarm.setText(time);
 	    mAlarm = alarm;
+
+	    mCustomer.setAlarmTime(alarm.getTimeInMillis());
+	    mCustomer.setHasChecked(false);
+	    mCustomer.setIsDisplayed(false);
+	    GlobalValue.getIns().putCustomer(mCustomer);
+	    GlobalValue.getIns().getCustomerHandler(getBaseContext())
+		    .updateCustomer(mCustomer);
 	    
+	    AlarmHelper.startAlarm(AddCustomerActivity.this, true);
+
 	    Action action =
-			new Action(mCustomer.getId(), ActionHandler.TYPE_SET_ALARM);
-		action.setContent(DateUtil.yyyyMMddHHmm.format(alarm.getTime()));
+		    new Action(mCustomer.getId(), ActionHandler.TYPE_SET_ALARM);
+	    action.setContent(DateUtil.yyyyMMddHHmm.format(alarm.getTime()));
 	    if (mCustomerId == -1) {
 		mActions.add(action);
 		return;
 	    } else {
-		mCustomer.setAlarmTime(alarm.getTimeInMillis());
-		GlobalValue.getIns().putCustomer(mCustomer);
-		GlobalValue.getIns().getCustomerHandler(getBaseContext())
-			.updateCustomer(mCustomer);
 		GlobalValue.getIns().getActionHandler(AddCustomerActivity.this)
 			.handleAction(action);
 	    }

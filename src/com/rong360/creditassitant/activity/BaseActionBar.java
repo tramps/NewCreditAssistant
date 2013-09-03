@@ -1,7 +1,9 @@
 package com.rong360.creditassitant.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.util.PassCheckHelper;
 import com.rong360.creditassitant.widget.FitTextView.ITitle;
 import com.rong360.creditassitant.widget.TitleBarCenter;
 import com.rong360.creditassitant.widget.TitleBarLeft;
@@ -41,12 +44,26 @@ public abstract class BaseActionBar extends Activity {
     protected void onPause() {
 	super.onPause();
 	// MobclickAgent.onPause(this);
+	Log.i(TAG, "base action onPause");
+	PassCheckHelper.getInstance(this).init();
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
+	Log.i(TAG, "base action start:");
+	if (PassCheckHelper.getInstance(this).shouldLock()) {
+		Intent intent = new Intent(this, ShowPassAliasActivity.class);
+		startActivity(intent);
+	}
 	// MobclickAgent.onResume(this);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "base action destroy");
+	PassCheckHelper.getInstance(this).init();
     }
 
     protected int getLayout() {

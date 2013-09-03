@@ -39,7 +39,7 @@ import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.activity.AdvancedFilterActiviy.QueryIndexer;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
-import com.rong360.creditassitant.model.GlobalValue;
+import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.ModelHeler;
 import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.widget.ActionItem;

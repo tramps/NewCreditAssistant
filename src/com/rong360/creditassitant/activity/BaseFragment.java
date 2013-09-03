@@ -1,11 +1,11 @@
 package com.rong360.creditassitant.activity;
 
 import android.app.ActionBar.LayoutParams;
-import android.app.Dialog;
-import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.util.PassCheckHelper;
 import com.rong360.creditassitant.widget.FitTextView.ITitle;
 import com.rong360.creditassitant.widget.TitleBarCenter;
 import com.rong360.creditassitant.widget.TitleBarLeft;
@@ -55,6 +56,11 @@ public abstract class BaseFragment extends Fragment implements IFragment {
     @Override
     public void onResume() {
 	super.onResume();
+	Log.i(TAG, "base action start:");
+	if (PassCheckHelper.getInstance(mContext).shouldLock()) {
+		Intent intent = new Intent(mContext, ShowPassAliasActivity.class);
+		startActivity(intent);
+	}
 	// MobclickAgent.onResume(mContext);
     }
 
@@ -62,8 +68,17 @@ public abstract class BaseFragment extends Fragment implements IFragment {
     public void onPause() {
 	super.onPause();
 	// MobclickAgent.onPause(mContext);
+	Log.i(TAG, "base action pause");
+	PassCheckHelper.getInstance(mContext).init();
     }
-
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "base action destroy");
+	PassCheckHelper.getInstance(mContext).init();
+        
+    }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 	super.onActivityCreated(savedInstanceState);

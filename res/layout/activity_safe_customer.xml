@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="54dp"
+        android:paddingBottom="25dp"
+        android:background="@android:color/white"
+        >
+        <ImageView 
+            android:id="@+id/ivSafe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_safe_normal"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="45dp"
+            />
+        
+        <TextView 
+            android:id="@+id/tvSafeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_alignTop="@id/ivSafe"
+            android:layout_toRightOf="@id/ivSafe"
+            />
+         <TextView 
+            android:id="@+id/tvSafeDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvSafeTitle"
+            android:layout_alignLeft="@id/tvSafeTitle"
+            android:layout_marginTop="15dp"
+            />
+         
+         <Button 
+             android:id="@+id/btnSafe"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_below="@id/tvSafeDetail"
+             android:layout_alignLeft="@id/tvSafeDetail"
+             android:background="@drawable/ic_stop"
+             android:layout_marginTop="25dp"
+             android:layout_marginBottom="25dp"
+             />
+    </RelativeLayout>
+    
+    <FrameLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="25dp"
+        >
+        <LinearLayout 
+            android:id="@+id/llSafeNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:visibility="gone"
+            android:orientation="vertical"
+            >
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="14dp"
+                android:text="远程拷贝丢失手机上的客户"
+                />
+            <View 
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@drawable/divider_set"
+                />
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:text="防止其他应用访问客户资料"
+                />
+            <View 
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@drawable/divider_set"
+                />
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:text="远程删除客户资料"
+                />
+            <View 
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@drawable/divider_set"
+                />
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:text="手机丢失后，快速找回客户资料"
+                />
+            <View 
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@drawable/divider_set"
+                />
+            
+        </LinearLayout>
+        <LinearLayout 
+            android:id="@+id/llSafe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="25dp"
+            android:paddingRight="20dp"
+            >
+             <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:text="手机丢失后，如何找回客户资料？"
+                />
+            <View 
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@drawable/divider_set"
+                />
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="第一步, 使用新手机下载并安装融易记APP客户端;"
+                android:lineSpacingExtra="6dp"
+                />
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="第二步, 在新手机上打开融易记APP并开启客户保险箱，选择融易记账号登陆，输入之前使用的融易记账号密码;"
+                android:lineSpacingExtra="6dp"
+                />
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="第三步, 确保网络连接正常，等待服务器导入客户资料;"
+                android:lineSpacingExtra="6dp"
+                />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>
+
+</ScrollView>

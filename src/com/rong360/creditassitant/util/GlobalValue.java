@@ -1,4 +1,4 @@
-package com.rong360.creditassitant.model;
+package com.rong360.creditassitant.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,6 +6,17 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.rong360.creditassitant.model.ActionHandler;
+import com.rong360.creditassitant.model.Comment;
+import com.rong360.creditassitant.model.CommentHandler;
+import com.rong360.creditassitant.model.CommuHandler;
+import com.rong360.creditassitant.model.Customer;
+import com.rong360.creditassitant.model.CustomerHandler;
+import com.rong360.creditassitant.model.HistoryMsg;
+import com.rong360.creditassitant.model.HistoryMsgHandler;
+import com.rong360.creditassitant.model.NoticeIgnoreHandler;
+
 
 import android.content.Context;
 import android.util.Log;
@@ -18,18 +29,35 @@ public class GlobalValue {
     private static CommentHandler mCommentHandler;
     private static NoticeIgnoreHandler mNoticeIgnoreHandler;
     private static ActionHandler mActionHandler;
+    
+    private ArrayList<Customer> mAlarmCustomers;
+    
+    public ArrayList<Customer> getAlarms() {
+	if (mAlarmCustomers == null) {
+	    mAlarmCustomers =  new ArrayList<Customer>();
+	}
+	
+	return mAlarmCustomers;
+    }
 
     public static GlobalValue getIns() {
 	if (mInstance == null)
 	    mInstance = new GlobalValue();
 	return mInstance;
     }
-    
+
+    public void init(Context context) {
+	ArrayList<Customer> customers = GlobalValue.getIns().getAllCustomers();
+	if (customers.size() == 0) {
+	    GlobalValue.getIns().loadAllCustomerFromDb(customers, context);
+	}
+    }
+
     public ActionHandler getActionHandler(Context context) {
 	if (mActionHandler == null) {
 	    mActionHandler = new ActionHandler(context);
 	}
-	
+
 	return mActionHandler;
     }
 
@@ -85,11 +113,10 @@ public class GlobalValue {
     private ArrayList<String> mPhones;
     private long mPhoneTime;
     private static final long READ_CONTACT_HOURLY = 60 * 60 * 1000;
-    
+
     private ArrayList<HistoryMsg> mHistoryMsgs;
     private boolean mIsMsgDirty = true;
-    
-    
+
     public ArrayList<HistoryMsg> getHistoryMsgs(HistoryMsgHandler handler) {
 	if (mHistoryMsgs == null) {
 	    mHistoryMsgs = new ArrayList<HistoryMsg>();
@@ -100,7 +127,7 @@ public class GlobalValue {
 	}
 	return mHistoryMsgs;
     }
-    
+
     public void setMsgDirty() {
 	mIsMsgDirty = true;
     }

@@ -10,7 +10,7 @@ import android.widget.EditText;
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.Comment;
 import com.rong360.creditassitant.model.Customer;
-import com.rong360.creditassitant.model.GlobalValue;
+import com.rong360.creditassitant.util.GlobalValue;
 
 public class CommentActivity extends BaseActionBar {
     private static final String TAG = "CommentActivity";
@@ -77,17 +77,17 @@ public class CommentActivity extends BaseActionBar {
 	    return;
 	}
 
-	GlobalValue value = GlobalValue.getIns();
-	Comment c = new Comment();
-	c.setComment(comment);
-	c.setCustomerId(mId);
-	boolean isInsert = value.getCommentHandler(this).insertComment(c);
-	if (isInsert) {
-	    Customer cus = value.getCusmer(mId);
-	    cus.setLastFollowComment(comment);
-	    value.getCustomerHandler(this).updateCustomer(cus);
-	    value.putCustomer(cus);
-	}
+//	GlobalValue value = GlobalValue.getIns();
+//	Comment c = new Comment();
+//	c.setComment(comment);
+//	c.setCustomerId(mId);
+//	boolean isInsert = value.getCommentHandler(this).insertComment(c);
+//	if (isInsert) {
+//	    Customer cus = value.getCusmer(mId);
+//	    cus.setLastFollowComment(comment);
+//	    value.getCustomerHandler(this).updateCustomer(cus);
+//	    value.putCustomer(cus);
+//	}
 
 	intent.putExtra(RESULT_COMMENT, comment);
 	setResult(RESULT_OK, intent);

@@ -26,8 +26,8 @@ import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Contact;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
-import com.rong360.creditassitant.model.GlobalValue;
 import com.rong360.creditassitant.model.TelHelper;
+import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.ModelHeler;
 import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.widget.IndexableListView;
@@ -338,6 +338,7 @@ public class ImportContactActivity extends BaseActionBar implements
 		Action a = new Action(customer.getId(), ActionHandler.TYPE_NEW);
 		    GlobalValue.getIns().getActionHandler(this).handleAction(a);
 		customer.setIsImported(true);
+		GlobalValue.getIns().putCustomer(customer);
 		mCustomers.add(customer);
 		sucCount++;
 	    }

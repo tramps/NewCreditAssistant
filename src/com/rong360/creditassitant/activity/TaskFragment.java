@@ -1,6 +1,7 @@
 package com.rong360.creditassitant.activity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +16,8 @@ import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.Customer;
-import com.rong360.creditassitant.model.GlobalValue;
 import com.rong360.creditassitant.util.DateUtil;
+import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.widget.TitleBarCenter;
 
 public class TaskFragment extends BaseFragment {
@@ -26,6 +27,7 @@ public class TaskFragment extends BaseFragment {
     private ListView lvAlarm;
     private TextView tvHint;
 
+    private Calendar mToday;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -46,6 +48,11 @@ public class TaskFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        
+        mToday = Calendar.getInstance();
+	mToday.set(Calendar.HOUR_OF_DAY, 0);
+	mToday.set(Calendar.MINUTE, 0);
+	mToday.set(Calendar.MILLISECOND, 0);
         initContent();
     }
 
@@ -54,7 +61,7 @@ public class TaskFragment extends BaseFragment {
 	ArrayList<Customer> allCustomers = GlobalValue.getIns().getAllCustomers();
 	
 	for (Customer c : allCustomers) {
-	    if (c.getAlarmTime() != 0) {
+	    if (c.getAlarmTime() > mToday.getTimeInMillis() || c.getAlarmTime() != 0) {
 		mAlarmCustomers.add(c);
 	    }
 	}

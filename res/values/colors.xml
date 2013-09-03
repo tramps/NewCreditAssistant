@@ -4,4 +4,6 @@
     <color name="bkg_import">#202729</color>
     <color name="customer_label">#999999</color>
     <color name="customer_content">#333333</color>
+    <color name="follow_text_normal">#666666</color>
+    <color name="translucent_background">#a0000000</color>
 </resources>

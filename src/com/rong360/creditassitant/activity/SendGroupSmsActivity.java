@@ -13,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
-import com.rong360.creditassitant.model.GlobalValue;
 import com.rong360.creditassitant.model.HistoryMsg;
 import com.rong360.creditassitant.model.HistoryMsgHandler;
+import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.MyToast;
 
 public class SendGroupSmsActivity extends BaseActionBar implements OnClickListener{
@@ -46,6 +46,7 @@ public class SendGroupSmsActivity extends BaseActionBar implements OnClickListen
     
     private void setReciver() {
 	mCustomerInfo = getIntent().getStringExtra(EXTRA_CUSTOMER);
+	Log.i(TAG, "customerinfo: " + mCustomerInfo);
 //	Log.i(TAG, mCustomerInfo);
         mReceiver = new ArrayList<String[]>();
         String[] cuses = mCustomerInfo.split(";#;");
