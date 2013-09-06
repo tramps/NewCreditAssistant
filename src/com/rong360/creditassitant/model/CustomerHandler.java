@@ -232,6 +232,16 @@ public class CustomerHandler extends BaseDbHandler {
 
 	return false;
     }
+    
+    public void removeSourceByName(String source) {
+	String sql = "update customer set source = '' where source = '" + source + "'";
+	try {
+	    SQLiteDatabase  db = mHelper.getWritableDatabase();
+	    db.execSQL(sql);
+	} catch (Exception e) {
+	    Log.w(TAG, e.toString());
+	}
+    }
 
     public void deleteCustomer(int customerId) {
 	SQLiteStatement statement =

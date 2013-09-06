@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -61,6 +62,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
     private MovingBarView mbv;
 
     private RelativeLayout rlAlarm;
+    private Button btnClose;
     private RelativeLayout rlComment;
     private TextView tvAlarm;
     private TextView tvComment;
@@ -246,10 +248,12 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	rlAlarm = (RelativeLayout) findViewById(R.id.rlAlarm);
 	rlComment = (RelativeLayout) findViewById(R.id.rlComment);
 	tvAlarm = (TextView) findViewById(R.id.tvCAlarm);
+	btnClose = (Button) findViewById(R.id.btnClose);
 	tvComment = (TextView) findViewById(R.id.tvCCommment);
 
 	rlAlarm.setOnClickListener(this);
 	rlComment.setOnClickListener(this);
+	btnClose.setOnClickListener(this);
 
 	llQuality = (LinearLayout) findViewById(R.id.llQuality);
 	llDetail = (LinearLayout) findViewById(R.id.llDetail);
@@ -269,6 +273,20 @@ public class CustomerDetailActivity extends BaseActionBar implements
 			mCustomer.getLastFollowComment());
 	    }
 	    startActivityForResult(intent, REQUEST_CODE);
+	} else if (v == btnClose) {
+	    tvAlarm.setText("");
+	    mCustomer.setAlarmTime(0);
+	    mCustomer.setHasChecked(false);
+	    mCustomer.setIsDisplayed(false);
+	    GlobalValue.getIns().putCustomer(mCustomer);
+	    GlobalValue.getIns().getCustomerHandler(getBaseContext())
+		    .updateCustomer(mCustomer);
+
+	    Action action =
+		    new Action(mCustomer.getId(), ActionHandler.TYPE_CANCEL_ALARM);
+	    GlobalValue.getIns().getActionHandler(CustomerDetailActivity.this)
+		    .handleAction(action);
+	    AlarmHelper.startAlarm(CustomerDetailActivity.this, true);
 	}
     }
 

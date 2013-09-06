@@ -20,6 +20,9 @@ public class Communication implements Serializable {
 	private String mName;
 	private long mThreadId;
 	
+	private String mProgress;
+	private String mLocation;
+	
 	//call
 	private long mDuration;
 	//sms
@@ -76,6 +79,20 @@ public class Communication implements Serializable {
 	public void setContent(String content) {
 		this.mContent = content;
 	}
+	
+	public String getProgress() {
+	    return mProgress;
+	}
+	public void setProgress(String mProgress) {
+	    this.mProgress = mProgress;
+	}
+	public String getLocation() {
+	    return mLocation;
+	}
+	public void setLocation(String mLocation) {
+	    this.mLocation = mLocation;
+	}
+	
 	
 //	@Override
 //	public int hashCode() {

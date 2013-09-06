@@ -121,6 +121,8 @@ public class AddCustomerActivity extends BaseActionBar implements
 	}
 
 	mActions = new ArrayList<Action>();
+	
+	initContent();
     }
 
     @Override
@@ -176,10 +178,10 @@ public class AddCustomerActivity extends BaseActionBar implements
     @Override
     protected void onResume() {
 	super.onResume();
-	initContent();
     }
 
     private void initContent() {
+	Log.i(TAG, "initcontent");
 	if (mCustomer == null) {
 	    if (mTel != null) {
 		etTel.setText(mTel);
@@ -369,6 +371,13 @@ public class AddCustomerActivity extends BaseActionBar implements
 	mCustomer.setTel(etTel.getText().toString());
 	mCustomer.setLoan(getEditText(etLoan));
 	mCustomer.setSource(tvSource.getText().toString());
+	
+	String progress = tvProgress.getText().toString();
+	if (progress != null && progress.equalsIgnoreCase(mCustomer.getProgress())) {
+	    Action action = new Action(mCustomerId, ActionHandler.TYPE_PROGRESS);
+	    action.setContent(mCustomer.getProgress());
+	    mActions.add(action);
+	}
 	mCustomer.setProgress(tvProgress.getText().toString());
 	if (mAlarm != null) {
 	    mCustomer.setAlarmTime(mAlarm.getTimeInMillis());
@@ -394,7 +403,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	}
 
 	int cash = getValueFromMap(tvCash);
-	if (cash != -1 && mCustomer.getBank() != cash) {
+	if (cash != -1 && mCustomer.getCash() != cash) {
 	    mCustomer.setCash(cash);
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
 	    String[] array = res.getStringArray(R.array.bankCash);
@@ -434,7 +443,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    mCustomer.setCar(car);
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_QUALITY);
 	    String[] array = res.getStringArray(R.array.car);
-	    action.setContent(TITLE_BANK + "-" + array[car]);
+	    action.setContent(TITLE_CAR + "-" + array[car]);
 	    mActions.add(action);
 	}
 
@@ -518,13 +527,18 @@ public class AddCustomerActivity extends BaseActionBar implements
     public void onClick(View v) {
 	// View child =
 	if (mChooseMap.containsKey(v)) {
-	    Log.i(TAG, "choose");
 	    mCurrentEditV = mChooseMap.get(v);
 	    Intent intent = new Intent(this, ChooseOptionActivity.class);
 	    intent.putExtra(ChooseOptionActivity.EXTRA_TITLE, mTitleMap.get(v));
 	    intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_INDEX,
 		    mValues.get(mChooseMap.get(v)));
+	    if (mCurrentEditV == tvSource) {
+		intent.putExtra(ChooseOptionActivity.EXTRA_RESULT_TEXT, tvSource.getText());
+	    }
 	    startActivityForResult(intent, REQUEST_CODE);
+	    InputMethodManager imm =
+		    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	    mySrollview.closeInput(mySrollview, imm);
 	} else if (mInputMap.containsKey(v)) {
 	    Log.i(TAG, "input");
 	    EditText et = mInputMap.get(v);

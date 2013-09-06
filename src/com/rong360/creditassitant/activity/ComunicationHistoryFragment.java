@@ -157,6 +157,8 @@ public class ComunicationHistoryFragment extends BaseFragment {
 		    (TextView) convertView.findViewById(R.id.tv_duration);
 	    ImageView ivType =
 		    (ImageView) convertView.findViewById(R.id.iv_type);
+	    TextView tvProgress =
+		    (TextView) convertView.findViewById(R.id.tvProgress);
 
 	    RelativeLayout rlCustomer =
 		    (RelativeLayout) convertView.findViewById(R.id.rl_customer);
@@ -168,13 +170,14 @@ public class ComunicationHistoryFragment extends BaseFragment {
 		@Override
 		public void onClick(View v) {
 		    Intent intent =
-			    new Intent(mContext, CustomerComuDetailActivity.class);
-		    if (c.getId() != -1){
+			    new Intent(mContext,
+				    CustomerComuDetailActivity.class);
+		    if (c.getId() != -1) {
 			intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
-				    c.getId());
+				c.getId());
 		    } else {
 			intent.putExtra(AddCustomerActivity.EXTRA_TEL,
-				    c.getTel());
+				c.getTel());
 		    }
 		    mContext.startActivity(intent);
 
@@ -200,6 +203,12 @@ public class ComunicationHistoryFragment extends BaseFragment {
 		ivType.setBackgroundResource(R.drawable.ic_call_out);
 	    } else {
 		ivType.setBackgroundResource(R.drawable.ic_call_missed);
+	    }
+
+	    if (c.getProgress() != null) {
+		tvProgress.setText(c.getProgress());
+	    } else {
+		tvProgress.setText(c.getLocation());
 	    }
 
 	    tvTime.setText(DateUtil.getDisplayTime(c.getTime()));

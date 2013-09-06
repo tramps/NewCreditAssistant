@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -101,6 +102,15 @@
         </activity>
         <activity
             android:name=".activity.CustomerLockActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.AddSourceActivity"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustPan"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.SourceActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity

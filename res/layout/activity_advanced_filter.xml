@@ -93,7 +93,6 @@
 	        android:background="@android:color/white"
 	        android:layout_alignBottom="@id/tvTime"
 	        style="@style/AddCustomerContent"
-	        android:duplicateParentState="true"
 	        android:inputType="phone"
 	        android:gravity="right"
 	        />
@@ -187,8 +186,6 @@
 	        android:background="@android:color/white"
 	        android:layout_alignBottom="@id/tvSource"
 	        style="@style/AddCustomerContent"
-	        android:duplicateParentState="true"
-	        android:inputType="phone"
 	        android:gravity="right"
 	        />
 	      

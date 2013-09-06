@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import com.rong360.creditassitant.util.GlobalValue;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.util.Log;
+
+import com.rong360.creditassitant.util.GlobalValue;
 
 public class CommuHandler {
     private static final String TAG = CommuHandler.class.getSimpleName();
@@ -97,9 +97,9 @@ public class CommuHandler {
 	Customer customer;
 	while (c.moveToNext()) {
 	    com = buildCallLog(c);
-	    if (contacts.contains(com.getTel())) {
-		continue;
-	    }
+	    // if (contacts.contains(com.getTel())) {
+	    // continue;
+	    // }
 
 	    if (phones.contains(com.getTel())) {
 		continue;
@@ -113,9 +113,18 @@ public class CommuHandler {
 		// Log.i(TAG, customer.getName() + customer.getTel());
 		com.setName(customer.getName());
 		com.setId(customer.getId());
+		if (customer.getProgress() != null) {
+		    com.setProgress(customer.getProgress());
+		} else {
+		    com.setLocation(LocationHelper.getAreaByNumber(context,
+			    com.getTel()));
+		}
 	    } else {
 		com.setId(-1);
+		com.setLocation(LocationHelper.getAreaByNumber(context,
+			    com.getTel()));
 	    }
+	    
 	    comms.add(com);
 	}
 	c.close();

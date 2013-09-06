@@ -21,6 +21,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="赵德珠" />
+        
+        <TextView 
+            android:id="@+id/tvProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/tvName"
+            />
 
         <ImageView
             android:id="@+id/iv_type"

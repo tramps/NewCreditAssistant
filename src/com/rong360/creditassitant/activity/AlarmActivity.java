@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.model.Action;
+import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.util.AlarmHelper;
@@ -219,6 +221,12 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    c.setHasChecked(true);
 	    GlobalValue.getIns().getCustomerHandler(this).updateCustomer(c);
 	    GlobalValue.getIns().putCustomer(c);
+	    
+	    Action action =
+		    new Action(c.getId(), ActionHandler.TYPE_FINISH_ALARM);
+	    action.setContent(DateUtil.yyyyMMddHHmm.format(c.getAlarmTime()));
+	    GlobalValue.getIns().getActionHandler(AlarmActivity.this)
+		    .handleAction(action);
 	}
 	mAlarmCustomers.clear();
     }

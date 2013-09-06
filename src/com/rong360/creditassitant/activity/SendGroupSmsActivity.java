@@ -169,7 +169,7 @@ public class SendGroupSmsActivity extends BaseActionBar implements OnClickListen
 //	for (String[] re : mReceiver) {
 //	    String msg = etMsg.getText().toString();
 //	    ArrayList<String> dMsg = manager.divideMessage(msg);
-//	    manager.sendMultipartTextMessage(re[1], "", dMsg, null, null);
+//	    manager.sendMultipartTextMessage(re[1], null, dMsg, null, null);
 //	}
 	MyToast.makeText(this, "已给"+mReceiver.size()+"人发送消息", Toast.LENGTH_LONG).show();
     }

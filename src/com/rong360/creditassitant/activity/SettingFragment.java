@@ -57,6 +57,12 @@ public class SettingFragment extends BaseFragment implements OnClickListener{
 	rlSource = (RelativeLayout) findViewById(R.id.rlSource);
 	rlFeedback = (RelativeLayout) findViewById(R.id.rlFeedback);
 	rlAbout = (RelativeLayout) findViewById(R.id.rlAbout);
+	rlImportContact.setOnClickListener(this);
+	rlImportPartner.setOnClickListener(this);
+	rlExport.setOnClickListener(this);
+	rlSource.setOnClickListener(this);
+	rlFeedback.setOnClickListener(this);
+	rlAbout.setOnClickListener(this);
     }
 
     @Override
@@ -64,8 +70,11 @@ public class SettingFragment extends BaseFragment implements OnClickListener{
 	if (v == btnSafe) {
 	    Intent intent = new Intent(mContext, CustomerSafeActivity.class);
 	    IntentUtil.startActivity(mContext, intent);
-	} else {
+	} else if (v == btnLock) {
 	    Intent intent = new Intent(mContext, CustomerLockActivity.class);
+	    IntentUtil.startActivity(mContext, intent);
+	} else if (v == rlSource) {
+	    Intent intent = new Intent(mContext, SourceActivity.class);
 	    IntentUtil.startActivity(mContext, intent);
 	}
     }

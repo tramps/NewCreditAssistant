@@ -45,7 +45,7 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
     private Button btnTwo;
     private Button btnThree;
     private Button btnFour;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	setContentView(R.layout.activity_show_pass);
@@ -55,8 +55,8 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
 	mBackwardMap = new HashMap<EditText, EditText>(3);
 	mValues = new HashMap<EditText, Integer>();
 	initContent();
-	 setTextChangeListener();
-//	 setOnTouchListener();
+	setTextChangeListener();
+	// setOnTouchListener();
 	etO.requestFocus();
 	// etO.setFocusable(true);
     }
@@ -64,7 +64,7 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
     private void setTextChangeListener() {
 	for (EditText et : mEdits) {
 	    et.addTextChangedListener(this);
-//	    et.setRawInputType(InputType.TYPE_CLASS_PHONE);
+	    // et.setRawInputType(InputType.TYPE_CLASS_PHONE);
 	}
     }
 
@@ -90,47 +90,46 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
 	    return false;
 	}
     };
-    
-    
+
     @Override
     protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        mWrongCount = 0;
-        tvHint.setVisibility(View.GONE);
-    }
-    
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mWrongCount = 0;
-        tvHint.setVisibility(View.GONE);
+	super.onNewIntent(intent);
+	mWrongCount = 0;
+	tvHint.setVisibility(View.GONE);
     }
 
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//	Log.i(TAG, "keycode" + keyCode);
-//	if (keyCode != KeyEvent.KEYCODE_DEL) {
-//	    mValues.put(mCurrentE, keyCode);
-//	    mCurrentE.setText("●");
-//	    mIsback = false;
-//	    mCurrentE = mForwardMap.get(mCurrentE);
-//	    if (mCurrentE == null) {
-//		mCurrentE = etF;
-//		mHandler.postDelayed(mValidate, 200);
-//	    }
-//	} else {
-//	    mIsback = true;
-//	    if (mIsback) {
-//		mCurrentE = mBackwardMap.get(mCurrentE);
-//		if (mCurrentE == null) {
-//		    mCurrentE = etO;
-//		}
-//	    }
-//	    mCurrentE.setText("");
-//	}
-//	return super.onKeyDown(keyCode, event);
-//
-//    }
+    @Override
+    protected void onResume() {
+	super.onResume();
+	mWrongCount = 0;
+	tvHint.setVisibility(View.GONE);
+    }
+
+    // @Override
+    // public boolean onKeyDown(int keyCode, KeyEvent event) {
+    // Log.i(TAG, "keycode" + keyCode);
+    // if (keyCode != KeyEvent.KEYCODE_DEL) {
+    // mValues.put(mCurrentE, keyCode);
+    // mCurrentE.setText("●");
+    // mIsback = false;
+    // mCurrentE = mForwardMap.get(mCurrentE);
+    // if (mCurrentE == null) {
+    // mCurrentE = etF;
+    // mHandler.postDelayed(mValidate, 200);
+    // }
+    // } else {
+    // mIsback = true;
+    // if (mIsback) {
+    // mCurrentE = mBackwardMap.get(mCurrentE);
+    // if (mCurrentE == null) {
+    // mCurrentE = etO;
+    // }
+    // }
+    // mCurrentE.setText("");
+    // }
+    // return super.onKeyDown(keyCode, event);
+    //
+    // }
 
     private void initContent() {
 	etO = (EditText) findViewById(R.id.etPassO);
@@ -158,7 +157,7 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
 	// etNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
 	// etNumber.setClickable(false);
 	// // etNumber.setFocusable(false);
-//	initButton();
+	// initButton();
     }
 
     @Override
@@ -181,7 +180,7 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
 	btnTwo.setOnClickListener(this);
 	btnThree.setOnClickListener(this);
     }
-    
+
     @Override
     public void onBackPressed() {
     }
@@ -199,7 +198,7 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
     @Override
     public void afterTextChanged(Editable s) {
 	String text = s.toString();
-//	mValues.put(mcur, value)
+	// mValues.put(mcur, value)
 	if (text.length() == 1) {
 	    mCurrentE = mForwardMap.get(mCurrentE);
 	    if (mCurrentE == null) {
@@ -244,13 +243,13 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
 	for (EditText et : mEdits) {
 	    sb.append(et.getEditableText().toString());
 	}
-	if (sb.toString().equalsIgnoreCase("8888")) {
+	if (sb.toString().equalsIgnoreCase("9527")) {
 	    isMatch = true;
 	    mWrongCount = 0;
 	} else {
 	    mWrongCount++;
 	    int leftCount = MAXIMUM_COUNT - mWrongCount;
-	    tvHint.setText(sb.toString()+"输错5次将锁定，你还有" + leftCount + "次机会");
+	    tvHint.setText(sb.toString() + "输错5次将锁定，你还有" + leftCount + "次机会");
 	    tvHint.setVisibility(View.VISIBLE);
 	    if (leftCount == 0) {
 		Intent intent = new Intent(this, LockActivity.class);
@@ -259,13 +258,12 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
 	}
 	return isMatch;
     }
+
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "destroed");
-//        PassCheckHelper.getInstance(this).init();
+	super.onDestroy();
+	Log.i(TAG, "destroed");
+	// PassCheckHelper.getInstance(this).init();
     }
-    
 
 }
-

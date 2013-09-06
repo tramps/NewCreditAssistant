@@ -19,20 +19,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.util.PreferenceHelper;
 
 public class ChooseOptionActivity extends BaseActionBar {
     protected static final String TAG = "ChooseOptionActivity";
-    
+
     public static final String EXTRA_CHOOSE_TYPE = "pre_key_choose";
     public static final String EXTRA_SELECTED_INDEX = "pre_key_selected";
     public static final String EXTRA_SELECTED_IDS = "pre_key_selected_ids";
     public static final int TYPE_CHECKBOX = 1;
     public static final int TYPE_RADIO = 0;
-    
+
     public static final String EXTRA_TITLE = "extra_title";
     public static final String EXTRA_RESULT_ID = "extra_res_id";
     public static final String EXTRA_RESULT_TEXT = "extra_res_text";
-    
+
     public static final String TITLE_SOURCE = "客户来源";
     public static final String TITLE_PROGRESS = "客户进度";
     public static final String TITLE_BANK = "银行流水";
@@ -41,21 +42,21 @@ public class ChooseOptionActivity extends BaseActionBar {
     public static final String TITLE_CREDI_RECORD = "信用记录";
     public static final String TITLE_HOUSE = "房产";
     public static final String TITLE_CAR = "车辆";
-    
+
     public static final String TITLE_STAR = "是否加星";
     public static final String TITLE_TIME = "录入时间";
-    
+
     public static final HashMap<String, Integer> mOpRsMap;
-    
+
     private OptionAdapter mAdapter;
     private String[] mItems;
     private int mType;
     private int mSelectedIndex;
     private int[] mSelectedIds;
     private HashMap<Integer, String> mSelected;
-    
+
     private ListView lvOption;
-    
+
     static {
 	mOpRsMap = new HashMap<String, Integer>();
 	mOpRsMap.put(TITLE_PROGRESS, R.array.progress);
@@ -68,50 +69,76 @@ public class ChooseOptionActivity extends BaseActionBar {
 	mOpRsMap.put(TITLE_STAR, R.array.star);
 	mOpRsMap.put(TITLE_TIME, R.array.time);
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	mType = getIntent().getIntExtra(EXTRA_CHOOSE_TYPE, TYPE_RADIO);
 	if (mType == TYPE_CHECKBOX) {
 	    mSelected = new HashMap<Integer, String>();
 	}
-        super.onCreate(savedInstanceState);
-        String title = getIntent().getStringExtra(EXTRA_TITLE);
-        getSupportActionBar(false).setTitle(title);
-        mSelectedIndex = getIntent().getIntExtra(EXTRA_SELECTED_INDEX, -1);
-        if (title.equalsIgnoreCase(TITLE_SOURCE) && mType == TYPE_CHECKBOX) {
-            String ids = getIntent().getStringExtra(EXTRA_SELECTED_IDS);
-            if (ids != null && ids.length() > 0) {
-                String[] idDs = ids.split(",");
-                mSelectedIds = new int[idDs.length];
-                int i = 0;
-                for (String d : idDs) {
-            	mSelectedIds[i] = Integer.parseInt(d);
-                }
-            }
-        }
-        initContent(title);
+	super.onCreate(savedInstanceState);
+	String title = getIntent().getStringExtra(EXTRA_TITLE);
+	getSupportActionBar(false).setTitle(title);
+	mSelectedIndex = getIntent().getIntExtra(EXTRA_SELECTED_INDEX, -1);
+	if (title.equalsIgnoreCase(TITLE_SOURCE) && mType == TYPE_CHECKBOX) {
+	    String ids = getIntent().getStringExtra(EXTRA_SELECTED_IDS);
+	    if (ids != null && ids.length() > 0) {
+		String[] idDs = ids.split("#");
+		mSelectedIds = new int[idDs.length];
+		int i = 0;
+		for (String d : idDs) {
+		    mSelectedIds[i] = Integer.parseInt(d);
+		}
+	    }
+	}
+	initContent(title);
     }
-    
-    
+
     private void initContent(String title) {
 	if (title.equalsIgnoreCase(TITLE_SOURCE)) {
-	    mItems = new String[] {"自有客户", "其他自定义来源"};
-	    if (mSelectedIds != null)
-	    for (int id : mSelectedIds ) {
-		mSelected.put(id, mItems[id]);
+	    String current = getIntent().getStringExtra(EXTRA_RESULT_TEXT);
+	    PreferenceHelper helper = PreferenceHelper.getHelper(this);
+	    String source =
+		    helper.readPreference(AddSourceActivity.PRE_KEY_SOURCES);
+	    if (source != null && source.length() > 0) {
+		String[] sources = source.split(";");
+		mItems = new String[sources.length + 1];
+		mItems[0] = "自有客户";
+		for (int i = 0; i < sources.length; i++) {
+		    if (sources[i] != null) {
+			mItems[i + 1] = sources[i];
+		    } else {
+			break;
+		    }
+		}
+		for (int i = 0; i < mItems.length; i++) {
+		    if (mItems[i].equalsIgnoreCase(current)) {
+			mSelectedIndex = i;
+		    }
+		}
+	    } else {
+		mItems = new String[] { "自有客户" };
+		for (int i = 0; i < mItems.length; i++) {
+		    if (mItems[i].equalsIgnoreCase(current)) {
+			mSelectedIndex = i;
+		    }
+		}
 	    }
+	    if (mSelectedIds != null)
+		for (int id : mSelectedIds) {
+		    mSelected.put(id, mItems[id]);
+		}
 	} else {
 	    mItems = getResources().getStringArray(mOpRsMap.get(title));
 	}
-	
+
 	mAdapter = new OptionAdapter(this, mType, mItems);
 	lvOption.setAdapter(mAdapter);
     }
-    
+
     @Override
     protected void initElements() {
-	
+
 	lvOption = (ListView) findViewById(R.id.lvOption);
 	lvOption.setOnItemClickListener(new OnItemClickListener() {
 
@@ -120,10 +147,10 @@ public class ChooseOptionActivity extends BaseActionBar {
 		    int position, long id) {
 		handleClick(position);
 	    }
-	    
+
 	});
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 	if (mType == TYPE_CHECKBOX) {
@@ -154,19 +181,19 @@ public class ChooseOptionActivity extends BaseActionBar {
 	}
 	return super.onOptionsItemSelected(item);
     }
-    
+
     private void handleClick(int pos) {
 	if (mType == TYPE_RADIO) {
 	    if (mSelectedIndex == pos) {
-		    mSelectedIndex = -1;
-		} else {
-		    mSelectedIndex = pos;
-		    Intent intent = new Intent();
-		    intent.putExtra(EXTRA_RESULT_ID, mSelectedIndex);
-		    intent.putExtra(EXTRA_RESULT_TEXT, mItems[pos]);
-		    setResult(RESULT_OK, intent);
-		    finish();
-		}
+		mSelectedIndex = -1;
+	    } else {
+		mSelectedIndex = pos;
+		Intent intent = new Intent();
+		intent.putExtra(EXTRA_RESULT_ID, mSelectedIndex);
+		intent.putExtra(EXTRA_RESULT_TEXT, mItems[pos]);
+		setResult(RESULT_OK, intent);
+		finish();
+	    }
 	    Log.i(TAG, "selected: " + mSelectedIndex);
 	} else {
 	    if (mSelected.containsKey(pos)) {
@@ -175,7 +202,7 @@ public class ChooseOptionActivity extends BaseActionBar {
 		mSelected.put(pos, mItems[pos]);
 	    }
 	}
-	
+
 	mAdapter.notifyDataSetChanged();
     }
 
@@ -183,12 +210,12 @@ public class ChooseOptionActivity extends BaseActionBar {
     protected int getLayout() {
 	return R.layout.activity_choose_option;
     }
-    
+
     private class OptionAdapter extends BaseAdapter {
 	private Context mContext;
 	private int type;
 	private String[] mOptions;
-	
+
 	public OptionAdapter(Context context, int t, String[] ops) {
 	    mContext = context;
 	    type = t;
@@ -211,19 +238,23 @@ public class ChooseOptionActivity extends BaseActionBar {
 	}
 
 	@Override
-	public View getView(final int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView,
+		ViewGroup parent) {
 	    if (convertView == null) {
 		int layout = R.layout.list_item_option;
 		if (type == TYPE_CHECKBOX) {
 		    layout = R.layout.list_item_option_check;
 		}
-		
-		convertView = LayoutInflater.from(mContext).inflate(layout, null);
+
+		convertView =
+			LayoutInflater.from(mContext).inflate(layout, null);
 	    }
-	    
-	    CompoundButton check = (CompoundButton) convertView.findViewById(R.id.ivChoose);
-	    TextView tvOption = (TextView) convertView.findViewById(R.id.tvOption);
-	    
+
+	    CompoundButton check =
+		    (CompoundButton) convertView.findViewById(R.id.ivChoose);
+	    TextView tvOption =
+		    (TextView) convertView.findViewById(R.id.tvOption);
+
 	    if (mSelected == null) {
 		if (position == mSelectedIndex) {
 		    Log.i(TAG, "one equal");
@@ -238,25 +269,26 @@ public class ChooseOptionActivity extends BaseActionBar {
 			check.setChecked(true);
 			isContained = true;
 			break;
-		    } 
+		    }
 		}
 		if (!isContained) {
 		    check.setChecked(false);
 		}
 	    }
-//	    check.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//	        
-//	        @Override
-//	        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//	            handleClick(position);
-//	    	
-//	        }
-//	    });
+	    // check.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+	    //
+	    // @Override
+	    // public void onCheckedChanged(CompoundButton buttonView, boolean
+	    // isChecked) {
+	    // handleClick(position);
+	    //
+	    // }
+	    // });
 	    tvOption.setText(getItem(position));
-	    
+
 	    return convertView;
 	}
-	
+
     }
 
 }

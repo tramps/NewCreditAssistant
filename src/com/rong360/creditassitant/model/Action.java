@@ -5,46 +5,55 @@ public class Action {
     private int mCustomerId;
     private int mType;
     private long mTime;
-    private String mContent="";
-    
+    private String mContent = "";
+
     public Action(int customerId, int type) {
 	mCustomerId = customerId;
 	mType = type;
     }
-    
+
     public Action() {
-	
+
     }
-    
+
     public int getCustomerId() {
-        return mCustomerId;
+	return mCustomerId;
     }
+
     public void setCustomerId(int mCustomerId) {
-        this.mCustomerId = mCustomerId;
+	this.mCustomerId = mCustomerId;
     }
+
     public String getContent() {
-        return mContent;
+	return mContent;
     }
+
     public void setContent(String mContent) {
-        this.mContent = mContent;
+	this.mContent = mContent;
     }
+
     public int getId() {
-        return mId;
+	return mId;
     }
+
     public void setId(int mId) {
-        this.mId = mId;
+	this.mId = mId;
     }
+
     public int getType() {
-        return mType;
+	return mType;
     }
+
     public void setType(int mType) {
-        this.mType = mType;
+	this.mType = mType;
     }
+
     public long getTime() {
-        return mTime;
+	return mTime;
     }
+
     public void setTime(long mTime) {
-        this.mTime = mTime;
+	this.mTime = mTime;
     }
 
 }

@@ -11,7 +11,7 @@ public class PassCheckHelper {
     private static long INIT_TIME = 0;
     private static PassCheckHelper mhelper = null;
     private static SharedPreferences mSharePref = null;
-    private static final long THRESH_HOLD = 6000;
+    private static final long THRESH_HOLD = 60000;
 
     private PassCheckHelper(Context context) {
 	mSharePref =

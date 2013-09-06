@@ -163,7 +163,6 @@
 	        android:layout_marginRight="50dp"
 	        style="@style/AddCustomerContent"
 	        android:layout_alignBottom="@id/tvSource"
-	        android:inputType="phone"
 	        android:gravity="right"
 	        />
 	      
