@@ -88,6 +88,10 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener,
     public void setTitleListener(OnClickListener onClick) {
 	mRlCenter.setOnClickListener(onClick);
     }
+    
+    public void setMsgListener(OnClickListener onclick) {
+	mLeft.setOnClickListener(onclick);
+    }
 
     public void displayIndicator(boolean isShow) {
 	if (isShow) {
@@ -177,13 +181,6 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener,
     @Override
     public void onClick(View v) {
 	Context context = getContext();
-	if (v == mLeft
-		&& !BaseActionBar.CANCEL_TITLE.equalsIgnoreCase(mLeft.getText()
-			.toString())) {
-	    Intent intent = new Intent(context, ChooseCustomerActivity.class);
-	    context.startActivity(intent);
-	    return;
-	}
 	MenuItem item = mMenuItemMap.get(v);
 	if (item != null) {
 	    if (mFragment != null) {

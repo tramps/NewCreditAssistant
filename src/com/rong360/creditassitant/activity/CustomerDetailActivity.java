@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,6 +34,7 @@ import com.rong360.creditassitant.util.AlarmHelper;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
 import com.rong360.creditassitant.util.GlobalValue;
+import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
 import com.rong360.creditassitant.util.DisplayUtils;
 import com.rong360.creditassitant.widget.HorizontalListView;
@@ -55,8 +57,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
     private LinearLayout llTel;
     private LinearLayout llMsg;
     private LinearLayout llComHistory;
-    private LinearLayout llStar;
-    private ImageView ivStar;
+    private ImageButton ibStar;
 
     private HorizontalListView hlv;
     private MovingBarView mbv;
@@ -156,6 +157,11 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	tvTel.setText(mCustomer.getTel());
 	tvLoan.setText(mCustomer.getLoan() + "万");
 	tvSource.setText(mCustomer.getSource());
+	if (mCustomer.isIsFavored()) {
+	    ibStar.setBackgroundResource(R.drawable.ic_star_checked);
+	} else {
+	    ibStar.setBackgroundResource(R.drawable.ic_star_no_checked);
+	}
 
 	if (mCustomer.getAlarmTime() != -1) {
 	    Calendar instance = Calendar.getInstance();
@@ -242,8 +248,11 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	llTel = (LinearLayout) findViewById(R.id.llTel);
 	llMsg = (LinearLayout) findViewById(R.id.llMsg);
 	llComHistory = (LinearLayout) findViewById(R.id.llComHistory);
-	llStar = (LinearLayout) findViewById(R.id.llStar);
-	ivStar = (ImageView) findViewById(R.id.ivStar);
+	ibStar = (ImageButton) findViewById(R.id.ibStar);
+	llTel.setOnClickListener(this);
+	llMsg.setOnClickListener(this);
+	llComHistory.setOnClickListener(this);
+	ibStar.setOnClickListener(this);
 
 	rlAlarm = (RelativeLayout) findViewById(R.id.rlAlarm);
 	rlComment = (RelativeLayout) findViewById(R.id.rlComment);
@@ -287,6 +296,29 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    GlobalValue.getIns().getActionHandler(CustomerDetailActivity.this)
 		    .handleAction(action);
 	    AlarmHelper.startAlarm(CustomerDetailActivity.this, true);
+	} else if (v == llTel) {
+	    IntentUtil.startTel(this, mCustomer.getTel());
+	} else if (v == llMsg) {
+	    String customerInfo = mCustomer.getTel() + ";,;" + mCustomer.getTel();
+	    Log.i(TAG, "customerinfo: " + customerInfo);
+	    Intent intent = new Intent(this, SendGroupSmsActivity.class);
+	    intent.putExtra(SendGroupSmsActivity.EXTRA_CUSTOMER, customerInfo);
+	    IntentUtil.startActivity(this, intent);
+	} else if (v == llComHistory) {
+	    Intent intent = new Intent(this, CustomerComuDetailActivity.class);
+	    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID, mCustomerId);
+	    IntentUtil.startActivity(this, intent);
+	} else if (v == ibStar) {
+	    if (mCustomer.isIsFavored()) {
+		ibStar.setBackgroundResource(R.drawable.ic_star_no_checked);
+		mCustomer.setIsFavored(false);
+	    } else {
+		ibStar.setBackgroundResource(R.drawable.ic_star_checked);
+		mCustomer.setIsFavored(true);
+	    }
+	    GlobalValue.getIns().putCustomer(mCustomer);
+	    GlobalValue.getIns().getCustomerHandler(getBaseContext())
+		    .updateCustomer(mCustomer);
 	}
     }
 

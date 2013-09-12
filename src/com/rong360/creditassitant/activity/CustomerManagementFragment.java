@@ -55,6 +55,9 @@ public class CustomerManagementFragment extends BaseFragment implements
     private String[] mFilter = new String[] { TITLE_ALL, TITLE_STAR,
 	    TITLE_POTENTIAL, TITLE_CONSISTENT, TITLE_UPGRADE, TITLE_SUCCEED,
 	    TITLE_FAIL, TITLE_UNCONSISTENT };
+    
+    public static final int[] progressColor = new int[] {R.color.cp_fail, R.color.cp_potential,
+	R.color.cp_talked, R.color.cp_upgraded, R.color.cp_succeded, R.color.cp_fail};
 
     private Button btnImport;
     private LinearLayout llNoCustomers;
@@ -75,7 +78,18 @@ public class CustomerManagementFragment extends BaseFragment implements
 
     private TextView tvHeadHint;
     private LinearLayout llHeader;
-
+    
+    private OnClickListener mMsgListener = new OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(mContext, ChooseCustomerActivity.class);
+            intent.putExtra(ChooseCustomerActivity.EXTRA_INDEX, mFilterIndex);
+            intent.putExtra(AdvancedFilterActiviy.EXTRA_QUERY, mQueryIndex);
+            mContext.startActivity(intent);
+        }
+    };
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -91,6 +105,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		mAction.showView(v);
 	    }
 	});
+	mTitleCenter.setMsgListener(mMsgListener);
 	setReuseOldViewEnable(true);
 	setHasOptionsMenu(false);
 
@@ -401,7 +416,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 
 	    return;
 	}
-	
+
 	mCustomers = GlobalValue.getIns().getAllCustomers();
 	if (mCustomers.size() == 0) {
 	    GlobalValue.getIns().loadAllCustomerFromDb(mCustomers, mContext);
@@ -435,16 +450,16 @@ public class CustomerManagementFragment extends BaseFragment implements
 	Calendar lastCalc = Calendar.getInstance(Locale.CHINA);
 	Customer lastCustomer = customers.get(0);
 	lastCalc.setTimeInMillis(lastCustomer.getTime());
-	mSections.add(new Section(TYPE_HEAD, lastCalc.get(Calendar.MONTH)
-		+ "month "));
+	mSections.add(new Section(TYPE_HEAD, (lastCalc.get(Calendar.MONTH) + 1)
+		+ "月 "));
 	mSections.add(new Section(TYPE_CUSTOMER, lastCustomer));
 	Calendar nextCalc = Calendar.getInstance();
 	for (int i = 1; i < customers.size(); i++) {
 	    Customer c = customers.get(i);
 	    nextCalc.setTimeInMillis(c.getTime());
 	    if (lastCalc.get(Calendar.MONTH) != nextCalc.get(Calendar.MONTH)) {
-		mSections.add(new Section(TYPE_HEAD, nextCalc
-			.get(Calendar.MONTH) + "month"));
+		mSections.add(new Section(TYPE_HEAD, (nextCalc
+			.get(Calendar.MONTH) + 1) + "月 "));
 		lastCalc = nextCalc;
 	    }
 
@@ -471,10 +486,12 @@ public class CustomerManagementFragment extends BaseFragment implements
 
 	private Context mContext;
 	private ArrayList<Section> mSections;
+	private String[] mProgress;
 
 	public CustomerAdapter(Context context, ArrayList<Section> sections) {
 	    mContext = context;
 	    mSections = sections;
+	    mProgress = mContext.getResources().getStringArray(R.array.progress);
 	}
 
 	@Override
@@ -554,7 +571,17 @@ public class CustomerManagementFragment extends BaseFragment implements
 		tvLoan.setText("");
 	    }
 	    tvSource.setText(c.getSource());
-	    tvProgress.setText(c.getProgress());
+	    String progress = c.getProgress();
+	    if (progress != null) {
+		tvProgress.setText(c.getProgress());
+		for (int i = 0; i < mProgress.length; i++) {
+		    if (mProgress[i].equalsIgnoreCase(progress)) {
+			tvProgress.setTextColor(getResources().getColor(progressColor[i]));
+			break;
+		    }
+		}
+	    }
+	    
 	    return convertView;
 	}
 

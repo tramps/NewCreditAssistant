@@ -23,6 +23,7 @@
         android:layout_toRightOf="@id/cb_choose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/cmName"
         />
     
     <ImageView 
@@ -32,6 +33,7 @@
         android:layout_toRightOf="@id/tvName"
         android:layout_marginLeft="10dp"
         android:layout_alignBottom="@id/tvName"
+        android:src="@drawable/ic_single_star"
         />
     
     <TextView 
@@ -42,6 +44,7 @@
         android:layout_below="@id/tvName"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        style="@style/cmDetail"
         />
     
     <TextView 
@@ -52,6 +55,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="80dp"
+        style="@style/cmDetail"
         />
     
     <TextView 
@@ -60,6 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:textSize="16sp"
         />
     
 

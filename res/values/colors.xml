@@ -6,4 +6,9 @@
     <color name="customer_content">#333333</color>
     <color name="follow_text_normal">#666666</color>
     <color name="translucent_background">#a0000000</color>
+    <color name="cp_fail">#999999</color>
+    <color name="cp_potential">#bfbeda</color>
+    <color name="cp_talked">#1576d5</color>
+    <color name="cp_upgraded">#0063cf</color>
+    <color name="cp_succeded">#26be62</color>
 </resources>

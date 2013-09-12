@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.util.LocCache;
 
 /**
  * the main tab host and the main activity of this app.
@@ -94,6 +95,7 @@ public class MainTabHost extends BaseTabHost {
 	    mBackCount++;
 	    Toast.makeText(this, "再按一次退出融易记", Toast.LENGTH_SHORT).show();
 	} else {
+	    LocCache.getInstance().saveCache(this);
 	    super.onBackPressed();
 	}
     }

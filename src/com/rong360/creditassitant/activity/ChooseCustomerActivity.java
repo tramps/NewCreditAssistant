@@ -33,7 +33,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.activity.AdvancedFilterActiviy.QueryIndexer;
@@ -52,8 +51,9 @@ public class ChooseCustomerActivity extends BaseActionBar implements
     private static final int FILTER_INDEX = 100;
 
     private static final String TAG = "ChooseCustomerActivity";
-    
+
     public static final String EXTRA_NEW = "extra_new";
+    public static final String EXTRA_INDEX = "extra_index";
 
     private static final int TYPE_HEAD = 0;
     private static final int TYPE_CUSTOMER = 1;
@@ -84,7 +84,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
     private HashMap<Customer, Boolean> mCheckMap;
     private Button btnSelect;
     private Button btnImport;
-    private boolean mIsPorted = false;
+    private boolean mIsReturn = false;
     private final String mChoose = "选择";
 
     @Override
@@ -102,7 +102,8 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	mTitleCenter = getSupportActionBarCenter(true);
 	mTitleCenter.showLeft();
 
-	mFilterIndex = 0;
+	mFilterIndex = getIntent().getIntExtra(EXTRA_INDEX, 0);
+	Log.i(TAG, "filer index" + mFilterIndex);
 	initQuickAction();
 	mTitleCenter.setTitleListener(new OnClickListener() {
 
@@ -112,21 +113,21 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    }
 	});
 
-	initCheckMap();
-
     }
 
     private void initCheckMap() {
+	Log.i(TAG, "check map");
+	mCheckMap.clear();
 	String mCustomerInfo =
 		getIntent().getStringExtra(SendGroupSmsActivity.EXTRA_CUSTOMER);
 	if (mCustomerInfo == null) {
 	    return;
 	}
-	String[] cuses = mCustomerInfo.split("#");
+	String[] cuses = mCustomerInfo.split("%");
 	Log.i(TAG, "customer :" + cuses.length);
 	for (String c : cuses) {
-	    String[] singel = c.split(";,;");
-	    for (Customer customer : mCustomers) {
+	    String[] singel = c.split("#");
+	    for (Customer customer : mFilteredCustomers) {
 		if (ModelHeler.isTelEqual(customer.getTel(), singel[1])) {
 		    mCheckMap.put(customer, true);
 		    break;
@@ -134,8 +135,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    }
 	}
 	
-	Log.i(TAG, "customer :" + mCheckMap.size());
-	
+	btnImport.setText(mChoose + "(" + mCheckMap.size() + ")");
     }
 
     private void initQuickAction() {
@@ -166,6 +166,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		mFilterIndex = actionId;
 		mTitleCenter.setTitle(mFilter[mFilterIndex]);
 		getFilteredCustomers();
+		initCheckMap();
 		initContent();
 	    }
 	});
@@ -199,8 +200,10 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    if (query != null) {
 		mQueryIndex.addAll(query);
 	    }
-
+	    mIsReturn = true;
+	    Log.i(TAG, "mQuery size:" + mQueryIndex.size());
 	    getFilteredCustomers();
+	    initCheckMap();
 	    initContent();
 	}
 
@@ -209,13 +212,27 @@ public class ChooseCustomerActivity extends BaseActionBar implements
     @Override
     public void onResume() {
 	super.onResume();
+	Log.i(TAG, "onresume");
+	if (!mIsReturn) {
+	    ArrayList<String> query =
+		    getIntent().getStringArrayListExtra(
+			    AdvancedFilterActiviy.EXTRA_QUERY);
+	    mQueryIndex.clear();
+	    if (query != null) {
+		mQueryIndex.addAll(query);
+	    }
+	    Log.i(TAG, "query size:" + mQueryIndex.size());
+	    getFilteredCustomers();
+	    initCheckMap();
+	    initContent();
+	}
+	
+	mIsReturn = false;
 	if (mFilterIndex == FILTER_INDEX) {
 	    mTitleCenter.setTitle("高级筛选");
 	} else {
 	    mTitleCenter.setTitle(mFilter[mFilterIndex]);
 	}
-	getFilteredCustomers();
-	initContent();
     }
 
     @Override
@@ -282,7 +299,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    }
 
 	} else {
-	    Log.i(TAG, "notified");
+//	    Log.i(TAG, "notified");
 	    llNoCustomers.setVisibility(View.GONE);
 	    lvCustomers.setVisibility(View.VISIBLE);
 	    mAdapter.notifyDataSetChanged();
@@ -477,16 +494,16 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	Calendar lastCalc = Calendar.getInstance(Locale.CHINA);
 	Customer lastCustomer = customers.get(0);
 	lastCalc.setTimeInMillis(lastCustomer.getTime());
-	mSections.add(new Section(TYPE_HEAD, lastCalc.get(Calendar.MONTH)
-		+ "month "));
+	mSections.add(new Section(TYPE_HEAD, (lastCalc.get(Calendar.MONTH) + 1)
+		+ "月"));
 	mSections.add(new Section(TYPE_CUSTOMER, lastCustomer));
 	Calendar nextCalc = Calendar.getInstance();
 	for (int i = 1; i < customers.size(); i++) {
 	    Customer c = customers.get(i);
 	    nextCalc.setTimeInMillis(c.getTime());
 	    if (lastCalc.get(Calendar.MONTH) != nextCalc.get(Calendar.MONTH)) {
-		mSections.add(new Section(TYPE_HEAD, nextCalc
-			.get(Calendar.MONTH) + "month"));
+		mSections.add(new Section(TYPE_HEAD, (nextCalc
+			.get(Calendar.MONTH) + 1) + "月"));
 		lastCalc = nextCalc;
 	    }
 
@@ -504,33 +521,36 @@ public class ChooseCustomerActivity extends BaseActionBar implements
     @Override
     public void onClick(View v) {
 	if (v == btnImport) {
-	    if (!mIsPorted) {
-		boolean isNew = getIntent().getBooleanExtra(EXTRA_NEW, true);
-		Intent intent;
-		if (isNew) {
-		    intent = new Intent(this, SendGroupSmsActivity.class);
-		} else {
-		    intent = new Intent();
-		}
-		StringBuilder sb = new StringBuilder();
-		for (Customer c : mCheckMap.keySet()) {
-		    sb.append(c.getName());
-		    sb.append(";,;");
-		    sb.append(c.getTel());
-		    sb.append(";#;");
-		}
-		Log.i(TAG, sb.toString());
-		String customer = sb.toString().substring(0, sb.length() - 1);
-		intent.putExtra(SendGroupSmsActivity.EXTRA_CUSTOMER, customer);
-		if (isNew) {
-		    startActivity(intent);
-		} else {
-		    setResult(RESULT_OK, intent);
-		}
-		finish();
+	    boolean isNew = getIntent().getBooleanExtra(EXTRA_NEW, true);
+	    Intent intent;
+	    if (isNew) {
+		intent = new Intent(this, SendGroupSmsActivity.class);
 	    } else {
-		MyToast.makeText(this, "您已经导过了，亲", Toast.LENGTH_SHORT).show();
+		intent = new Intent();
 	    }
+	    StringBuilder sb = new StringBuilder();
+	    if (mCheckMap.size() == 0) {
+		MyToast.makeText(this, "请选择客户！").show();
+		return;
+	    }
+	    for (Customer c : mCheckMap.keySet()) {
+		sb.append(c.getName());
+		sb.append("#");
+		sb.append(c.getTel());
+		sb.append("%");
+	    }
+	    Log.i(TAG, sb.toString());
+	    String customer = sb.toString().substring(0, sb.length() - 1);
+	    intent.putExtra(SendGroupSmsActivity.EXTRA_CUSTOMER, customer);
+	    intent.putExtra(EXTRA_INDEX, mFilterIndex);
+	    intent.putStringArrayListExtra(AdvancedFilterActiviy.EXTRA_QUERY,
+		    mQueryIndex);
+	    if (isNew) {
+		startActivity(intent);
+	    } else {
+		setResult(RESULT_OK, intent);
+	    }
+	    finish();
 
 	} else if (v == btnSelect) {
 	    if (mCheckMap.size() == mFilteredCustomers.size()) {
@@ -625,6 +645,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    }
 	    if (c.getLoan() > 0) {
 		tvLoan.setText(c.getLoan() + "");
+		tvLoan.setVisibility(View.VISIBLE);
 	    } else {
 		tvLoan.setVisibility(View.INVISIBLE);
 	    }

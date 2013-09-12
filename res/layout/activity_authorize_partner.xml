@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <RelativeLayout
+        android:id="@+id/rlAuthorize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:descendantFocusability="blocksDescendants"
+        android:background="@drawable/bkg_single_round"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/ivSign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:duplicateParentState="true"
+            android:src="@drawable/ic_green_circle" />
+        
+        <TextView 
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/ivSign"
+            android:layout_centerVertical="true"
+            android:duplicateParentState="true"
+            android:text="融360账号导入"
+            />
+        
+        <TextView 
+            android:id="@+id/tvHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:duplicateParentState="true"
+            />
+        
+        <ImageView 
+            android:id="@+id/ivHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sucseed"
+            android:layout_toLeftOf="@id/tvHint"
+            android:duplicateParentState="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            />
+        
+    </RelativeLayout>
+
+</LinearLayout>

@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="35dp"
-                android:background="@drawable/ic_save_no_normal" />
+                android:background="@drawable/ic_safe_no" />
 
             <TextView
                 android:id="@+id/tvSaveHint"
@@ -37,7 +37,7 @@
                 android:layout_alignBottom="@id/btnSafe"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="35dp"
-                android:background="@drawable/ic_lock_no_normal" />
+                android:background="@drawable/ic_lock_no" />
 
             <TextView
                 android:layout_width="wrap_content"

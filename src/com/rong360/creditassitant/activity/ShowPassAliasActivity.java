@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.LinearGradient;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -16,13 +17,13 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.util.PassCheckHelper;
 
-public class ShowPassAliasActivity extends Activity implements TextWatcher,
-	OnClickListener {
+public class ShowPassAliasActivity extends Activity implements OnClickListener {
     private static final String TAG = "ShowPassActivity";
     private EditText etO;
     private EditText etS;
@@ -34,10 +35,8 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
     private ArrayList<EditText> mEdits;
     private HashMap<EditText, EditText> mForwardMap;
     private HashMap<EditText, EditText> mBackwardMap;
-    private HashMap<EditText, Integer> mValues;
 
     private TextView tvHint;
-    private boolean mIsback = false;
     private int mWrongCount = 0;
     private static final int MAXIMUM_COUNT = 5;
 
@@ -45,51 +44,28 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
     private Button btnTwo;
     private Button btnThree;
     private Button btnFour;
+    private Button btnFive;
+    private Button btnSix;
+    private Button btnSeven;
+    private Button btnEight;
+    private Button btnNine;
+    private Button btnZero;
+    private Button btnClean;
+    private LinearLayout llBack;
+
+    private ArrayList<Button> mButtons;
+    private boolean mIsBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-	setContentView(R.layout.activity_show_pass);
+	setContentView(R.layout.activity_show_pass_key);
 	super.onCreate(savedInstanceState);
 	mEdits = new ArrayList<EditText>(4);
 	mForwardMap = new HashMap<EditText, EditText>(3);
 	mBackwardMap = new HashMap<EditText, EditText>(3);
-	mValues = new HashMap<EditText, Integer>();
+	mButtons = new ArrayList<Button>();
 	initContent();
-	setTextChangeListener();
-	// setOnTouchListener();
-	etO.requestFocus();
-	// etO.setFocusable(true);
     }
-
-    private void setTextChangeListener() {
-	for (EditText et : mEdits) {
-	    et.addTextChangedListener(this);
-	    // et.setRawInputType(InputType.TYPE_CLASS_PHONE);
-	}
-    }
-
-    private void setOnTouchListener() {
-	for (EditText et : mEdits) {
-	    et.setOnTouchListener(mOnTouchListener);
-	}
-    }
-
-    private OnTouchListener mOnTouchListener = new OnTouchListener() {
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-	    Log.i(TAG, "ontouch;");
-	    if (v instanceof EditText) {
-		EditText et = (EditText) v;
-		if (et != mCurrentE) {
-		    et.clearFocus();
-		    mCurrentE.requestFocus();
-		    mCurrentE.requestFocusFromTouch();
-		}
-	    }
-	    return false;
-	}
-    };
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -104,32 +80,6 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
 	mWrongCount = 0;
 	tvHint.setVisibility(View.GONE);
     }
-
-    // @Override
-    // public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Log.i(TAG, "keycode" + keyCode);
-    // if (keyCode != KeyEvent.KEYCODE_DEL) {
-    // mValues.put(mCurrentE, keyCode);
-    // mCurrentE.setText("●");
-    // mIsback = false;
-    // mCurrentE = mForwardMap.get(mCurrentE);
-    // if (mCurrentE == null) {
-    // mCurrentE = etF;
-    // mHandler.postDelayed(mValidate, 200);
-    // }
-    // } else {
-    // mIsback = true;
-    // if (mIsback) {
-    // mCurrentE = mBackwardMap.get(mCurrentE);
-    // if (mCurrentE == null) {
-    // mCurrentE = etO;
-    // }
-    // }
-    // mCurrentE.setText("");
-    // }
-    // return super.onKeyDown(keyCode, event);
-    //
-    // }
 
     private void initContent() {
 	etO = (EditText) findViewById(R.id.etPassO);
@@ -153,22 +103,41 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
 
 	mCurrentE = etO;
 
-	// EditText etNumber = (EditText) findViewById(R.id.etNumber);
-	// etNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
-	// etNumber.setClickable(false);
-	// // etNumber.setFocusable(false);
-	// initButton();
+	initButton();
     }
 
     @Override
     public void onClick(View v) {
-	if (v == btnOne) {
-	    mCurrentE.setText(btnOne.getText());
-	} else if (v == btnTwo) {
-	    mCurrentE.setText(btnTwo.getText());
-	}
+	if (mButtons.contains(v)) {
+	    Button clicked = (Button) v;
+	    if (mIsBack && mCurrentE.getText().length() > 0) {
+		mCurrentE = mForwardMap.get(mCurrentE);
+	    }
+	    mCurrentE.setText(clicked.getText());
+	    mCurrentE = mForwardMap.get(mCurrentE);
+	    if (mCurrentE == null) {
+		mHandler.post(mValidate);
+	    }
+	    mIsBack = false;
+	} else if (v == llBack) {
+	    if (!mIsBack) {
+		mCurrentE = mBackwardMap.get(mCurrentE);
+		if (mCurrentE == null) {
+		    mCurrentE = etO;
+		    return;
+		}
 
-	// mCurrentE = mForwardMap.get(mCurrentE);
+	    }
+	    mIsBack = true;
+	    mCurrentE.setText("");
+	    mCurrentE = mBackwardMap.get(mCurrentE);
+	    if (mCurrentE == null) {
+		mCurrentE = etO;
+	    }
+	} else if (v == btnClean) {
+	    reInput();
+	    mIsBack = false;
+	}
     }
 
     private void initButton() {
@@ -176,44 +145,34 @@ public class ShowPassAliasActivity extends Activity implements TextWatcher,
 	btnTwo = (Button) findViewById(R.id.btnTwo);
 	btnThree = (Button) findViewById(R.id.btnThree);
 	btnFour = (Button) findViewById(R.id.btnFour);
-	btnOne.setOnClickListener(this);
-	btnTwo.setOnClickListener(this);
-	btnThree.setOnClickListener(this);
+	btnFive = (Button) findViewById(R.id.btnFive);
+	btnSix = (Button) findViewById(R.id.btnSix);
+	btnSeven = (Button) findViewById(R.id.btnSeven);
+	btnEight = (Button) findViewById(R.id.btnEight);
+	btnNine = (Button) findViewById(R.id.btnNine);
+	btnClean = (Button) findViewById(R.id.btnClear);
+	btnZero = (Button) findViewById(R.id.btnZero);
+	llBack = (LinearLayout) findViewById(R.id.llBack);
+	mButtons.add(btnOne);
+	mButtons.add(btnTwo);
+	mButtons.add(btnFour);
+	mButtons.add(btnThree);
+	mButtons.add(btnFive);
+	mButtons.add(btnSix);
+	mButtons.add(btnEight);
+	mButtons.add(btnSeven);
+	mButtons.add(btnNine);
+	mButtons.add(btnZero);
+	btnClean.setOnClickListener(this);
+	llBack.setOnClickListener(this);
+
+	for (Button b : mButtons) {
+	    b.setOnClickListener(this);
+	}
     }
 
     @Override
     public void onBackPressed() {
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count,
-	    int after) {
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-	String text = s.toString();
-	// mValues.put(mcur, value)
-	if (text.length() == 1) {
-	    mCurrentE = mForwardMap.get(mCurrentE);
-	    if (mCurrentE == null) {
-		mCurrentE = etF;
-		mHandler.postDelayed(mValidate, 200);
-	    }
-	} else {
-	    Log.i(TAG, "back");
-	    mCurrentE = mBackwardMap.get(mCurrentE);
-	    if (mCurrentE == null) {
-		mCurrentE = etO;
-	    }
-	}
-	mCurrentE.requestFocus();
-	Log.i(TAG, text + mCurrentE.getId());
     }
 
     private Handler mHandler = new Handler();

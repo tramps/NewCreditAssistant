@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout 
+    android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center"
+	android:layout_margin="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+	<RelativeLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:background="@android:color/black"
+	   	android:layout_gravity="center"
+	   	android:gravity="center"
+	   	android:padding="15dp"
+	    >
+	    
+	    <Button 
+	        android:id="@+id/btnClose"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:background="@drawable/ic_close"
+	        />
+	
+	    <TextView 
+	        android:id="@+id/tvTel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="16sp"
+	        android:textColor="@android:color/white"
+	        android:layout_marginTop="35dp"
+	        style="@style/cmDetail"
+	        android:text="sdf"
+	        />
+	    <TextView 
+	        android:id="@+id/tvProgress"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_toLeftOf="@id/btnClose"
+	        android:layout_alignBottom="@id/tvTel"
+	        android:layout_marginRight="15dp"
+	        style="@style/cmDetail"
+	        android:text="sdf"
+	        />
+	    
+	    <TextView 
+	        android:id="@+id/tvLast"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/tvTel"
+	        style="@style/cmDetail"
+	        android:text="sdf"
+	        />
+	    
+	    <Button 
+	        android:id="@+id/btnAction"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:padding="10dp"
+	        android:layout_marginTop="15dp"
+	        android:background="@drawable/bkg_white"
+	        android:layout_below="@id/tvLast"
+	        android:layout_toLeftOf="@id/btnClose"
+	        android:text="保存为联系人"
+	        />
+	</RelativeLayout>
+
+</LinearLayout>

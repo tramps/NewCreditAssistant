@@ -449,6 +449,9 @@ public class AddCustomerActivity extends BaseActionBar implements
 
 	boolean isSuccess = false;
 	if (mCustomer.getId() == 0) {
+	    if (mCustomer.getProgress() == null || mCustomer.getProgress().length() == 0) {
+		mCustomer.setProgress("潜在客户");
+	    }
 	    isSuccess =
 		    GlobalValue.getIns().getCustomerHandler(this)
 			    .insertCustomer(mCustomer);

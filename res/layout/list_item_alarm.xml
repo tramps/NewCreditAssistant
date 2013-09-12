@@ -2,14 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bkg_section"
     android:padding="10dp">
     
     <TextView 
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        style="@style/cmName"
         />
     
     <TextView 
@@ -19,6 +20,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignBottom="@id/tvName"
         android:layout_marginRight="100dp"
+        android:textSize="16sp"
         android:layout_marginBottom="3dp"
         android:layout_centerVertical="true"
         />
@@ -28,17 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        />
-    
-    <TextView 
-        android:id="@+id/tvTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/tvDay"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+		android:layout_alignTop="@id/tvProgress"        
+        style="@style/cmDetail"
         />
     
     <TextView 
@@ -47,10 +40,24 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tvName"
         android:layout_below="@id/tvName"
+        style="@style/cmDetail"
         android:layout_toLeftOf="@id/tvTime"
-        android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_marginRight="100dp"
         />
     
+    <TextView 
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textSize="18sp"
+        android:textColor="@color/customer_content"
+        android:layout_below="@id/tvDay"
+        android:layout_marginTop="10dp"
+        android:layout_alignBottom="@id/tvComment"
+        />
 
 </RelativeLayout>

@@ -52,6 +52,7 @@ public class ComunicationHistoryFragment extends BaseFragment {
     public void onResume() {
 	super.onResume();
 	ArrayList<Communication> res = CommuHandler.getAllCallLog(mContext);
+//	LocationHelper.setAllMobileLoc(mContext, res);
 	// if (res.size() != mHistory.size()) {
 	mHistory.clear();
 	mHistory.addAll(res);
@@ -208,14 +209,12 @@ public class ComunicationHistoryFragment extends BaseFragment {
 	    if (c.getProgress() != null) {
 		tvProgress.setText(c.getProgress());
 	    } else {
-		tvProgress.setText(c.getLocation());
+		tvProgress.setText(c.getLocation() == null ? "" : c.getLocation());
 	    }
 
 	    tvTime.setText(DateUtil.getDisplayTime(c.getTime()));
 	    tvDuration.setText(DateUtil.getDisplayForDuration(c.getDuration()));
 	    return convertView;
 	}
-
     }
-
 }

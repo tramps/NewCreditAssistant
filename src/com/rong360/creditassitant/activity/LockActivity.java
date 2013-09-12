@@ -24,6 +24,7 @@ public class LockActivity extends Activity {
     private final int mMinute = 60;
 
     private long mStartTime;
+    private boolean mStop;
 
     private static final String PRE_KEY_START_LOCK_TIME = "pre_key_start_lock";
 
@@ -40,7 +41,9 @@ public class LockActivity extends Activity {
 	    }
 	    Log.i(TAG, "refresh...");
 	    tvLeftTime.setText(getDisplay(leftTime));
-	    startTiming();
+	    if (!mStop) {
+		startTiming();
+	    }
 	    return true;
 	}
     });
@@ -61,8 +64,18 @@ public class LockActivity extends Activity {
 	    PreferenceHelper.getHelper(this).writePreference(
 		    PRE_KEY_START_LOCK_TIME, String.valueOf(mStartTime));
 	}
-
+	mStop = false;
 	startTiming();
+    }
+    
+    @Override
+    public void onBackPressed() {
+	stopTiming();
+	super.onBackPressed();
+    }
+    
+    private void stopTiming() {
+	mStop = true;
     }
 
     protected CharSequence getDisplay(long leftTime) {

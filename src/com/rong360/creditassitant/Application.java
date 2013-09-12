@@ -3,12 +3,12 @@ package com.rong360.creditassitant;
 import android.content.Intent;
 import android.util.Log;
 
-import com.rong360.creditassitant.activity.ComunicationHistoryFragment;
-import com.rong360.creditassitant.activity.CustomerManagementFragment;
 import com.rong360.creditassitant.model.LocationHelper;
+import com.rong360.creditassitant.service.PhoneNoticeService;
+import com.rong360.creditassitant.task.BaseHttpsManager;
 import com.rong360.creditassitant.util.AlarmHelper;
-import com.rong360.creditassitant.util.DisplayUtils;
 import com.rong360.creditassitant.util.GlobalValue;
+import com.rong360.creditassitant.util.LocCache;
 import com.rong360.creditassitant.util.PreferenceHelper;
 
 public class Application extends android.app.Application {
@@ -22,16 +22,19 @@ public class Application extends android.app.Application {
 
     protected void onAppStart() {
 	Log.i(TAG, "Application onAppStart");
-	GlobalValue.getIns().init(getApplicationContext());
-	AlarmHelper.startAlarm(getApplicationContext());
 	String isBacked = PreferenceHelper.getHelper(this).readPreference(LocationHelper.PRE_KEY_DB);
 	if (isBacked == null || !isBacked.equalsIgnoreCase(LocationHelper.BACKED)) {
 	    LocationHelper.back2SdCard(getApplicationContext());
 	}
+	GlobalValue.getIns().init(getApplicationContext());
+	AlarmHelper.startAlarm(getApplicationContext());
+	LocCache.getInstance().restoreCache(getApplicationContext());
+	LocationHelper.initHomeMap(getApplicationContext());
+	BaseHttpsManager.init(getApplicationContext());
 	removePreference();
-//	Intent service =
-//		new Intent(getApplicationContext(), PhoneNoticeService.class);
-//	startService(service);
+	Intent service =
+		new Intent(getApplicationContext(), PhoneNoticeService.class);
+	startService(service);
     }
 
     private void removePreference() {

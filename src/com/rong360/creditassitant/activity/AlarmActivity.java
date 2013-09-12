@@ -126,7 +126,7 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    tvProgress.setText(c.getProgress());
 	    tvComment.setText(c.getLastFollowComment());
 	    tvLast.setText(DateUtil.getDisplayTime(CommuHandler
-		    .getLastCallOfTel(this, c.getTel()).getTime()));
+		    .getLastCallOfTel(this, c.getTel()).getTime()) + "联系过");
 	} else {
 	    tvNumber.setText("您有" + mAlarmCustomers.size() + "条跟进提醒");
 	    mAdapter.notifyDataSetChanged();

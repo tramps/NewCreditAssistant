@@ -5,62 +5,62 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical" >
-    
-    <RelativeLayout 
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="260dp"
         android:layout_gravity="center"
-        android:gravity="center"
+        android:paddingBottom="20dp"
+        android:layout_margin="20dp"
         android:background="@drawable/bkg_black"
-        >
-    <TextView 
-        android:id="@+id/tvNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        style="@style/AddCustomerLabel"
-        />
-    
-    <Button 
-        android:id="@+id/btnClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/ic_close"
-        />
-    
-    <Button 
-        android:id="@+id/btnView"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bkg_white"
-        android:layout_alignParentBottom="true"
-        android:text="查看客户"
-        />
-    
-    <ListView 
-        android:id="@+id/lvAlarm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvNumber"
-        android:layout_marginTop="20dp"
-        android:layout_above="@id/btnView"
-        ></ListView>
-        
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/tvNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/ic_close" />
+
+        <Button
+            android:id="@+id/btnView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bkg_white"
+            android:text="查看客户" />
+
+        <ListView
+            android:id="@+id/lvAlarm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/btnView"
+            android:layout_margin="15dp"
+            android:divider="@null"
+            android:layout_below="@id/tvNumber"
+            android:layout_marginTop="20dp" >
+        </ListView>
     </RelativeLayout>
-    
-     <Button
+
+    <Button
         android:id="@+id/btnSound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       	android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginTop="45dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:padding="12dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/ic_silent" />
-    
-    
-    
+
 </FrameLayout>

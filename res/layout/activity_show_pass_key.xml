@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:clickable="false"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/llTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bkg_pass"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:text="输入密码" />
+
+        <TextView
+            android:id="@+id/tvHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="1dp" />
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:layout_below="@id/llTitle"
+        android:orientation="horizontal"
+        android:padding="15dp" >
+
+        <EditText
+            android:id="@+id/etPassO"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/ic_pass"
+            android:gravity="center"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:digits="0123456789"
+            android:inputType="textPassword"
+            android:maxLength="1" />
+
+        <EditText
+            android:id="@+id/etPassS"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/ic_pass"
+            android:focusable="true"
+            android:cursorVisible="false"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:inputType="textPassword"
+            android:digits="0123456789"
+            android:maxLength="1" />
+
+        <EditText
+            android:id="@+id/etPassT"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/ic_pass"
+            android:focusable="true"
+            android:cursorVisible="false"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
+            android:digits="0123456789"
+            android:gravity="center"
+            android:inputType="textPassword"
+            android:maxLength="1" />
+
+        <EditText
+            android:id="@+id/etPassF"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ic_pass"
+            android:focusable="true"
+            android:cursorVisible="false"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:digits="0123456789"
+            android:inputType="textPassword"
+            android:maxLength="1" />
+    </LinearLayout>
+    
+    <TableLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="65dp"
+        android:background="@android:color/black"
+        android:padding="8dp"
+        >
+        
+        <TableRow >
+        <Button 
+            android:id="@+id/btnOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:background="@drawable/bkg_key"
+            />
+        <Button 
+            android:id="@+id/btnTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bkg_key"
+            />
+        <Button 
+            android:id="@+id/btnThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:background="@drawable/bkg_key"
+            />
+        </TableRow>
+        
+        <TableRow  android:layout_marginTop="5dp">
+         <Button 
+            android:id="@+id/btnFour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:background="@drawable/bkg_key"
+            />
+        <Button 
+            android:id="@+id/btnFive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bkg_key"
+            />
+        <Button 
+            android:id="@+id/btnSix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:background="@drawable/bkg_key"
+            />
+         </TableRow>
+         
+        <TableRow android:layout_marginTop="5dp">
+         <Button 
+            android:id="@+id/btnSeven"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:background="@drawable/bkg_key"
+            />
+        <Button 
+            android:id="@+id/btnEight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bkg_key"
+            />
+        <Button 
+            android:id="@+id/btnNine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:background="@drawable/bkg_key"
+            />
+         </TableRow>
+         
+        <TableRow android:layout_marginTop="5dp">
+         <Button 
+            android:id="@+id/btnClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:background="@drawable/bkg_key"
+            />
+        <Button 
+            android:id="@+id/btnZero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bkg_key"
+            />
+        <LinearLayout 
+            android:id="@+id/llBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bkg_key"
+            android:layout_weight="1"
+            android:descendantFocusability="blocksDescendants"
+            >
+	        <ImageView 
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:duplicateParentState="true"
+	            android:src="@drawable/ic_key_delete"
+	            />
+        </LinearLayout>
+         </TableRow>
+    </TableLayout>
+
+</RelativeLayout>

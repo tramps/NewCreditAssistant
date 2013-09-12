@@ -19,7 +19,7 @@
             android:id="@+id/ivSafe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_safe_normal"
+            android:background="@drawable/ic_safe_no"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="45dp"
             />
@@ -47,7 +47,7 @@
              android:layout_height="wrap_content"
              android:layout_below="@id/tvSafeDetail"
              android:layout_alignLeft="@id/tvSafeDetail"
-             android:background="@drawable/ic_stop"
+             android:background="@drawable/ic_start"
              android:layout_marginTop="25dp"
              android:layout_marginBottom="25dp"
              />

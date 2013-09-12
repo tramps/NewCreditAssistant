@@ -2,12 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:background="@drawable/bkg_section"
+    android:paddingBottom="5dp"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp">
     
     <TextView 
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="top"
+        style="@style/cmName"
         />
     
     <ImageView 
@@ -16,7 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/tvName"
         android:layout_marginLeft="10dp"
-        android:layout_alignBottom="@id/tvName"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/ic_single_star"
         />
     
     <TextView 
@@ -25,8 +32,10 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tvName"
         android:layout_below="@id/tvName"
-        android:layout_marginTop="10dp"
+        style="@style/cmDetail"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
         />
     
     <TextView 
@@ -34,9 +43,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvName"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="80dp"
+        android:layout_toRightOf="@id/tvLoan"
+        style="@style/cmDetail"
         />
     
     <TextView 
@@ -45,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:textSize="16sp"
         />
     
 

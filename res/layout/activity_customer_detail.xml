@@ -31,6 +31,16 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/tvName"
                 android:layout_toRightOf="@id/tvName" />
+            
+            <ImageButton 
+                android:id="@+id/ibStar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_star_checked"
+                android:layout_alignBottom="@id/tvTel"
+                />
 
             <TextView
                 android:id="@+id/tvLoan"
@@ -55,15 +65,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:padding="1dp"
             android:background="@drawable/bkg_single_round" >
 
             <TableRow android:gravity="center" >
 
                 <LinearLayout
                     android:id="@+id/llTel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/bkg_section"
+                    android:descendantFocusability="blocksDescendants"
+                    android:gravity="center"
                     android:orientation="vertical" >
 
                     <ImageView
@@ -86,9 +100,12 @@
 
                 <LinearLayout
                     android:id="@+id/llMsg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/bkg_section"
+                    android:descendantFocusability="blocksDescendants"
+                    android:gravity="center"
                     android:orientation="vertical" >
 
                     <ImageView
@@ -111,9 +128,12 @@
 
                 <LinearLayout
                     android:id="@+id/llComHistory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/bkg_section"
+                    android:descendantFocusability="blocksDescendants"
+                    android:gravity="center"
                     android:orientation="vertical" >
 
                     <ImageView
@@ -127,32 +147,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="通讯记录" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/divider_vertical" />
-
-                <LinearLayout
-                    android:id="@+id/llStar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical" >
-
-                    <ImageView
-                        android:id="@+id/ivStar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/ic_star_checked" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="标星" />
                 </LinearLayout>
             </TableRow>
         </TableLayout>

@@ -169,6 +169,26 @@ public class DateUtil {
 	}
 	return sb.toString();
     }
+    
+    public static String getDisplayTimeForTask(long time) {
+   	Calendar callTime = Calendar.getInstance();
+   	callTime.setTimeInMillis(time);
+
+   	Calendar now = Calendar.getInstance();
+   	now.setTimeInMillis(System.currentTimeMillis());
+
+   	StringBuilder sb = new StringBuilder();
+   	if (isSameDay(now, callTime)) {
+   	    sb.append(TODAY);
+   	} else if (isYesterday(now, callTime)) {
+   	    sb.append(YESTERDAY);
+   	} else if (isNextDay(now, callTime)) {
+   	    sb.append(TOMMORROW);
+   	} else if (isSameWeek(now, callTime)) {
+   	    sb.append(getWeekDay(callTime.getTime()));
+   	}
+   	return sb.toString();
+       }
 
     public static String getDisplayTimeForDetail(long time) {
 	Calendar callTime = Calendar.getInstance();

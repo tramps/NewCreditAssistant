@@ -39,7 +39,7 @@ public class PassCheckHelper {
 	Log.i(TAG, "period" + period);
 
 	if (period > THRESH_HOLD) {
-	    return true;
+	    return false;
 	}
 	return false;
     }

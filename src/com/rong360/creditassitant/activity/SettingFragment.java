@@ -76,6 +76,12 @@ public class SettingFragment extends BaseFragment implements OnClickListener{
 	} else if (v == rlSource) {
 	    Intent intent = new Intent(mContext, SourceActivity.class);
 	    IntentUtil.startActivity(mContext, intent);
+	} else if (v == rlImportPartner) {
+	    Intent intent = new Intent(mContext, AuthorisePartnerActivity.class);
+	    IntentUtil.startActivity(mContext, intent);
+	} else if (v == rlImportContact) {
+	    Intent intent = new Intent(mContext, ImportContactActivity.class);
+	    IntentUtil.startActivity(mContext, intent);
 	}
     }
 }

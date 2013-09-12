@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.rong360.creditassitant.util.DbHelper.BaseDbHandler;
 import com.rong360.creditassitant.util.DbHelper.TableInfo;
+import com.rong360.creditassitant.util.GlobalValue;
+import com.rong360.creditassitant.util.ModelHeler;
 
 public class CustomerHandler extends BaseDbHandler {
     private static final String TAG = CustomerHandler.class.getSimpleName();
@@ -144,6 +146,12 @@ public class CustomerHandler extends BaseDbHandler {
     }
 
     public Customer getCustomerByTel(String tel) {
+	ArrayList<Customer> customers = GlobalValue.getIns().getAllCustomers();
+	for (Customer c : customers) {
+	    if (ModelHeler.isTelEqual(tel, c.getTel())) {
+		return c;
+	    }
+	}
 	String slq = "select * from " + TABLE_NAME + " where " + TEL + " = ? ";
 	SQLiteDatabase db = mHelper.getReadableDatabase();
 	Cursor c = db.rawQuery(slq, new String[] { tel });

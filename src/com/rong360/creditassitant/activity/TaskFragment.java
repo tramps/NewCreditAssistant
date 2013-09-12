@@ -23,11 +23,12 @@ import com.rong360.creditassitant.widget.TitleBarCenter;
 public class TaskFragment extends BaseFragment {
     private ArrayList<Customer> mAlarmCustomers;
     private AlarmAdapter mAdapter;
-    
+
     private ListView lvAlarm;
     private TextView tvHint;
 
     private Calendar mToday;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -37,35 +38,37 @@ public class TaskFragment extends BaseFragment {
 	mAlarmCustomers = new ArrayList<Customer>();
 	mAdapter = new AlarmAdapter(mContext, mAlarmCustomers);
     }
-    
+
     @Override
     protected void initElement() {
 	lvAlarm = (ListView) findViewById(R.id.lvAlarm);
 	tvHint = (TextView) findViewById(R.id.tvHint);
 	lvAlarm.setAdapter(mAdapter);
     }
-    
+
     @Override
     public void onResume() {
-        super.onResume();
-        
-        mToday = Calendar.getInstance();
+	super.onResume();
+
+	mToday = Calendar.getInstance();
 	mToday.set(Calendar.HOUR_OF_DAY, 0);
 	mToday.set(Calendar.MINUTE, 0);
 	mToday.set(Calendar.MILLISECOND, 0);
-        initContent();
+	initContent();
     }
 
     private void initContent() {
 	mAlarmCustomers.clear();
-	ArrayList<Customer> allCustomers = GlobalValue.getIns().getAllCustomers();
-	
+	ArrayList<Customer> allCustomers =
+		GlobalValue.getIns().getAllCustomers();
+
 	for (Customer c : allCustomers) {
-	    if (c.getAlarmTime() > mToday.getTimeInMillis() || c.getAlarmTime() != 0) {
+	    if (c.getAlarmTime() > mToday.getTimeInMillis()
+		    || c.getAlarmTime() != 0) {
 		mAlarmCustomers.add(c);
 	    }
 	}
-	
+
 	if (mAlarmCustomers.size() > 0) {
 	    lvAlarm.setVisibility(View.VISIBLE);
 	    mAdapter.notifyDataSetChanged();
@@ -80,14 +83,16 @@ public class TaskFragment extends BaseFragment {
     protected int getLayout() {
 	return R.layout.fragment_task;
     }
-    
+
     private class AlarmAdapter extends BaseAdapter {
 	private Context mContext;
 	private ArrayList<Customer> mCustomers;
-	
+	private String[] mProgress;
+
 	public AlarmAdapter(Context context, ArrayList<Customer> customers) {
 	    mContext = context;
 	    mCustomers = customers;
+	    mProgress = mContext.getResources().getStringArray(R.array.progress);
 	}
 
 	@Override
@@ -108,19 +113,32 @@ public class TaskFragment extends BaseFragment {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 	    if (convertView == null) {
-		convertView = LayoutInflater.from(mContext).inflate(R.layout.list_item_alarm, null);
+		convertView =
+			LayoutInflater.from(mContext).inflate(
+				R.layout.list_item_alarm, null);
 	    }
-	    
+
 	    TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
-	    TextView tvComment = (TextView) convertView.findViewById(R.id.tvComment);
-	    TextView tvProgress = (TextView) convertView.findViewById(R.id.tvProgress);
+	    TextView tvComment =
+		    (TextView) convertView.findViewById(R.id.tvComment);
+	    TextView tvProgress =
+		    (TextView) convertView.findViewById(R.id.tvProgress);
 	    TextView tvDay = (TextView) convertView.findViewById(R.id.tvDay);
 	    TextView tvTime = (TextView) convertView.findViewById(R.id.tvTime);
 	    final Customer c = getItem(position);
 	    tvName.setText(c.getName());
 	    tvComment.setText(c.getLastFollowComment());
-	    tvProgress.setText(c.getProgress());
-	    tvDay.setText(DateUtil.getDisplayTime(c.getAlarmTime()));
+	    String progress = c.getProgress();
+	    if (progress != null) {
+		tvProgress.setText(c.getProgress());
+		for (int i = 0; i < mProgress.length; i++) {
+		    if (mProgress[i].equalsIgnoreCase(progress)) {
+			tvProgress.setTextColor(getResources().getColor(CustomerManagementFragment.progressColor[i]));
+			break;
+		    }
+		}
+	    }
+	    tvDay.setText(DateUtil.getDisplayTimeForTask(c.getAlarmTime()));
 	    tvTime.setText(DateUtil.getExactTime(c.getAlarmTime()));
 	    convertView.setOnClickListener(new OnClickListener() {
 		@Override
@@ -132,7 +150,7 @@ public class TaskFragment extends BaseFragment {
 		    startActivity(intent);
 		}
 	    });
-	    
+
 	    return convertView;
 	}
     }

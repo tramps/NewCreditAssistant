@@ -115,14 +115,15 @@ public class CommuHandler {
 		com.setId(customer.getId());
 		if (customer.getProgress() != null) {
 		    com.setProgress(customer.getProgress());
-		} else {
-		    com.setLocation(LocationHelper.getAreaByNumber(context,
-			    com.getTel()));
-		}
+		} 
+//		else {
+//		    com.setLocation(LocationHelper.getAreaByNumber(context,
+//			    com.getTel()));
+//		}
 	    } else {
 		com.setId(-1);
-		com.setLocation(LocationHelper.getAreaByNumber(context,
-			    com.getTel()));
+//		com.setLocation(LocationHelper.getAreaByNumber(context,
+//			    com.getTel()));
 	    }
 	    
 	    comms.add(com);

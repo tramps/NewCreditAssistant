@@ -2,14 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
+    android:orientation="vertical"
+    android:paddingTop="54dp" >
+    
     <RelativeLayout
-        android:id="@+id/fl_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <RelativeLayout
             android:id="@+id/rl_import"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,38 +48,40 @@
                 android:text="确定" />
         </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/fl_content"
+        android:layout_above="@id/rl_import"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
         <LinearLayout
-            android:id="@+id/ll_no_customer"
+        android:id="@+id/ll_no_customer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tvHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical" >
+            android:layout_gravity="center_horizontal"
+            android:text="您未存入客户" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="您未存入客户" />
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true">
+        <include layout="@layout/head_query" />
+    </LinearLayout>
 
-        <ListView
-            android:id="@+id/lvCustomer"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@id/rl_import"
-            android:layout_marginTop="54dp" />
-
-        <LinearLayout
-            android:id="@+id/llHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_above="@id/lvCustomer"
-            android:visibility="gone" >
-
-            <include layout="@layout/head_query" />
-        </LinearLayout>
+    <ListView
+        android:id="@+id/lvCustomer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llHeader" />
     </RelativeLayout>
 
 </RelativeLayout>
