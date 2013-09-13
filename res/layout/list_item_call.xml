@@ -3,10 +3,16 @@
 <LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/bkg_color"
+    android:descendantFocusability="blocksDescendants"
+    android:clickable="false"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
     xmlns:android="http://schemas.android.com/apk/res/android">
 	<RelativeLayout 
 	    android:layout_width="wrap_content"
 	    android:layout_height="48dp"
+	    android:background="@null"
 	    android:orientation="vertical" >
 	    
 	    <ImageView 
@@ -45,10 +51,10 @@
 	   	    android:id="@+id/iv_tel"
 	   	    android:layout_width="wrap_content"
 	   	    android:layout_height="wrap_content"
-	   	    android:background="@drawable/ic_tel"
+	   	    android:background="@drawable/ic_tel_pressed"
 	   	    android:layout_gravity="center_vertical"
 	   	    android:clickable="false"
-	   	    android:duplicateParentState="true"
+	   	    android:duplicateParentState="false"
 	   	    />
 	   	</LinearLayout>
 	   	

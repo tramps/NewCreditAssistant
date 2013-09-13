@@ -77,17 +77,6 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	super.onCreate(savedInstanceState);
 	getSupportActionBar(false).setTitle("客户详情");
 	mState = getResources().getStringArray(R.array.progress);
-	mCustomerId =
-		getIntent().getIntExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
-			-1);
-	mCustomer = GlobalValue.getIns().getCusmer(mCustomerId);
-	Log.i(TAG, "oncreate");
-
-	if (mCustomer == null) {
-	    finish();
-	    Log.e(TAG, "customer can't be null");
-	}
-
     }
 
     @Override
@@ -111,6 +100,14 @@ public class CustomerDetailActivity extends BaseActionBar implements
     @Override
     protected void onResume() {
 	super.onResume();
+	mCustomerId =
+		getIntent().getIntExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
+			-1);
+	mCustomer = GlobalValue.getIns().getCusmer(mCustomerId);
+	if (mCustomer == null) {
+	    finish();
+	    return;
+	}
 	initContent();
     }
 
@@ -307,6 +304,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	} else if (v == llComHistory) {
 	    Intent intent = new Intent(this, CustomerComuDetailActivity.class);
 	    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID, mCustomerId);
+	    intent.putExtra(CustomerComuDetailActivity.EXTRA_MODE, false);
 	    IntentUtil.startActivity(this, intent);
 	} else if (v == ibStar) {
 	    if (mCustomer.isIsFavored()) {

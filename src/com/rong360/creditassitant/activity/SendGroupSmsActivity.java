@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -181,12 +182,12 @@ public class SendGroupSmsActivity extends BaseActionBar implements
     }
 
     private void sendMsg() {
-	// SmsManager manager = SmsManager.getDefault();
-	// for (String[] re : mReceiver) {
-	// String msg = etMsg.getText().toString();
-	// ArrayList<String> dMsg = manager.divideMessage(msg);
-	// manager.sendMultipartTextMessage(re[1], null, dMsg, null, null);
-	// }
+	 SmsManager manager = SmsManager.getDefault();
+	 for (String[] re : mReceiver) {
+	 String msg = etMsg.getText().toString();
+	 ArrayList<String> dMsg = manager.divideMessage(msg);
+	 manager.sendMultipartTextMessage(re[1], null, dMsg, null, null);
+	 }
 	MyToast.makeText(this, "已给" + mReceiver.size() + "人发送消息",
 		Toast.LENGTH_LONG).show();
     }

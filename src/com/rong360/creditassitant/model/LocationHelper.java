@@ -16,6 +16,8 @@ import com.rong360.creditassitant.util.LocCache;
 import com.rong360.creditassitant.util.PreferenceHelper;
 
 public class LocationHelper {
+    private static final String TAG = "LocationHelper";
+    
     public static final String DEFAULT_FOLER = "data";
     public static final String DEFAULT_NAME = "loc.db";
 
@@ -29,7 +31,6 @@ public class LocationHelper {
     private static final String SQL_ALL =
 	    "select l.number, b.city from area b, loc l where b._id = l.area_id "
 		    + "and l.number in ";
-    private static final String TAG = "LocationHelper";
     private static final String SQL_AREA =
 	    "select distinct(code), city from area";
 
@@ -37,8 +38,9 @@ public class LocationHelper {
 
     public static void back2SdCard(Context context) {
 	File db = getFile(context);
+	Log.i(TAG, "back started");
 	if (db.exists() && db.length() > 1024) {
-	    return;
+//	    return;
 	} else {
 	    Log.i(TAG, "back to sd");
 	    InputStream is =
@@ -47,6 +49,7 @@ public class LocationHelper {
 	    PreferenceHelper.getHelper(context).writePreference(PRE_KEY_DB,
 		    BACKED);
 	}
+	LocationHelper.initHomeMap(context);
     }
 
     private static File getFile(Context context) {
@@ -57,7 +60,7 @@ public class LocationHelper {
 	if (mLocDb == null) {
 	    mLocDb =
 		    SQLiteDatabase.openDatabase(getFile(context).getPath(),
-			    null, SQLiteDatabase.OPEN_READONLY);
+			    null, SQLiteDatabase.NO_LOCALIZED_COLLATORS);
 	}
 	return mLocDb;
     }
@@ -82,7 +85,14 @@ public class LocationHelper {
 	sb.append(");");
 
 	String sql = SQL_ALL + sb.toString();
-	SQLiteDatabase db = getSqliteDb(context);
+	Log.i(TAG, sql);
+	SQLiteDatabase db;
+	try {
+	    db = getSqliteDb(context);
+	} catch (Exception e) {
+	    Log.e(TAG, e.toString());
+	    return;
+	}
 	Cursor c = db.rawQuery(sql, null);
 	LocCache cache = LocCache.getInstance();
 	while (c != null && c.moveToNext()) {
@@ -133,6 +143,8 @@ public class LocationHelper {
 	    }
 	    homeMap.put(key, city);
 	}
+	
+	Log.i(TAG, "home map: " + homeMap.size());
     }
 
     public static String getAreaByNumber(Context context, String number) {
@@ -158,7 +170,7 @@ public class LocationHelper {
 		key = first;
 	    }
 
-	} else if (number.length() > 10) {
+	} else if (number.length() >= 9) {
 	    sql = SQL_HOME;
 	    first = number.substring(1, 3);
 	    second = number.substring(1, 4);
@@ -166,7 +178,9 @@ public class LocationHelper {
 	    if (v == null) {
 		v = cache.getHomeMap().get(Integer.valueOf(second));
 	    }
-	    Log.i(TAG, v + "home cached");
+	    if (v != null) {
+		Log.i(TAG, v + "home cached");
+	    }
 	    return v;
 	    // Log.i(TAG, first + " " + second);
 	    // c = db.rawQuery(sql, new String[] { first, second });

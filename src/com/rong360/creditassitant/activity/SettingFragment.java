@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.util.DataBackupHelper;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.widget.TitleBarCenter;
 
@@ -82,6 +83,8 @@ public class SettingFragment extends BaseFragment implements OnClickListener{
 	} else if (v == rlImportContact) {
 	    Intent intent = new Intent(mContext, ImportContactActivity.class);
 	    IntentUtil.startActivity(mContext, intent);
+	} else if (v == rlExport) {
+	    DataBackupHelper.backupCustomers(mContext);
 	}
     }
 }

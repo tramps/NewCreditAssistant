@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +20,9 @@ import android.widget.TextView;
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Communication;
+import com.rong360.creditassitant.model.LocationHelper;
 import com.rong360.creditassitant.util.DateUtil;
+import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.widget.TitleBarCenter;
 
@@ -51,14 +54,21 @@ public class ComunicationHistoryFragment extends BaseFragment {
     @Override
     public void onResume() {
 	super.onResume();
-	ArrayList<Communication> res = CommuHandler.getAllCallLog(mContext);
-//	LocationHelper.setAllMobileLoc(mContext, res);
-	// if (res.size() != mHistory.size()) {
+	ArrayList<Communication> res;
+	if (GlobalValue.getIns().isNeedUpdateCommunication()) {
+	    Log.i(TAG, "reloaded");
+	    res = CommuHandler.getAllCallLog(mContext);
+	    ArrayList<Communication> coms = GlobalValue.getIns().getAllComunication(mContext);
+	    coms.clear();
+	    coms.addAll(res);
+	} else {
+	    Log.i(TAG, "cached");
+	    res = GlobalValue.getIns().getAllComunication(mContext);
+	}
+	// LocationHelper.setAllMobileLoc(mContext, res);
 	mHistory.clear();
 	mHistory.addAll(res);
 	initContent();
-	// restorePosition();
-	// MobclickAgent.onEvent(mContext, UmengStasConstants.HISTORY_IN);
     }
 
     @Override
@@ -209,7 +219,13 @@ public class ComunicationHistoryFragment extends BaseFragment {
 	    if (c.getProgress() != null) {
 		tvProgress.setText(c.getProgress());
 	    } else {
-		tvProgress.setText(c.getLocation() == null ? "" : c.getLocation());
+		String location = c.getLocation();
+		if (location == null) {
+		    location = LocationHelper.getAreaByNumber(mContext, c.getTel());
+		    c.setLocation(location);
+//		    Log.i(TAG, c.getTel() + " " + c.getLocation());
+		}
+		tvProgress.setText(location);
 	    }
 
 	    tvTime.setText(DateUtil.getDisplayTime(c.getTime()));

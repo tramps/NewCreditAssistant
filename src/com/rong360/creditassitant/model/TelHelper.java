@@ -20,7 +20,7 @@ public class TelHelper {
 	if (pureTel.startsWith(COMMON_PREFIX)) {
 	    pureTel = pureTel.substring(COMMON_PREFIX.length());
 	}
-	return pureTel;
+	return pureTel.replace("[/D]", "");
     }
 
     public static String getTelNums(String tel) {

@@ -57,6 +57,7 @@ public class ImportContactActivity extends BaseActionBar implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+	mContacts = new ArrayList<Contact>();
 	super.onCreate(savedInstanceState);
 	getSupportActionBar().setTitle("通讯录导入客户");
 
@@ -74,7 +75,15 @@ public class ImportContactActivity extends BaseActionBar implements
     }
 
     private void initContent() {
-	mContacts = CommuHandler.getAllContacts(this);
+	ArrayList<Contact> contacts = CommuHandler.getAllContacts(this);
+	HashMap<String, Customer> phoneNameMap =
+		GlobalValue.getIns().getPhoneNameMap();
+	mContacts.clear();
+	for (Contact c : contacts) {
+	    if (phoneNameMap.get(TelHelper.getPureTel(c.getTel())) == null) {
+		mContacts.add(c);
+	    }
+	}
 	mCheckMap = new HashMap<Contact, Boolean>();
 	transfer2Items(mContacts);
 
@@ -83,6 +92,11 @@ public class ImportContactActivity extends BaseActionBar implements
 	if (mItems == null || mItems.size() == 0) {
 	    tvHint.setVisibility(View.VISIBLE);
 	    lvIndex.setVisibility(View.INVISIBLE);
+	    if (contacts.size() != 0) {
+		tvHint.setText("您已经导入了全部通讯录");
+	    } else {
+		tvHint.setText("通讯录没有记录");
+	    }
 	} else {
 	    maAdapter = new ContactAdapter(this, mItems);
 	    lvIndex.setAdapter(maAdapter);
@@ -314,20 +328,25 @@ public class ImportContactActivity extends BaseActionBar implements
 	for (Contact c : mCheckMap.keySet()) {
 	    if (containSameTel(mCustomers, c)) {
 		removedContacts.add(c);
-//		Log.i(TAG, "same tel: " + c.getName() + c.getTel());
+		// Log.i(TAG, "same tel: " + c.getName() + c.getTel());
 		continue;
 	    }
 	    Customer customer = new Customer();
-//	    Log.i(TAG, "before pure: " + c.getTel());
+	    // Log.i(TAG, "before pure: " + c.getTel());
 	    customer.setTel(TelHelper.getPureTel(c.getTel()));
-//	    Log.i(TAG, "after pure: " + customer.getTel());
+	    // Log.i(TAG, "after pure: " + customer.getTel());
 	    if (c.getCreateTime() != 0) {
 		customer.setTime(c.getCreateTime());
 	    } else {
 		customer.setTime(System.currentTimeMillis());
 	    }
 	    // TODO name
-	    customer.setName(c.getName());
+	    if (c.getName().length() > AddCustomerActivity.MAX_NAME_LENGTH) {
+		customer.setName(c.getName().substring(0,
+			AddCustomerActivity.MAX_NAME_LENGTH));
+	    } else {
+		customer.setName(c.getName());
+	    }
 	    if (handler.insertCustomer(customer)) {
 		customer = handler.getCustomerByTel(customer.getTel());
 		removedContacts.add(c);
@@ -336,7 +355,7 @@ public class ImportContactActivity extends BaseActionBar implements
 		    continue;
 		}
 		Action a = new Action(customer.getId(), ActionHandler.TYPE_NEW);
-		    GlobalValue.getIns().getActionHandler(this).handleAction(a);
+		GlobalValue.getIns().getActionHandler(this).handleAction(a);
 		customer.setIsImported(true);
 		GlobalValue.getIns().putCustomer(customer);
 		mCustomers.add(customer);

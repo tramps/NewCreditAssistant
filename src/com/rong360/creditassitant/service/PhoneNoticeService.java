@@ -281,6 +281,8 @@ public class PhoneNoticeService extends Service {
 
 	public void onCallStateChanged(int state, String incomingNumber) {
 	    super.onCallStateChanged(state, incomingNumber);
+	    GlobalValue.getIns().setNeedUpdateCommunication(true);
+	    
 	    Log.i(TAG, "call state: " + state + " number: " + incomingNumber
 		    + " last: " + mLastEffectiveNumber);
 	    if (mLastCallState == -1) {

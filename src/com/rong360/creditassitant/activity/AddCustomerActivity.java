@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.Action;
 import com.rong360.creditassitant.model.ActionHandler;
+import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.TelHelper;
 import com.rong360.creditassitant.util.AlarmHelper;
@@ -93,7 +94,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 
     public static final String EXTRA_CUSTOMER_ID = "extra_customer_id";
     public static final String EXTRA_TEL = "extra_tel";
-    private static final int MAX_NAME_LENGTH = 10;
+    public static final int MAX_NAME_LENGTH = 10;
     private static final int MAX_TEL_LENGTH = 15;
     private int mCustomerId = -1;
     private Customer mCustomer;
@@ -121,7 +122,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	}
 
 	mActions = new ArrayList<Action>();
-	
+
 	initContent();
     }
 
@@ -223,6 +224,14 @@ public class AddCustomerActivity extends BaseActionBar implements
 		R.array.credit);
 	setChooseValue(tvHouse, mCustomer.getHouse(), R.array.house);
 	setChooseValue(tvCar, mCustomer.getCar(), R.array.car);
+	
+	closeImm();
+    }
+    
+    private void closeImm() {
+	InputMethodManager imm =
+		    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	    mySrollview.closeInput(mySrollview, imm);
     }
 
     private void setChooseValue(TextView v, int selected, int arrayId) {
@@ -283,13 +292,11 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    }
 
 	    save2Db();
-//	    AlarmHelper.startAlarm(this, true);
+	    // AlarmHelper.startAlarm(this, true);
 	    if (mCustomerId == -1) {
 		go2Detail();
 	    }
-	    InputMethodManager imm =
-		    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-	    mySrollview.closeInput(mySrollview, imm);
+	    closeImm();
 	    finish();
 	    return true;
 
@@ -368,13 +375,16 @@ public class AddCustomerActivity extends BaseActionBar implements
 	}
 
 	mCustomer.setName(etName.getText().toString());
-	mCustomer.setTel(etTel.getText().toString());
+	String tel = etTel.getText().toString();
+	mCustomer.setTel(TelHelper.getPureTel(tel));
 	mCustomer.setLoan(getEditText(etLoan));
 	mCustomer.setSource(tvSource.getText().toString());
-	
+
 	String progress = tvProgress.getText().toString();
-	if (progress != null && progress.equalsIgnoreCase(mCustomer.getProgress())) {
-	    Action action = new Action(mCustomerId, ActionHandler.TYPE_PROGRESS);
+	if (progress != null
+		&& progress.equalsIgnoreCase(mCustomer.getProgress())) {
+	    Action action =
+		    new Action(mCustomerId, ActionHandler.TYPE_PROGRESS);
 	    action.setContent(mCustomer.getProgress());
 	    mActions.add(action);
 	}
@@ -449,7 +459,8 @@ public class AddCustomerActivity extends BaseActionBar implements
 
 	boolean isSuccess = false;
 	if (mCustomer.getId() == 0) {
-	    if (mCustomer.getProgress() == null || mCustomer.getProgress().length() == 0) {
+	    if (mCustomer.getProgress() == null
+		    || mCustomer.getProgress().length() == 0) {
 		mCustomer.setProgress("潜在客户");
 	    }
 	    isSuccess =
@@ -463,7 +474,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 				    mCustomer.getTel());
 	    // mCustomerId = mCustomer.getId();
 
-	    Action a = new Action(mCustomerId, ActionHandler.TYPE_NEW);
+	    Action a = new Action(mCustomer.getId(), ActionHandler.TYPE_NEW);
 	    GlobalValue.getIns().getActionHandler(this).handleAction(a);
 
 	    // remove from blacklist
@@ -488,6 +499,8 @@ public class AddCustomerActivity extends BaseActionBar implements
 		a.setCustomerId(mCustomer.getId());
 		handler.handleAction(a);
 	    }
+
+	    CommuHandler.setNewAddName(mTel, this);
 	}
 
 	return isSuccess;
@@ -536,24 +549,21 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_INDEX,
 		    mValues.get(mChooseMap.get(v)));
 	    if (mCurrentEditV == tvSource) {
-		intent.putExtra(ChooseOptionActivity.EXTRA_RESULT_TEXT, tvSource.getText());
+		intent.putExtra(ChooseOptionActivity.EXTRA_RESULT_TEXT,
+			tvSource.getText());
 	    }
 	    startActivityForResult(intent, REQUEST_CODE);
-	    InputMethodManager imm =
-		    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-	    mySrollview.closeInput(mySrollview, imm);
+	    closeImm();
 	} else if (mInputMap.containsKey(v)) {
 	    Log.i(TAG, "input");
 	    EditText et = mInputMap.get(v);
 	    et.requestFocus();
-	    et.setSelection(0);
+	    et.setSelection(et.getText().length());
 	    InputMethodManager im =
 		    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 	    im.showSoftInput(et, InputMethodManager.RESULT_SHOWN);
 	} else if (v == rlAlarm) {
-	    InputMethodManager imm =
-		    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-	    mySrollview.closeInput(mySrollview, imm);
+	    closeImm();
 	    DialogUtil.showTimePicker(this, mTimePickListener);
 	} else if (v == btnDelete) {
 	    GlobalValue.getIns().getCustomerHandler(this)
@@ -561,6 +571,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    GlobalValue.getIns().removeCustomer(mCustomerId);
 	    GlobalValue.getIns().getActionHandler(this)
 		    .deleteAction(mCustomerId);
+	    CommuHandler.removeNameByPhone(mCustomer.getTel(), this);
 	    finish();
 	}
     }
@@ -572,14 +583,19 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    tvAlarm.setText(time);
 	    mAlarm = alarm;
 
+	    if (mCustomer == null) {
+		mCustomer = new Customer();
+	    }
 	    mCustomer.setAlarmTime(alarm.getTimeInMillis());
 	    mCustomer.setHasChecked(false);
 	    mCustomer.setIsDisplayed(false);
-	    GlobalValue.getIns().putCustomer(mCustomer);
-	    GlobalValue.getIns().getCustomerHandler(getBaseContext())
-		    .updateCustomer(mCustomer);
-	    
-	    AlarmHelper.startAlarm(AddCustomerActivity.this, true);
+	    if (mCustomerId != -1) {
+		GlobalValue.getIns().putCustomer(mCustomer);
+		GlobalValue.getIns().getCustomerHandler(getBaseContext())
+			.updateCustomer(mCustomer);
+
+		AlarmHelper.startAlarm(AddCustomerActivity.this, true);
+	    }
 
 	    Action action =
 		    new Action(mCustomer.getId(), ActionHandler.TYPE_SET_ALARM);

@@ -1,8 +1,12 @@
 package com.rong360.creditassitant;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.util.Log;
 
+import com.rong360.creditassitant.model.CommuHandler;
+import com.rong360.creditassitant.model.Communication;
 import com.rong360.creditassitant.model.LocationHelper;
 import com.rong360.creditassitant.service.PhoneNoticeService;
 import com.rong360.creditassitant.task.BaseHttpsManager;
@@ -25,13 +29,25 @@ public class Application extends android.app.Application {
 	String isBacked = PreferenceHelper.getHelper(this).readPreference(LocationHelper.PRE_KEY_DB);
 	if (isBacked == null || !isBacked.equalsIgnoreCase(LocationHelper.BACKED)) {
 	    LocationHelper.back2SdCard(getApplicationContext());
+	} else {
+	    LocationHelper.initHomeMap(getApplicationContext());
 	}
+	
 	GlobalValue.getIns().init(getApplicationContext());
-	AlarmHelper.startAlarm(getApplicationContext());
+	
+	ArrayList<Communication> comms = GlobalValue.getIns().getAllComunication(getApplicationContext());
+	ArrayList<Communication> hisComs = CommuHandler.getAllCallLog(getApplicationContext());
+	comms.addAll(hisComs);
+	LocationHelper.setAllMobileLoc(getApplicationContext(), comms);
+	
 	LocCache.getInstance().restoreCache(getApplicationContext());
-	LocationHelper.initHomeMap(getApplicationContext());
+	
+	AlarmHelper.startAlarm(getApplicationContext());
+	
 	BaseHttpsManager.init(getApplicationContext());
+	
 	removePreference();
+	
 	Intent service =
 		new Intent(getApplicationContext(), PhoneNoticeService.class);
 	startService(service);

@@ -11,6 +11,7 @@ import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.Comment;
 import com.rong360.creditassitant.model.CommentHandler;
 import com.rong360.creditassitant.model.CommuHandler;
+import com.rong360.creditassitant.model.Communication;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
 import com.rong360.creditassitant.model.HistoryMsg;
@@ -116,6 +117,24 @@ public class GlobalValue {
 
     private ArrayList<HistoryMsg> mHistoryMsgs;
     private boolean mIsMsgDirty = true;
+    
+    private ArrayList<Communication> mComunications;
+    public boolean mNeedUpdateCommunication;
+    
+    public boolean isNeedUpdateCommunication() {
+        return mNeedUpdateCommunication;
+    }
+
+    public void setNeedUpdateCommunication(boolean mNeedUpdateCommunication) {
+        this.mNeedUpdateCommunication = mNeedUpdateCommunication;
+    }
+
+    public ArrayList<Communication> getAllComunication(Context context) {
+	if (mComunications == null) {
+	    mComunications = new ArrayList<Communication>();
+	}
+	return mComunications;
+    }
 
     public ArrayList<HistoryMsg> getHistoryMsgs(HistoryMsgHandler handler) {
 	if (mHistoryMsgs == null) {

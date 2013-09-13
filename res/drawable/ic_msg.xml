@@ -3,6 +3,5 @@
 
     <item android:drawable="@drawable/ic_msg_normal" android:state_pressed="true"/>
     <item android:drawable="@drawable/ic_msg_normal" android:state_selected="true"></item>
-    <item android:drawable="@drawable/ic_msg_pressed"/>
-
+    <item android:drawable="@drawable/ic_msg_pressed"></item>
 </selector>

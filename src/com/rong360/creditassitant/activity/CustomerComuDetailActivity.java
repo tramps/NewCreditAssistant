@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
@@ -31,6 +32,7 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	OnClickListener {
     private static final String TAG = "CustomerComuDetailActivity";
     public static final String EXTRA_TEL = "extra_tel";
+    public static final String EXTRA_MODE = "extra_shall_show";
 
     private int mCustomerId;
     private Customer mCustomer;
@@ -43,6 +45,7 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
     private LinearLayout llCustomer;
     private ImageView ivCustomer;
     private TextView tvCusomter;
+    private TableLayout tlAction;
 
     private ListView lvHistory;
     private TextView tvHint;
@@ -63,23 +66,23 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	    mTel = mCustomer.getTel();
 	}
 	mHistory = new ArrayList<Communication>();
-	
+
 	if (mTel != null && mTel.length() > 0) {
-		mHistory.addAll(CommuHandler.getCallLogByTel(this, mTel));
-		Log.i(TAG, "tel:" + mHistory.size());
-		mHistory.addAll(CommuHandler.getAllSmsByTel(this, mTel));
-		Log.i(TAG, "all:" + mHistory.size());
+	    mHistory.addAll(CommuHandler.getCallLogByTel(this, mTel));
+	    Log.i(TAG, "tel:" + mHistory.size());
+	    mHistory.addAll(CommuHandler.getAllSmsByTel(this, mTel));
+	    Log.i(TAG, "all:" + mHistory.size());
 	}
 	Log.i(TAG, "all:" + mHistory.size());
-	
+
 	Collections.sort(mHistory, new Comparator<Communication>() {
-		@Override
-		public int compare(Communication lhs, Communication rhs) {
-			return (rhs.getTime() - lhs.getTime() >= 0 ? 1 : -1);
-		}
+	    @Override
+	    public int compare(Communication lhs, Communication rhs) {
+		return (rhs.getTime() - lhs.getTime() >= 0 ? 1 : -1);
+	    }
 	});
 	mAdapter = new CommunicationAdapter(this, mHistory);
-	
+
 	super.onCreate(savedInstanceState);
 	getSupportActionBar(false).setTitle("通讯详情");
     }
@@ -94,8 +97,8 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	    tvTel.setText(mCustomer.getTel());
 	    tvCusomter.setText("查看客户");
 	}
-	
-	if (mHistory.size() > 0 ) {
+
+	if (mHistory.size() > 0) {
 	    lvHistory.setVisibility(View.VISIBLE);
 	    tvHint.setVisibility(View.GONE);
 	    mAdapter.notifyDataSetChanged();
@@ -104,11 +107,21 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	    tvHint.setVisibility(View.VISIBLE);
 	}
 
+	boolean shallShowTable = getIntent().getBooleanExtra(EXTRA_MODE, true);
+	if (!shallShowTable) {
+	    tlAction.setVisibility(View.GONE);
+	}
+
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
+	if (GlobalValue.getIns().getCusmer(mCustomerId) == null
+		&& getIntent().getStringExtra(EXTRA_TEL) == null) {
+	    finish();
+	    return;
+	}
 	initContent();
     }
 
@@ -127,6 +140,8 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	llTel.setOnClickListener(this);
 	llMsg.setOnClickListener(this);
 	lvHistory.setAdapter(mAdapter);
+
+	tlAction = (TableLayout) findViewById(R.id.tlAction);
     }
 
     @Override
@@ -142,6 +157,7 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 		Log.i(TAG, "tel:" + mTel);
 		intent = new Intent(this, AddCustomerActivity.class);
 		intent.putExtra(AddCustomerActivity.EXTRA_TEL, mTel);
+		finish();
 	    } else {
 		intent = new Intent(this, CustomerDetailActivity.class);
 		intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
@@ -224,14 +240,14 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 		    (LinearLayout) convertView.findViewById(R.id.ll_msg);
 	    final Communication c = getItem(position);
 
-	    llMsg.setOnClickListener(new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-		    IntentUtil.sendMessage(mContext, c.getTel(), "",
-			    c.getThreadId());
-		}
-	    });
+//	    llMsg.setOnClickListener(new OnClickListener() {
+//
+//		@Override
+//		public void onClick(View v) {
+//		    IntentUtil.sendMessage(mContext, c.getTel(), "",
+//			    c.getThreadId());
+//		}
+//	    });
 	    if (c.getType() == Communication.TYPE_INCOMING) {
 		ivType.setBackgroundResource(R.drawable.ic_sms_in);
 	    } else {
@@ -259,13 +275,13 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	    LinearLayout llTel =
 		    (LinearLayout) convertView.findViewById(R.id.ll_tel);
 	    final Communication c = getItem(position);
-	    llTel.setOnClickListener(new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-		    IntentUtil.startTel(mContext, c.getTel());
-		}
-	    });
+//	    llTel.setOnClickListener(new OnClickListener() {
+//
+//		@Override
+//		public void onClick(View v) {
+//		    IntentUtil.startTel(mContext, c.getTel());
+//		}
+//	    });
 
 	    if (c.getType() == Communication.TYPE_INCOMING) {
 		ivType.setBackgroundResource(R.drawable.ic_call_in);

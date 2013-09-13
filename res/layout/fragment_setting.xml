@@ -51,22 +51,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/bkg_round"
-            android:orientation="vertical"
-            android:padding="10dp" >
+            android:orientation="vertical" >
 
             <RelativeLayout
                 android:id="@+id/rlImportContact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginTop="-2dp"
+                android:background="@drawable/bkg_section"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView
                     android:id="@+id/tvImportContact"
-                    style="@style/AddCustomerLabel"
+                    style="@style/SettingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
@@ -78,6 +81,7 @@
                     android:layout_alignBottom="@id/tvImportContact"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/ic_arrow" />
             </RelativeLayout>
 
@@ -86,19 +90,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/tvBank"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/divider_horizontal" />
 
             <RelativeLayout
                 android:id="@+id/rlImportPartner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/bkg_section"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView
                     android:id="@+id/tvPartner"
-                    style="@style/AddCustomerLabel"
+                    style="@style/SettingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
@@ -110,6 +114,7 @@
                     android:layout_alignBottom="@id/tvPartner"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/ic_arrow" />
             </RelativeLayout>
 
@@ -118,19 +123,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/tvCash"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/divider_horizontal" />
 
             <RelativeLayout
                 android:id="@+id/rlExport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/bkg_section"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView
                     android:id="@+id/tvExport"
-                    style="@style/AddCustomerLabel"
+                    style="@style/SettingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
@@ -142,6 +147,7 @@
                     android:layout_alignBottom="@id/tvExport"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/ic_arrow" />
             </RelativeLayout>
 
@@ -150,19 +156,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/tvIdentity"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/divider_horizontal" />
 
             <RelativeLayout
                 android:id="@+id/rlSource"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bkg_section"
+                android:padding="10dp"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView
                     android:id="@+id/tvSource"
-                    style="@style/AddCustomerLabel"
+                    style="@style/SettingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
@@ -174,6 +180,7 @@
                     android:layout_alignBottom="@id/tvSource"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/ic_arrow" />
             </RelativeLayout>
         </LinearLayout>
@@ -181,22 +188,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/bkg_round"
-            android:orientation="vertical"
-            android:padding="10dp" >
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/rlFeedback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/bkg_section"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView
                     android:id="@+id/tvFeedback"
-                    style="@style/AddCustomerLabel"
+                    style="@style/SettingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
@@ -208,6 +217,7 @@
                     android:layout_alignBottom="@id/tvFeedback"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/ic_arrow" />
             </RelativeLayout>
 
@@ -216,22 +226,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/tvBank"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/divider_horizontal" />
 
             <RelativeLayout
                 android:id="@+id/rlAbout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@drawable/bkg_section"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView
                     android:id="@+id/tvAbout"
-                    style="@style/AddCustomerLabel"
+                    style="@style/SettingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="8dp"
                     android:text="关于我们" />
 
@@ -241,6 +250,7 @@
                     android:layout_alignBottom="@id/tvAbout"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/ic_arrow" />
             </RelativeLayout>
         </LinearLayout>

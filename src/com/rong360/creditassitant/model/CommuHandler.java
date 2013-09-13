@@ -12,6 +12,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.rong360.creditassitant.util.GlobalValue;
+import com.rong360.creditassitant.util.ModelHeler;
 
 public class CommuHandler {
     private static final String TAG = CommuHandler.class.getSimpleName();
@@ -131,8 +132,46 @@ public class CommuHandler {
 	c.close();
 
 	Log.i(TAG, "get all call log: " + comms.size());
-
+	
+	GlobalValue.getIns().setNeedUpdateCommunication(false);
 	return comms;
+    }
+    
+    public static void setNewAddName(String tel, Context context) {
+	GlobalValue.getIns().setNeedUpdateCommunication(true);
+	return;
+//	ArrayList<Communication> coms = GlobalValue.getIns().getAllComunication(context);
+//	Communication com = null;
+//	for (Communication c : coms) {
+//	    if (ModelHeler.isTelEqual(tel, c.getTel())) {
+//		com = c;
+//		break;
+//	    }
+//	}
+//	
+//	if (com != null) {
+//	    HashMap<String, Customer> phoneNameMap = GlobalValue.getIns().getPhoneNameMap();
+//	    Customer c = phoneNameMap.get(tel);
+//	    if (c != null) {
+//		com.setName(c.getName());
+//		if (c.getProgress() != null) {
+//		    com.setProgress(c.getProgress());
+//		}
+//		com.setId(c.getId());
+//	    }
+//	}
+    }
+    
+    public static void removeNameByPhone(String tel, Context context) {
+	GlobalValue.getIns().setNeedUpdateCommunication(true);
+//	ArrayList<Communication> coms = GlobalValue.getIns().getAllComunication(context);
+//	for (Communication c : coms) {
+//	    if (ModelHeler.isTelEqual(tel, c.getTel())) {
+//		c.setId(-1);
+//		break;
+//	    }
+//	}
+//	coms.remove(com);
     }
 
     public static ArrayList<Communication> getCallLogByTel(Context context,
@@ -146,7 +185,7 @@ public class CommuHandler {
 	Communication com;
 	while (c.moveToNext()) {
 	    com = buildCallLog(c);
-	    Log.i(TAG, tel);
+//	    Log.i(TAG, tel);
 	    comms.add(com);
 	}
 	c.close();
@@ -187,7 +226,7 @@ public class CommuHandler {
 	    c.close();
 	}
 
-	Log.i(TAG, "contacts: " + phones.toString());
+//	Log.i(TAG, "contacts: " + phones.toString());
 	return phones;
     }
 

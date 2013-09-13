@@ -17,12 +17,12 @@ public class Customer implements Serializable {
     private long mTime; // when customer added/revised;
 
     // optional
-    private int mCash;
-    private int mBank;
-    private int mIdentity;
-    private int mHouse;
-    private int mCar;
-    private int mCreditRecord;
+    private int mCash = -1;
+    private int mBank = -1;
+    private int mIdentity = -1;
+    private int mHouse = -1;
+    private int mCar = -1;
+    private int mCreditRecord = -1;
 
     private boolean mIsFollow;
     private boolean mHasChecked;
