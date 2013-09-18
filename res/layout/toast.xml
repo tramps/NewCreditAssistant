@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bkg_toast"
+    android:orientation="vertical" >
+    
+    <ImageView 
+        android:id="@+id/ivHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_alarm"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        />
+    
+    <TextView 
+        android:id="@+id/tvHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ivHint"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="10dp"
+        />
+    
+
+</RelativeLayout>

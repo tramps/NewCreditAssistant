@@ -1,6 +1,11 @@
 package com.rong360.creditassitant.activity;
 
+import java.util.ArrayList;
+
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.model.Customer;
+import com.rong360.creditassitant.util.CloudHelper;
+import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.PreferenceHelper;
 
@@ -61,6 +66,11 @@ public class CustomerSafeActivity extends BaseActionBar implements
 	    btnSafe.setBackgroundResource(R.drawable.ic_stop);
 	    llSafe.setVisibility(View.VISIBLE);
 	    llSafeNo.setVisibility(View.GONE);
+	    
+	    ArrayList<Customer> customers = GlobalValue.getIns().getAllCustomers();
+	    if (customers.size() == 0) {
+		CloudHelper.restoreFromCloud(this);
+	    }
 	} else {
 	    ivSafe.setImageResource(R.drawable.ic_save_no_normal);
 	    tvTitle.setText("尚未开启客户保险箱");
@@ -94,7 +104,7 @@ public class CustomerSafeActivity extends BaseActionBar implements
 			    PRE_KEY_IS_SAFED, Boolean.TRUE + "");
 		    initContent();
 		} else {
-		    Intent intent = new Intent(this, LoginActivity.class);
+		    Intent intent = new Intent(this, RegisterActivity.class);
 		    IntentUtil.startActivity(this, intent);
 		}
 	    }

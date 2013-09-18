@@ -1,9 +1,11 @@
 package com.rong360.creditassitant.model;
 
-public class HistoryMsg {
-    private int mId;
-    private String mMsg;
-    private long mTime;
+import com.rong360.creditassitant.json.JSONBean;
+
+public class HistoryMsg implements JSONBean {
+    public int mId;
+    public String mMsg;
+    public long mTime;
     
     public int getId() {
         return mId;

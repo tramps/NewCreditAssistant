@@ -11,4 +11,5 @@
     <color name="cp_talked">#1576d5</color>
     <color name="cp_upgraded">#0063cf</color>
     <color name="cp_succeded">#26be62</color>
+     <color name="bkg_imported">#e3f8ff</color>
 </resources>

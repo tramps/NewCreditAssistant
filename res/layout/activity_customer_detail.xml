@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:scrollbars="none"
     android:paddingLeft="10dp"
     android:paddingRight="10dp" >
 
@@ -257,12 +258,10 @@
                     android:layout_toLeftOf="@id/ivArrow"
                     android:layout_toRightOf="@id/tvComment"
                     android:background="@android:color/white"
-                    android:ellipsize="marquee"
+                    android:ellipsize="end"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="left"
-                    android:marqueeRepeatLimit="3"
-                    android:scrollHorizontally="true"
                     android:singleLine="true" />
             </RelativeLayout>
         </LinearLayout>

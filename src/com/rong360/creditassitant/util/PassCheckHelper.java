@@ -1,5 +1,7 @@
 package com.rong360.creditassitant.util;
 
+import com.rong360.creditassitant.activity.SetPassActivity;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
@@ -34,12 +36,16 @@ public class PassCheckHelper {
     // PassCheckHelper.INIT_TIME = 0;
     // }
 
-    public boolean shouldLock() {
+    public boolean shouldLock(Context context) {
+	String pass = PreferenceHelper.getHelper(context).readPreference(SetPassActivity.PRE_KEY_PASS);
+	if (pass == null) {
+	    return false;
+	}
 	long period = SystemClock.uptimeMillis() - PassCheckHelper.INIT_TIME;
 	Log.i(TAG, "period" + period);
 
 	if (period > THRESH_HOLD) {
-	    return false;
+	    return true;
 	}
 	return false;
     }

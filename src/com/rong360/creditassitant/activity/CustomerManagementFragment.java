@@ -550,6 +550,12 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    startActivity(intent);
 		}
 	    });
+	    
+	    if (c.isImported()) {
+		convertView.setBackgroundResource(R.drawable.bkg_import);
+	    } else {
+		convertView.setBackgroundResource(R.drawable.bkg_section);
+	    }
 
 	    TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
 	    ImageView ivStar =

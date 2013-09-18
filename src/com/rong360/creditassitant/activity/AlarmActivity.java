@@ -21,6 +21,7 @@ import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.Action;
 import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.CommuHandler;
+import com.rong360.creditassitant.model.Communication;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.util.AlarmHelper;
 import com.rong360.creditassitant.util.DateUtil;
@@ -125,8 +126,11 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    tvName.setText(c.getName());
 	    tvProgress.setText(c.getProgress());
 	    tvComment.setText(c.getLastFollowComment());
-	    tvLast.setText(DateUtil.getDisplayTime(CommuHandler
-		    .getLastCallOfTel(this, c.getTel()).getTime()) + "联系过");
+	    Communication com = CommuHandler.getLastCallOfTel(this, c.getTel());
+	    if (com != null) {
+		tvLast.setText(DateUtil.getDisplayTime(com.getTime()) + "联系过");
+	    }
+
 	} else {
 	    tvNumber.setText("您有" + mAlarmCustomers.size() + "条跟进提醒");
 	    mAdapter.notifyDataSetChanged();
@@ -204,8 +208,8 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    // mHandler.post(mSilentThread);
 	    // finish();
 	}
-	
-	 mHandler.post(mSilentThread);
+
+	mHandler.post(mSilentThread);
     }
 
     private void clearDisplay() {
@@ -221,7 +225,7 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    c.setHasChecked(true);
 	    GlobalValue.getIns().getCustomerHandler(this).updateCustomer(c);
 	    GlobalValue.getIns().putCustomer(c);
-	    
+
 	    Action action =
 		    new Action(c.getId(), ActionHandler.TYPE_FINISH_ALARM);
 	    action.setContent(DateUtil.yyyyMMddHHmm.format(c.getAlarmTime()));

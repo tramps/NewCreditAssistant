@@ -39,6 +39,7 @@ import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.TelHelper;
 import com.rong360.creditassitant.util.AlarmHelper;
+import com.rong360.creditassitant.util.CloudHelper;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
 import com.rong360.creditassitant.util.GlobalValue;
@@ -501,6 +502,8 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    }
 
 	    CommuHandler.setNewAddName(mTel, this);
+	    
+	    CloudHelper.back2Server(this, false);
 	}
 
 	return isSuccess;

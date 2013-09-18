@@ -57,7 +57,7 @@ public abstract class BaseFragment extends Fragment implements IFragment {
     public void onResume() {
 	super.onResume();
 	Log.i(TAG, "base action start:");
-	if (PassCheckHelper.getInstance(mContext).shouldLock()) {
+	if (PassCheckHelper.getInstance(mContext).shouldLock(mContext)) {
 		Intent intent = new Intent(mContext, ShowPassAliasActivity.class);
 		startActivity(intent);
 	}

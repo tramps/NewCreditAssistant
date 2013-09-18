@@ -52,7 +52,7 @@ public abstract class BaseActionBar extends Activity {
     protected void onResume() {
 	super.onResume();
 	Log.i(TAG, "base action start:");
-	if (PassCheckHelper.getInstance(this).shouldLock()) {
+	if (PassCheckHelper.getInstance(this).shouldLock(this)) {
 		Intent intent = new Intent(this, ShowPassAliasActivity.class);
 		startActivity(intent);
 	}

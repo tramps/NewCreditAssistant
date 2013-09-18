@@ -27,6 +27,7 @@ import com.rong360.creditassitant.model.Contact;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
 import com.rong360.creditassitant.model.TelHelper;
+import com.rong360.creditassitant.util.CloudHelper;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.ModelHeler;
 import com.rong360.creditassitant.util.MyToast;
@@ -383,6 +384,8 @@ public class ImportContactActivity extends BaseActionBar implements
 	Log.i(TAG, "after insert: " + mCustomers.size());
 	ModelHeler.orderCustomersByTime(mCustomers);
 	finish();
+	
+	CloudHelper.back2Server(this, false);
     }
 
     private boolean containSameTel(ArrayList<Customer> customers, Contact c) {

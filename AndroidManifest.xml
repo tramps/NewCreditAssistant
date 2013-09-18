@@ -115,6 +115,11 @@
             android:windowSoftInputMode="stateAlwaysVisible|adjustPan" >
         </activity>
         <activity
+            android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustPan" >
+        </activity>
+        <activity
             android:name=".activity.SetPassActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" >
@@ -136,6 +141,11 @@
         </activity>
         <activity
             android:name=".activity.AuthCodeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustPan" >
+        </activity>
+        <activity
+            android:name=".activity.ResetPwdActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysVisible|adjustPan" >
         </activity>

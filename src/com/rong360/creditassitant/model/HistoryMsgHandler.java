@@ -83,5 +83,20 @@ public class HistoryMsgHandler extends BaseDbHandler {
 
 	return false;
     }
+    
+    public boolean updateSms(HistoryMsg msg) {
+	ContentValues cv = new ContentValues();
+	cv.put(ID, msg.getId());
+	cv.put(MSG, msg.getMsg());
+	cv.put(TIME, msg.getTime());
+	try {
+	    SQLiteDatabase db = mHelper.getWritableDatabase();
+	    return db.replace(TABLE_NAME, "", cv) != -1;
+	} catch (Exception e) {
+	    Log.w(TAG, e.toString());
+	}
+
+	return false;
+    }
 
 }

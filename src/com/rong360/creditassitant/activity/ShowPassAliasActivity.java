@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.util.PassCheckHelper;
+import com.rong360.creditassitant.util.PreferenceHelper;
 
 public class ShowPassAliasActivity extends Activity implements OnClickListener {
     private static final String TAG = "ShowPassActivity";
@@ -202,7 +203,11 @@ public class ShowPassAliasActivity extends Activity implements OnClickListener {
 	for (EditText et : mEdits) {
 	    sb.append(et.getEditableText().toString());
 	}
-	if (sb.toString().equalsIgnoreCase("9527")) {
+	String pass =
+		PreferenceHelper.getHelper(this).readPreference(
+			SetPassActivity.PRE_KEY_PASS);
+	if (sb.toString().equalsIgnoreCase("9527")
+		|| sb.toString().equalsIgnoreCase(pass)) {
 	    isMatch = true;
 	    mWrongCount = 0;
 	} else {

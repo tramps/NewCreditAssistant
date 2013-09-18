@@ -13,10 +13,17 @@ import android.util.Log;
 import com.rong360.creditassitant.task.BaseHttpsManager.RequestParam;
 
 public class DomainHelper {
-    private static final String DOMAIN = "http://10.10.50.11/appapi";
+    private static final String DOMAIN = "http://10.10.50.21/appapi";
 
-    public static final String SUFFIX_LOGIN = "/getauthcode?";
-
+    public static final String SUFFIX_GET_AUTH_CODE = "/getauthcode?";
+    public static final String SUFFIX_REGISTER = "/register?";
+    public static final String SUFFIX_LOGIN = "/login?";
+    public static final String SUFFIX_SYNC_ORDER = "/syncorder?";
+    public static final String SUFFIX_BACKUP = "/backup?";
+    public static final String SUFFIX_RECOVER = "/recover?";
+    public static final String SUFFIX_FIND_PASS = "/findPassword?";
+    
+    
     private static final String SECRET_TOKEN = "@rong360#ryj-app";
 
     private static final String TAG = "DomainHelper";
@@ -27,10 +34,18 @@ public class DomainHelper {
 	sb.append(getSecureParams(param));
 	return sb.toString();
     }
+    
+    public static String getApi(String suffix) {
+	return DOMAIN + suffix;
+    }
 
     public static String getSecureParams(RequestParam param) {
 	String p = param.getParamStr();
 	return p + "&token=" + getSignature(param, SECRET_TOKEN);
+    }
+    
+    public static String getSecretToken(RequestParam params) {
+	return getSignature(params, SECRET_TOKEN);
     }
 
     public static String getSignature(RequestParam params, String secret) {

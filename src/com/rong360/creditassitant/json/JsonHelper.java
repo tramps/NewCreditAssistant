@@ -334,6 +334,9 @@ public class JsonHelper {
 		if (discard)
 		    continue;
 		key = member.getName().substring(1);
+		String first = key.substring(0, 1).toLowerCase();
+		String left = key.substring(1);
+		key = first + left;
 		if (member instanceof Field) {
 		    Field field = (Field) member;
 		    value = field.get(instance);
@@ -362,7 +365,7 @@ public class JsonHelper {
 	return ja;
     }
 
-    private static Object wrapToJSON(Object object) {
+    public static Object wrapToJSON(Object object) {
 	try {
 	    if (object == null) {
 		return null;

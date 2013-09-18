@@ -35,6 +35,7 @@ import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
+import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
 import com.rong360.creditassitant.util.DisplayUtils;
 import com.rong360.creditassitant.widget.HorizontalListView;
@@ -107,6 +108,11 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	if (mCustomer == null) {
 	    finish();
 	    return;
+	} else {
+	    if (mCustomer.isImported()) {
+		mCustomer.setIsImported(false);
+		GlobalValue.getIns().putCustomer(mCustomer);
+	    }
 	}
 	initContent();
     }
@@ -129,6 +135,8 @@ public class CustomerDetailActivity extends BaseActionBar implements
 		GlobalValue.getIns()
 			.getActionHandler(CustomerDetailActivity.this)
 			.handleAction(a);
+		MyToast.displayFeedback(CustomerDetailActivity.this, R.drawable.ic_right,
+			"修改为" + mCustomer.getProgress(), hlv);
 	    } else {
 		Log.e(TAG, "wrong index" + index);
 	    }
@@ -160,7 +168,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    ibStar.setBackgroundResource(R.drawable.ic_star_no_checked);
 	}
 
-	if (mCustomer.getAlarmTime() != -1) {
+	if (mCustomer.getAlarmTime() != 0) {
 	    Calendar instance = Calendar.getInstance();
 	    instance.setTimeInMillis(mCustomer.getAlarmTime());
 	    tvAlarm.setText(DateUtil.yyyyMMddHHmm.format(instance.getTime()));
@@ -361,6 +369,8 @@ public class CustomerDetailActivity extends BaseActionBar implements
 		    .handleAction(action);
 	    
 	    AlarmHelper.startAlarm(CustomerDetailActivity.this, true);
+	    
+	    MyToast.displayFeedback(CustomerDetailActivity.this, R.drawable.ic_alarm, "设置提醒", rlAlarm);
 	}
 
     };

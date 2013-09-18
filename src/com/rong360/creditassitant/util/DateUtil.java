@@ -45,8 +45,8 @@ public class DateUtil {
     private static final String SINGLE_ZERO = "0";
     private static final String COMMA = ":";
 
-    private static final String[] WeekDay = { "周一", "周二", "周三", "周四",
-	    "周五", "周六", "周日" };
+    private static final String[] WeekDay = { "周一", "周二", "周三", "周四", "周五",
+	    "周六", "周日" };
 
     public static String getWeekDay(Date date) {
 	Calendar c = Calendar.getInstance();
@@ -169,26 +169,26 @@ public class DateUtil {
 	}
 	return sb.toString();
     }
-    
+
     public static String getDisplayTimeForTask(long time) {
-   	Calendar callTime = Calendar.getInstance();
-   	callTime.setTimeInMillis(time);
+	Calendar callTime = Calendar.getInstance();
+	callTime.setTimeInMillis(time);
 
-   	Calendar now = Calendar.getInstance();
-   	now.setTimeInMillis(System.currentTimeMillis());
+	Calendar now = Calendar.getInstance();
+	now.setTimeInMillis(System.currentTimeMillis());
 
-   	StringBuilder sb = new StringBuilder();
-   	if (isSameDay(now, callTime)) {
-   	    sb.append(TODAY);
-   	} else if (isYesterday(now, callTime)) {
-   	    sb.append(YESTERDAY);
-   	} else if (isNextDay(now, callTime)) {
-   	    sb.append(TOMMORROW);
-   	} else if (isSameWeek(now, callTime)) {
-   	    sb.append(getWeekDay(callTime.getTime()));
-   	}
-   	return sb.toString();
-       }
+	StringBuilder sb = new StringBuilder();
+	if (isSameDay(now, callTime)) {
+	    sb.append(TODAY);
+	} else if (isYesterday(now, callTime)) {
+	    sb.append(YESTERDAY);
+	} else if (isNextDay(now, callTime)) {
+	    sb.append(TOMMORROW);
+	} else if (isSameWeek(now, callTime)) {
+	    sb.append(getWeekDay(callTime.getTime()));
+	}
+	return sb.toString();
+    }
 
     public static String getDisplayTimeForDetail(long time) {
 	Calendar callTime = Calendar.getInstance();
@@ -231,7 +231,7 @@ public class DateUtil {
 
 	return sb.toString();
     }
-    
+
     public static String getExactTime(long time) {
 	Calendar calc = Calendar.getInstance();
 	calc.setTimeInMillis(time);
@@ -239,7 +239,7 @@ public class DateUtil {
 	sb.append(calc.get(Calendar.HOUR_OF_DAY));
 	sb.append(":");
 	sb.append(calc.get(Calendar.MINUTE));
-	
+
 	return sb.toString();
     }
 
@@ -285,6 +285,14 @@ public class DateUtil {
 	}
 
 	return sb.toString();
+    }
+
+    public static int getDaySpan(long time) {
+	Calendar today = Calendar.getInstance();
+	Calendar lastUpdate = Calendar.getInstance();
+	lastUpdate.setTimeInMillis(time);
+	return today.get(Calendar.DAY_OF_YEAR)
+		- lastUpdate.get(Calendar.DAY_OF_YEAR);
     }
 
 }

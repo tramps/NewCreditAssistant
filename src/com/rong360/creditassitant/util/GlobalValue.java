@@ -49,9 +49,8 @@ public class GlobalValue {
 
     public void init(Context context) {
 	ArrayList<Customer> customers = GlobalValue.getIns().getAllCustomers();
-	if (customers.size() == 0) {
-	    GlobalValue.getIns().loadAllCustomerFromDb(customers, context);
-	}
+	customers.clear();
+	GlobalValue.getIns().loadAllCustomerFromDb(customers, context);
     }
 
     public ActionHandler getActionHandler(Context context) {

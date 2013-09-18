@@ -92,6 +92,24 @@ public class ActionHandler extends BaseDbHandler {
 
 	return actions;
     }
+    
+    public ArrayList<Action> getUpdateActions(long updateTime) {
+	String sql = "select * from action where time > ?";
+	ArrayList<Action> actions = new ArrayList<Action>();
+	Cursor c =
+		mHelper.getReadableDatabase().rawQuery(sql,
+			new String[] { String.valueOf(updateTime) });
+
+	Action a;
+	while (c.moveToNext()) {
+	    a = makeAction(c);
+	    if (a != null) {
+		actions.add(a);
+	    }
+	}
+
+	return actions;
+    }
 
     private Action makeAction(Cursor c) {
 	if (c == null) {
@@ -104,6 +122,7 @@ public class ActionHandler extends BaseDbHandler {
 	action.setType(c.getInt(c.getColumnIndex(TYPE)));
 	action.setTime(c.getLong(c.getColumnIndex(TIME)));
 	action.setContent(c.getString(c.getColumnIndex(CONTENT)));
+	action.setCustomerId(c.getInt(c.getColumnIndex(CUSTOMER_ID)));
 
 	return action;
     }

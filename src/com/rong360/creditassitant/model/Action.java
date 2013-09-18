@@ -1,11 +1,13 @@
 package com.rong360.creditassitant.model;
 
-public class Action {
-    private int mId;
-    private int mCustomerId;
-    private int mType;
-    private long mTime;
-    private String mContent = "";
+import com.rong360.creditassitant.json.JSONBean;
+
+public class Action implements JSONBean {
+    public int mId;
+    public int mCustomerId;
+    public int mType;
+    public long mTime;
+    public String mContent = "";
 
     public Action(int customerId, int type) {
 	mCustomerId = customerId;

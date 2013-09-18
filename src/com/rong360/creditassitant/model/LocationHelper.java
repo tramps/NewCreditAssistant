@@ -172,8 +172,8 @@ public class LocationHelper {
 
 	} else if (number.length() >= 9) {
 	    sql = SQL_HOME;
-	    first = number.substring(1, 3);
-	    second = number.substring(1, 4);
+	    first = number.substring(1, 3).trim();
+	    second = number.substring(1, 4).trim();
 	    String v = cache.getHomeMap().get(Integer.valueOf(first));
 	    if (v == null) {
 		v = cache.getHomeMap().get(Integer.valueOf(second));

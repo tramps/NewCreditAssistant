@@ -2,7 +2,9 @@ package com.rong360.creditassitant.model;
 
 import java.io.Serializable;
 
-public class Customer implements Serializable {
+import com.rong360.creditassitant.json.JSONBean;
+
+public class Customer implements JSONBean {
 
     /**
 	 * 
@@ -10,33 +12,33 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = 5642639408595041121L;
 
     // necessary
-    private int mId;
-    private String mName;
-    private String mTel;
-    private long mLoan;
-    private long mTime; // when customer added/revised;
+    public int mId;
+    public String mName;
+    public String mTel;
+    public long mLoan;
+    public long mTime; // when customer added/revised;
 
     // optional
-    private int mCash = -1;
-    private int mBank = -1;
-    private int mIdentity = -1;
-    private int mHouse = -1;
-    private int mCar = -1;
-    private int mCreditRecord = -1;
+    public int mCash = -1;
+    public int mBank = -1;
+    public int mIdentity = -1;
+    public int mHouse = -1;
+    public int mCar = -1;
+    public int mCreditRecord = -1;
 
-    private boolean mIsFollow;
-    private boolean mHasChecked;
-    private boolean mIsFavored;
+    public boolean mIsFollow;
+    public boolean mHasChecked;
+    public boolean mIsFavored;
     private boolean mIsDisplayed;
 
-    private String mLastFollowComment;
-    private long mAlarmTime;
+    public String mLastFollowComment;
+    public long mAlarmTime;
 
-    private String mProgress;
-    private String mSource;
+    public String mProgress;
+    public String mSource;
 
-    private long mOrderNo;
-    private boolean mIsImported; // type
+    public long mOrderNo;
+    public boolean mIsImported; // type
 
     public boolean IsDisplayed() {
 	return mIsDisplayed;
