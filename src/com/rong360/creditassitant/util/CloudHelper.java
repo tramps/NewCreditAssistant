@@ -41,7 +41,7 @@ import com.rong360.creditassitant.task.TransferDataTask;
 public class CloudHelper {
     protected static final String TAG = "CloudHelper";
     public static final String PRE_KEY_LAST_BACK = "pre_key_last_back";
-    private static final String PRE_KEY_MAX_ID = "pre_key_max_id";
+    public static final String PRE_KEY_MAX_ID = "pre_key_max_id";
     
     public static final String PRE_KEY_DELETE_IDS = "pre_key_delete_ids";
     
@@ -316,10 +316,10 @@ public class CloudHelper {
 	    i++;
 	}
 	
-	Log.i(TAG, "import " + i + " orders");
-	PreferenceHelper.getHelper(context).writePreference(PRE_KEY_MAX_ID, String.valueOf(maxId));
 	//TODO;
+	Log.i(TAG, "import " + i + " orders");
 	GlobalValue.getIns().init(context);
+	PreferenceHelper.getHelper(context).writePreference(PRE_KEY_MAX_ID, String.valueOf(maxId));
     }
     
     protected static void save2db(CustomerModel cModel, Context context) {

@@ -91,10 +91,19 @@ public class GlobalValue {
 		GlobalValue.getIns().getCustomerHandler(context);
 	List<Customer> cuses = hander.getAllCustomers();
 
+	String maxOrderId = PreferenceHelper.getHelper(context).readPreference(CloudHelper.PRE_KEY_MAX_ID);
+	int maxId = 0;
+	if (maxOrderId != null && maxOrderId.length() > 0) {
+	    maxId = Integer.valueOf(maxOrderId);
+	}
 	if (cuses.size() > 0) {
 	    customers.addAll(cuses);
 	    for (int i = 0; i < customers.size(); i++) {
-		GlobalValue.getIns().putCustomer(customers.get(i));
+		Customer c = customers.get(i);
+		if (c.mOrderNo > maxId) {
+		    c.setIsImported(true);
+		}
+		GlobalValue.getIns().putCustomer(c);
 	    }
 	}
     }

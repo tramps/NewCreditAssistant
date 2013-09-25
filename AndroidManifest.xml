@@ -30,7 +30,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -191,6 +190,18 @@
         <receiver
             android:name=".receiver.AlarmReceiver"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
+        </receiver>
+        
+        <receiver
+            android:name=".receiver.PushReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <category android:name="com.rong360.creditassitant" />
+            </intent-filter>
         </receiver>
 
         <!-- Required -->
