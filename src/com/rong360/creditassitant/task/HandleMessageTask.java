@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.rong360.creditassitant.exception.CustomException;
 import com.rong360.creditassitant.exception.ECode;
+import com.rong360.creditassitant.util.MyToast;
+import com.rong360.creditassitant.util.NetUtil;
 
 public abstract class HandleMessageTask extends BaseTask<Void, Object, Object> {
     private static final String TAG = "HandleMessageTask";
@@ -21,7 +24,7 @@ public abstract class HandleMessageTask extends BaseTask<Void, Object, Object> {
 
     static {
 	mDefaultCodeMsg = new HashMap<Integer, Object>();
-	// mDefaultCodeMsg.put(key, value)
+	 mDefaultCodeMsg.put(ECode.FAIL, "没有网络连接，请检查");
     }
 
     public HandleMessageTask(Context context) {
@@ -57,6 +60,9 @@ public abstract class HandleMessageTask extends BaseTask<Void, Object, Object> {
 
     @Override
     protected Object doInBackground(Void... params) {
+	if (!NetUtil.isNetworkAvailable(mContext)) {
+	    return null;
+	    }
 	return doInBackground();
     }
 
@@ -69,7 +75,7 @@ public abstract class HandleMessageTask extends BaseTask<Void, Object, Object> {
 
 	int code = 0;
 	if (null == result) {
-	    result = ECode.FAIL;
+	    code = ECode.FAIL;
 	} else if (result.equals(ECode.CANCELED)) {
 	    return;
 	} else if (result instanceof CustomException) {
@@ -82,9 +88,6 @@ public abstract class HandleMessageTask extends BaseTask<Void, Object, Object> {
 	}
 
 	String codeMsg = getCodeMsg(code);
-	if (codeMsg == null) {
-	    codeMsg = getCodeMsg(ECode.FAIL);
-	}
 	if (mShowCodeMsg && codeMsg != null && codeMsg.length() > 0) {
 	    showResultMessage(codeMsg);
 	}

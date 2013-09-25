@@ -95,10 +95,13 @@ public class MovingBarView extends View {
     }
 
     public void initRect(int width, int height, int offY) {
+	Log.i(TAG, "width: " + width + " height: " + height);
+//	width = 230;
+//	height = 120;
 	mSingleViewWidth = width;
 	int w = mSlider.getIntrinsicWidth();
 	int h = mSlider.getIntrinsicHeight();
-	// Log.i(TAG, "w" + w + " h" + h);
+	 Log.i(TAG, "w" + w + " h" + h);
 	int margin = height - h;
 	mRect = new Rect(0, margin / 2, w, h);
 	// Log.i(TAG, mRect.toString());
@@ -115,7 +118,7 @@ public class MovingBarView extends View {
 	}
 
 	if (mIndex > 0 && mIsFirst) {
-	    // Log.i(TAG, "index:" + mIndex);
+	     Log.i(TAG, "index:" + mIndex);
 	    mHlvOffset = (mIndex) * mSingleViewWidth;
 	    mHlv.setCurrentX(mHlvOffset);
 	    mIsFirst = false;

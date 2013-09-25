@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -29,6 +30,7 @@ import com.rong360.creditassitant.model.result.BDCustomer;
 import com.rong360.creditassitant.model.result.CustomerModel;
 import com.rong360.creditassitant.model.result.Result;
 import com.rong360.creditassitant.model.result.SyncResult;
+import com.rong360.creditassitant.model.result.TResult;
 import com.rong360.creditassitant.task.BaseHttpsManager.RequestParam;
 import com.rong360.creditassitant.task.DomainHelper;
 import com.rong360.creditassitant.task.HandleMessageTask;
@@ -41,8 +43,11 @@ public class CloudHelper {
     public static final String PRE_KEY_LAST_BACK = "pre_key_last_back";
     private static final String PRE_KEY_MAX_ID = "pre_key_max_id";
     
+    public static final String PRE_KEY_DELETE_IDS = "pre_key_delete_ids";
+    
     private static HashMap<Integer, String> mCodeMap;
     private static HashMap<Integer, String> mUseMap;
+    private static HashMap<Integer, String> mProgressMap;
     
     static {
 	mCodeMap = new HashMap<Integer, String>();
@@ -55,6 +60,17 @@ public class CloudHelper {
 	mCodeMap.put(150, "审批中");
 	mCodeMap.put(155, "审批被拒");
 	mCodeMap.put(170, "审批通过/成功放款");
+	
+	mProgressMap = new HashMap<Integer, String>();
+	mProgressMap.put(10, "意向客户");
+	mProgressMap.put(130, "意向客户");
+	mProgressMap.put(70, "不符客户");
+	mProgressMap.put(90, "失败客户");
+	mProgressMap.put(120, "意向客户");
+	mProgressMap.put(150, "进件客户");
+	mProgressMap.put(155, "失败客户");
+	mProgressMap.put(170, "成功客户");
+	
 	
 	mUseMap = new HashMap<Integer, String>();
 	mUseMap.put(9, "不限");
@@ -139,15 +155,15 @@ public class CloudHelper {
 	    public void onSuccess(HandleMessageTask task, Object t) {
 		try {
 		    Log.i(TAG, "res:" + task.getResult());
-		    Result res =
-			    JsonHelper.parseJSONToObject(Result.class,
+		    TResult res =
+			    JsonHelper.parseJSONToObject(TResult.class,
 				    task.getResult());
-		    if (res.getError() == (ECode.SUCCESS)) {
+		    if (res.mResult.getError() == (ECode.SUCCESS)) {
 			PreferenceHelper helper =
 				PreferenceHelper.getHelper(context);
 			helper.writePreference(PRE_KEY_LAST_BACK,
 				"" + System.currentTimeMillis());
-		    } else if (res.getError() == 4) {
+		    } else if (res.mResult.getError() == 4) {
 			Log.e(TAG, "解析数据失败");
 		    }
 		} catch (JsonParseException e) {
@@ -246,7 +262,7 @@ public class CloudHelper {
 				"已恢复" + res.mData.mCustomer.length + "个客户").show();
 			// context.finish();
 		    } else if (res.mResult.getError() == 1) {
-			MyToast.makeText(context, "后端不可用").show();
+			 MyToast.makeText(context, "后端不可用").show();
 		    }
 		} catch (JsonParseException e) {
 		    Log.e(TAG, e.toString());
@@ -288,6 +304,10 @@ public class CloudHelper {
 	    c.setLoan(bd.mLoan_limit);
 	    c.setSource("融360");
 	    c.setOrderNo(bd.mId);
+	    String proger = mProgressMap.get(bd.mStatus);
+	    if (proger != null) {
+		c.setProgress(proger);
+	    } 
 	    if (bd.mId > maxId) {
 		maxId = bd.mId;
 	    }
@@ -316,5 +336,64 @@ public class CloudHelper {
 	for (HistoryMsg msg : cModel.mData.mHistory_msg) {
 	    mHandler.updateSms(msg);
 	}
+    }
+    
+    public static void deleteCustomer(Context context) {
+	if (!NetUtil.isNetworkAvailable(context)) {
+	    return;
+	}
+	
+	final PreferenceHelper helper = PreferenceHelper.getHelper(context);
+	String ids = helper.readPreference(PRE_KEY_DELETE_IDS);
+	if (ids == null || ids.length() == 0) {
+	    return;
+	}
+	
+	String tel = helper.readPreference(AuthCodeActivity.EXTRA_TEL);
+	String pass = helper.readPreference(AuthCodeActivity.EXTRA_PASS);
+	if (tel == null || pass == null) {
+	    return;
+	}
+	
+	RequestParam params = new RequestParam(DomainHelper.getApi(DomainHelper.SUFFIX_BACKUP));
+	JSONObject json = new JSONObject();
+	try {
+	    json.put("customer_ids", ids);
+	} catch (JSONException e1) {
+	    // TODO Auto-generated catch block
+	    e1.printStackTrace();
+	}
+	params.addNameValuePair("mobile", tel);
+	params.addNameValuePair("password", pass);
+	params.addNameValuePair("data", json.toString());
+	String token = DomainHelper.getSecretToken(params);
+	params.addNameValuePair("token", token);
+	PostDataTask tTask =
+		new PostDataTask(context, params);
+	tTask.setCallback(new Callback() {
+
+	    @Override
+	    public void onSuccess(HandleMessageTask task, Object t) {
+		try {
+		    Log.i(TAG, "res:" + task.getResult());
+		    TResult res =
+			    JsonHelper.parseJSONToObject(TResult.class,
+				    task.getResult());
+		    if (res.mResult.getError() == (ECode.SUCCESS)) {
+			helper.removePreference(PRE_KEY_DELETE_IDS);
+		    } 
+		} catch (JsonParseException e) {
+		    Log.e(TAG, e.toString());
+		}
+	    }
+
+	    @Override
+	    public void onFail(HandleMessageTask task, Object t) {
+
+	    }
+	});
+
+	tTask.execute();
+	
     }
 }

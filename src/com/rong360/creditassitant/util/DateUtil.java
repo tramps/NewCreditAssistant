@@ -238,8 +238,13 @@ public class DateUtil {
 	StringBuilder sb = new StringBuilder();
 	sb.append(calc.get(Calendar.HOUR_OF_DAY));
 	sb.append(":");
-	sb.append(calc.get(Calendar.MINUTE));
-
+	int mini = calc.get(Calendar.MINUTE);
+	if (mini < 10) {
+	    sb.append("0").append(mini);
+	} else {
+	    sb.append(mini);
+	}
+	
 	return sb.toString();
     }
 

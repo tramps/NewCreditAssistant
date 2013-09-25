@@ -45,8 +45,8 @@ public class CustomerHandler extends BaseDbHandler {
     private static final String CREATE_SQL = "CREATE TABLE " + TABLE_NAME
 	    + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + TIME
 	    + " LONG, " + NAME + " TEXT, " + TEL + " TEXT, " + LOAN + " LONG, "
-	    + BANK + " LONG, " + CASH + " LONG, " + IDENTITY + " LONG, "
-	    + HOUSE + " LONG, " + CAR + " LONG, " + CREDIT_RECORD + " LONG, "
+	    + BANK + " INTEGER, " + CASH + " INTEGER, " + IDENTITY + " INTEGER, "
+	    + HOUSE + " INTEGER, " + CAR + " INTEGER, " + CREDIT_RECORD + " INTEGER, "
 	    + IS_FOLLOW + " INTEGER, " + IS_FAVORED
 	    + " INTEGER, " + HAS_CHECKED + " INTEGER, " + PROGRESS + " TEXT, "
 	    + SOURCE + " TEXT, " + ORDER_NO + " TEXT, " + LAST_FOLLOW_COMMENT

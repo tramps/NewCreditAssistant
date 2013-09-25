@@ -13,7 +13,7 @@ import android.util.Log;
 import com.rong360.creditassitant.task.BaseHttpsManager.RequestParam;
 
 public class DomainHelper {
-    private static final String DOMAIN = "http://10.10.50.21/appapi";
+    private static final String DOMAIN = "http://10.10.10.35/appapi";
 
     public static final String SUFFIX_GET_AUTH_CODE = "/getauthcode?";
     public static final String SUFFIX_REGISTER = "/register?";

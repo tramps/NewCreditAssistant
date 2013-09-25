@@ -45,6 +45,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
     protected void onPause() {
 	super.onPause();
 	// MobclickAgent.onPause(this);
+	Log.i(TAG, "base action fragemtn pause");
 	PassCheckHelper.getInstance(this).init();
     }
 
@@ -61,7 +62,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
 	super.onDestroy();
-	Log.i(TAG, "base action destroy");
+	Log.i(TAG, "base action fragemtn destroy");
 	PassCheckHelper.getInstance(this).init();
     }
 

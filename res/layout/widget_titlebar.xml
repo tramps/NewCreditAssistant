@@ -4,7 +4,7 @@
     android:layout_height="wrap_content" >
     <RelativeLayout 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:background="@drawable/bkg_center_pressed"
         >
     <Button
@@ -18,9 +18,12 @@
     
     <RelativeLayout 
         android:id="@+id/rlTitle"
+        android:layout_marginBottom="2dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/bkg_center_press"
         android:gravity="center"

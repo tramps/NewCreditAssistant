@@ -168,7 +168,12 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	    Log.i(TAG, "tel:" + mTel);
 	    IntentUtil.startTel(this, mTel);
 	} else if (v == llMsg) {
-	    String customerInfo = mTel + ";,;" + mTel;
+	    String customerInfo;
+	    if (mCustomer == null) {
+		customerInfo = mTel + "#" + mTel;
+	    } else {
+		customerInfo = mCustomer.getName() + "#" + mCustomer.getTel();
+	    }
 	    Log.i(TAG, "customerinfo: " + customerInfo);
 	    Intent intent = new Intent(this, SendGroupSmsActivity.class);
 	    intent.putExtra(SendGroupSmsActivity.EXTRA_CUSTOMER, customerInfo);

@@ -1,5 +1,6 @@
 package com.rong360.creditassitant.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,7 @@ import com.rong360.creditassitant.service.PhoneNoticeService;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.PreferenceHelper;
 
-public class AfterPhoneActivity extends BaseActionBar implements
+public class AfterPhoneActivity extends Activity implements
 	OnClickListener {
     private static final String TAG = AfterPhoneActivity.class.getSimpleName();
     private static final String PRE_KEY_SERIAL = "pre_key_serial";
@@ -46,9 +47,11 @@ public class AfterPhoneActivity extends BaseActionBar implements
 			.getCustomerByTel(mTel);
 
 	super.onCreate(savedInstanceState);
+	
+	setContentView(getLayout());
+	initElements();
     }
 
-    @Override
     protected void initElements() {
 	btnClose = (Button) findViewById(R.id.btnClose);
 	btnAction = (Button) findViewById(R.id.btnAction);
@@ -81,7 +84,6 @@ public class AfterPhoneActivity extends BaseActionBar implements
 
     }
 
-    @Override
     protected int getLayout() {
 	if (mCustomer == null) {
 	    return R.layout.activity_after_phone_unknown;

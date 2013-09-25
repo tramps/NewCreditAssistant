@@ -124,7 +124,7 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 	} else if (v == btnHistory) {
 	    chooseHistory();
 	} else if (v == btnSend) {
-	    if (etMsg.getText().toString().length() == 0) {
+	    if (etMsg.getText().toString().trim().length() == 0) {
 		MyToast.makeText(this, "请输入短信内容~", Toast.LENGTH_SHORT).show();
 		return;
 	    }
@@ -136,7 +136,7 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 
     private void insert2History() {
 	String msg = etMsg.getText().toString();
-	if (mHistoryMsg == null || mHistoryMsg.equalsIgnoreCase(msg)) {
+	if (mHistoryMsg == null || !mHistoryMsg.equalsIgnoreCase(msg)) {
 	    mHandler.insertSms(msg);
 	    GlobalValue.getIns().setMsgDirty();
 	}

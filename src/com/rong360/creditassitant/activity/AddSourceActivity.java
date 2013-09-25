@@ -3,6 +3,7 @@ package com.rong360.creditassitant.activity;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.text.InputFilter.LengthFilter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -44,6 +45,10 @@ public class AddSourceActivity extends BaseActionBar {
     public boolean onOptionsItemSelected(MenuItem item) {
 	if (item.getItemId() == R.id.finish) {
 	    String source = etSource.getText().toString().trim();
+	    if (source.length() > 10) {
+		MyToast.makeText(this, "太长了，亲~", Toast.LENGTH_SHORT).show();
+		return true;
+	    }
 	    if (source.length() == 0) {
 		MyToast.makeText(this, "请输入客户来源", Toast.LENGTH_SHORT).show();
 		return true;

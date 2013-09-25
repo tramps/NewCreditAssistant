@@ -6,6 +6,7 @@ import com.rong360.creditassitant.exception.JsonParseException;
 import com.rong360.creditassitant.json.JsonHelper;
 import com.rong360.creditassitant.model.result.AuthCode;
 import com.rong360.creditassitant.model.result.Result;
+import com.rong360.creditassitant.model.result.TResult;
 import com.rong360.creditassitant.task.DomainHelper;
 import com.rong360.creditassitant.task.HandleMessageTask;
 import com.rong360.creditassitant.task.TransferDataTask;
@@ -79,11 +80,11 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 		    @Override
 		    public void onSuccess(HandleMessageTask task, Object t) {
 			try {
-			    Result res =
-				    JsonHelper.parseJSONToObject(Result.class,
+			    TResult res =
+				    JsonHelper.parseJSONToObject(TResult.class,
 					    task.getResult());
 			    Log.i(TAG, "res:" + task.getResult());
-			    if (res.getError() == (ECode.SUCCESS)) {
+			    if (res.mResult.getError() == (ECode.SUCCESS)) {
 				PreferenceHelper helper =
 					PreferenceHelper
 						.getHelper(LoginActivity.this);
@@ -98,13 +99,16 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 				helper.writePreference(
 					AuthCodeActivity.EXTRA_PASS, mEpass);
 				finish();
-			    } else if (res.getError() == 2) {
+			    } else if (res.mResult.getError() == 2) {
 				MyToast.makeText(LoginActivity.this, "用户被封禁")
 					.show();
-			    } else if (res.getError() == 1) {
+			    } else if (res.mResult.getError() == 1 || res.mResult.getError() == 110) {
 				MyToast.makeText(LoginActivity.this, "用户不存在或密码错误")
 					.show();
-			    }
+			    } else if (res.mResult.getError() == 4) {
+				MyToast.makeText(LoginActivity.this, "用户已存在")
+				.show();
+		    }
 			} catch (JsonParseException e) {
 			    Log.e(TAG, e.toString());
 			}

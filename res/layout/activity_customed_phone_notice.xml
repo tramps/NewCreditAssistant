@@ -12,7 +12,6 @@
         android:text="路子野"
         style="@style/cmName"
         android:textSize="18sp"
-        android:maxLength="6"
         android:textStyle="bold"
         android:textColor="@android:color/white"
         />

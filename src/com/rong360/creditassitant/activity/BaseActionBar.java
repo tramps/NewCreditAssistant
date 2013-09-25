@@ -23,6 +23,8 @@ public abstract class BaseActionBar extends Activity {
     private ITitle mTitleBar;
     private RelativeLayout mContainer;
     private TitleBarCenter mCenter;
+    
+    private boolean mShallLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +47,18 @@ public abstract class BaseActionBar extends Activity {
 	super.onPause();
 	// MobclickAgent.onPause(this);
 	Log.i(TAG, "base action onPause");
-	PassCheckHelper.getInstance(this).init();
+//	mShallLock = PassCheckHelper.getInstance(this).shouldLock(this);
+	if (!mShallLock) {
+	    PassCheckHelper.getInstance(this).init();
+	}
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
 	Log.i(TAG, "base action start:");
-	if (PassCheckHelper.getInstance(this).shouldLock(this)) {
+	mShallLock = PassCheckHelper.getInstance(this).shouldLock(this);
+	if (mShallLock) {
 		Intent intent = new Intent(this, ShowPassAliasActivity.class);
 		startActivity(intent);
 	}
@@ -62,8 +68,10 @@ public abstract class BaseActionBar extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "base action destroy");
-	PassCheckHelper.getInstance(this).init();
+//        mShallLock = PassCheckHelper.getInstance(this).shouldLock(this);
+	if (!mShallLock) {
+	    PassCheckHelper.getInstance(this).init();
+	}
     }
 
     protected int getLayout() {

@@ -64,7 +64,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
     private MovingBarView mbv;
 
     private RelativeLayout rlAlarm;
-    private Button btnClose;
+    private ImageButton btnClose;
     private RelativeLayout rlComment;
     private TextView tvAlarm;
     private TextView tvComment;
@@ -135,8 +135,9 @@ public class CustomerDetailActivity extends BaseActionBar implements
 		GlobalValue.getIns()
 			.getActionHandler(CustomerDetailActivity.this)
 			.handleAction(a);
-		MyToast.displayFeedback(CustomerDetailActivity.this, R.drawable.ic_right,
-			"修改为" + mCustomer.getProgress(), hlv);
+		MyToast.displayFeedback(CustomerDetailActivity.this,
+			R.drawable.ic_right, "修改为" + mCustomer.getProgress(),
+			hlv);
 	    } else {
 		Log.e(TAG, "wrong index" + index);
 	    }
@@ -168,12 +169,13 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    ibStar.setBackgroundResource(R.drawable.ic_star_no_checked);
 	}
 
-	if (mCustomer.getAlarmTime() != 0) {
+	if (mCustomer.getAlarmTime() > System.currentTimeMillis()) {
 	    Calendar instance = Calendar.getInstance();
 	    instance.setTimeInMillis(mCustomer.getAlarmTime());
 	    tvAlarm.setText(DateUtil.yyyyMMddHHmm.format(instance.getTime()));
 	} else {
 	    tvAlarm.setText("点击设置提醒");
+	    btnClose.setVisibility(View.GONE);
 	}
 
 	tvComment.setText(mCustomer.getLastFollowComment());
@@ -262,7 +264,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	rlAlarm = (RelativeLayout) findViewById(R.id.rlAlarm);
 	rlComment = (RelativeLayout) findViewById(R.id.rlComment);
 	tvAlarm = (TextView) findViewById(R.id.tvCAlarm);
-	btnClose = (Button) findViewById(R.id.btnClose);
+	btnClose = (ImageButton) findViewById(R.id.btnClose);
 	tvComment = (TextView) findViewById(R.id.tvCCommment);
 
 	rlAlarm.setOnClickListener(this);
@@ -297,14 +299,18 @@ public class CustomerDetailActivity extends BaseActionBar implements
 		    .updateCustomer(mCustomer);
 
 	    Action action =
-		    new Action(mCustomer.getId(), ActionHandler.TYPE_CANCEL_ALARM);
+		    new Action(mCustomer.getId(),
+			    ActionHandler.TYPE_CANCEL_ALARM);
 	    GlobalValue.getIns().getActionHandler(CustomerDetailActivity.this)
 		    .handleAction(action);
 	    AlarmHelper.startAlarm(CustomerDetailActivity.this, true);
+	    
+	    btnClose.setVisibility(View.GONE);
 	} else if (v == llTel) {
 	    IntentUtil.startTel(this, mCustomer.getTel());
 	} else if (v == llMsg) {
-	    String customerInfo = mCustomer.getTel() + ";,;" + mCustomer.getTel();
+	    String customerInfo =
+		    mCustomer.getName() + "#" + mCustomer.getTel();
 	    Log.i(TAG, "customerinfo: " + customerInfo);
 	    Intent intent = new Intent(this, SendGroupSmsActivity.class);
 	    intent.putExtra(SendGroupSmsActivity.EXTRA_CUSTOMER, customerInfo);
@@ -338,7 +344,8 @@ public class CustomerDetailActivity extends BaseActionBar implements
 		    && !comment.equalsIgnoreCase(mCustomer
 			    .getLastFollowComment())) {
 		mCustomer.setLastFollowComment(comment);
-		GlobalValue.getIns().getCustomerHandler(this).updateCustomer(mCustomer);
+		GlobalValue.getIns().getCustomerHandler(this)
+			.updateCustomer(mCustomer);
 		GlobalValue.getIns().putCustomer(mCustomer);
 		Action action =
 			new Action(mCustomerId, ActionHandler.TYPE_COMMENT);
@@ -367,10 +374,12 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    action.setContent(DateUtil.yyyyMMddHHmm.format(alarm.getTime()));
 	    GlobalValue.getIns().getActionHandler(CustomerDetailActivity.this)
 		    .handleAction(action);
-	    
+
 	    AlarmHelper.startAlarm(CustomerDetailActivity.this, true);
-	    
-	    MyToast.displayFeedback(CustomerDetailActivity.this, R.drawable.ic_alarm, "设置提醒", rlAlarm);
+
+	    MyToast.displayFeedback(CustomerDetailActivity.this,
+		    R.drawable.ic_alarm, "设置提醒", rlAlarm);
+	    btnClose.setVisibility(View.VISIBLE);
 	}
 
     };

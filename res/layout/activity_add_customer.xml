@@ -4,13 +4,11 @@
     android:id="@+id/myScrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="54dp"
  	android:padding="5dp">
 
 <LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="54dp"
     android:layout_marginBottom="45dp"
     android:paddingBottom="45dp"
     android:orientation="vertical" >
@@ -19,6 +17,7 @@
 	    android:id="@+id/rlNecessary"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
+	    android:layout_marginTop="54dp"
 	    android:paddingTop="10dp"
 	    android:paddingBottom="10dp"
 	    android:orientation="vertical"
@@ -47,6 +46,7 @@
 	        android:layout_alignBottom="@id/tvName"
 	        android:gravity="right"
 	        style="@style/AddCustomerContent"
+	        android:maxLength="10"
 	        android:hint="必填"
 	        />
 	    </RelativeLayout>
@@ -55,7 +55,7 @@
 	        android:id="@+id/divider_necessary"
 	        android:layout_width="match_parent"
 	        android:layout_height="1dp"
-	        android:background="@drawable/divider_horizontal"
+	        android:background="@drawable/divider_section"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginBottom="10dp"
 	        android:layout_below="@id/tvName"
@@ -72,6 +72,7 @@
 	         android:layout_height="wrap_content"
 	         android:layout_marginLeft="8dp"
 	         style="@style/AddCustomerLabel"
+	         android:maxLength="15"
 	         android:text="联系电话*"
 	         />
 	     
@@ -173,7 +174,9 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvCSource"
+	           android:paddingBottom="2dp"
 	           />
+	       
 	       </RelativeLayout>
 	</LinearLayout>  
 	
@@ -219,6 +222,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvProgress"
+	           android:paddingBottom="2dp"
 	           />
 	    </RelativeLayout>
 	    
@@ -257,16 +261,19 @@
 	        style="@style/AddCustomerContent"
 	        android:duplicateParentState="true"
 	        android:inputType="phone"
+	        android:text="dfs"
 	        android:gravity="right"
 	        />
 	      
-	       <ImageView 
+	       <ImageButton 
+	           android:id="@+id/ibDelete"
 	           android:layout_width="wrap_content"
 	           android:layout_height="wrap_content"
-	           android:src="@drawable/ic_delete_grey"
+	           android:background="@drawable/ic_delete_grey"
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
-	           android:layout_alignBottom="@id/tvAlarm"
+	           android:layout_alignBottom="@id/tvCAlarm"
+	           android:paddingBottom="6dp"
 	           />
 	       </RelativeLayout>
 	</LinearLayout>
@@ -348,6 +355,7 @@
            android:layout_alignParentRight="true"
            android:layout_marginRight="15dp"
            android:layout_alignBottom="@id/tvBank"
+           android:paddingBottom="2dp"
            />
 	     </RelativeLayout>
 	    
@@ -396,6 +404,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvCash"
+	           android:paddingBottom="2dp"
 	           />
 	       </RelativeLayout>
 	       <View 
@@ -442,6 +451,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvIdentity"
+	           android:paddingBottom="2dp"
 	           />
 	       </RelativeLayout>
 	       
@@ -490,6 +500,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvCreditRecord"
+	           android:paddingBottom="2dp"
 	           />
 	       </RelativeLayout>
 	       
@@ -537,6 +548,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvHouse"
+	           android:paddingBottom="2dp"
 	           />
 	       </RelativeLayout>
 	       
@@ -585,6 +597,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvCar"
+	           android:paddingBottom="2dp"
 	           />
 	       </RelativeLayout>
 	       

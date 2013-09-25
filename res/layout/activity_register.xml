@@ -57,7 +57,7 @@
                 android:layout_margin="10dp"
                 android:hint="请输入六位数字密码"
                 android:maxLength="6"
-                android:inputType="phone|textPassword"
+                android:inputType="textPassword"
                 android:background="@android:color/white"
                 />
         </LinearLayout>

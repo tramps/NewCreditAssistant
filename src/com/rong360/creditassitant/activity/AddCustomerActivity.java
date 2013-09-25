@@ -28,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +44,10 @@ import com.rong360.creditassitant.util.CloudHelper;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
 import com.rong360.creditassitant.util.GlobalValue;
+import com.rong360.creditassitant.util.PreferenceHelper;
 import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
 import com.rong360.creditassitant.util.MyToast;
+import com.rong360.creditassitant.util.NetUtil;
 import com.rong360.creditassitant.widget.MySrollview;
 
 public class AddCustomerActivity extends BaseActionBar implements
@@ -85,6 +88,8 @@ public class AddCustomerActivity extends BaseActionBar implements
     private TextView tvHouse;
 
     private Button btnDelete;
+
+    private ImageButton ibDelete;
 
     private HashMap<RelativeLayout, TextView> mChooseMap;
     private HashMap<RelativeLayout, EditText> mInputMap;
@@ -146,6 +151,8 @@ public class AddCustomerActivity extends BaseActionBar implements
 	rlHouse = (RelativeLayout) findViewById(R.id.rlHouse);
 
 	rlAlarm.setOnClickListener(this);
+	ibDelete = (ImageButton) findViewById(R.id.ibDelete);
+	ibDelete.setOnClickListener(this);
 
 	etName = (EditText) findViewById(R.id.etName);
 	etTel = (EditText) findViewById(R.id.etTel);
@@ -195,9 +202,12 @@ public class AddCustomerActivity extends BaseActionBar implements
 	if (mCustomer.getLoan() != 0) {
 	    etLoan.setText(mCustomer.getLoan() + "");
 	}
-	if (mCustomer.getAlarmTime() != -1) {
+	if (mCustomer.getAlarmTime() > 0) {
 	    tvAlarm.setText(DateUtil.yyyyMMddHHmm.format(new Date(mCustomer
 		    .getAlarmTime())));
+	    ibDelete.setVisibility(View.VISIBLE);
+	} else {
+	    ibDelete.setVisibility(View.GONE);
 	}
 	if (mCustomer.getLastFollowComment() != null) {
 	    etComment.setText(mCustomer.getLastFollowComment());
@@ -225,14 +235,14 @@ public class AddCustomerActivity extends BaseActionBar implements
 		R.array.credit);
 	setChooseValue(tvHouse, mCustomer.getHouse(), R.array.house);
 	setChooseValue(tvCar, mCustomer.getCar(), R.array.car);
-	
+
 	closeImm();
     }
-    
+
     private void closeImm() {
 	InputMethodManager imm =
-		    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-	    mySrollview.closeInput(mySrollview, imm);
+		(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	mySrollview.closeInput(mySrollview, imm);
     }
 
     private void setChooseValue(TextView v, int selected, int arrayId) {
@@ -302,6 +312,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    return true;
 
 	}
+	closeImm();
 	return super.onOptionsItemSelected(item);
     }
 
@@ -340,7 +351,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    if (!Character.isDigit(tel[i])
 		    && phoneCharacters.indexOf(tel[i]) == -1) {
 		mySrollview.scrollTo(0, etTel.getTop());
-		MyToast.makeText(this, "非法字符", Toast.LENGTH_SHORT);
+		MyToast.makeText(this, "非法字符", Toast.LENGTH_SHORT).show();
 		etTel.requestFocus();
 		etTel.setSelection(i + 1);
 		valid = false;
@@ -360,6 +371,17 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    valid = false;
 	    return valid;
 	}
+
+	String loan = etLoan.getText().toString();
+	if (loan != null && loan.length() > 0 && !loan.matches("^-?\\d+$")) {
+	    mySrollview.scrollTo(0, etLoan.getTop());
+	    MyToast.makeText(this, "非法字符", Toast.LENGTH_SHORT).show();
+	    etLoan.requestFocus();
+	    etLoan.setSelection(loan.length());
+	    valid = false;
+	    return valid;
+	}
+
 	return valid;
     }
 
@@ -502,8 +524,10 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    }
 
 	    CommuHandler.setNewAddName(mTel, this);
-	    
-	    CloudHelper.back2Server(this, false);
+
+	    if (NetUtil.isNetworkAvailable(this)) {
+		CloudHelper.back2Server(this, false);
+	    }
 	}
 
 	return isSuccess;
@@ -575,7 +599,36 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    GlobalValue.getIns().getActionHandler(this)
 		    .deleteAction(mCustomerId);
 	    CommuHandler.removeNameByPhone(mCustomer.getTel(), this);
+	    String ids =
+		    PreferenceHelper.getHelper(this).readPreference(
+			    CloudHelper.PRE_KEY_DELETE_IDS);
+	    if (ids == null || ids.length() == 0) {
+		ids = String.valueOf(mCustomerId);
+	    } else {
+		ids += ", " + mCustomerId;
+	    }
+	    PreferenceHelper.getHelper(this).writePreference(
+		    CloudHelper.PRE_KEY_DELETE_IDS, ids);
+	    
+	    CloudHelper.deleteCustomer(this);
 	    finish();
+	} else if (v == ibDelete) {
+	    tvAlarm.setText("");
+	    mCustomer.setAlarmTime(0);
+	    mCustomer.setHasChecked(false);
+	    mCustomer.setIsDisplayed(false);
+	    GlobalValue.getIns().putCustomer(mCustomer);
+	    GlobalValue.getIns().getCustomerHandler(getBaseContext())
+		    .updateCustomer(mCustomer);
+
+	    Action action =
+		    new Action(mCustomer.getId(),
+			    ActionHandler.TYPE_CANCEL_ALARM);
+	    GlobalValue.getIns().getActionHandler(AddCustomerActivity.this)
+		    .handleAction(action);
+	    AlarmHelper.startAlarm(AddCustomerActivity.this, true);
+
+	    ibDelete.setVisibility(View.GONE);
 	}
     }
 
@@ -585,6 +638,8 @@ public class AddCustomerActivity extends BaseActionBar implements
 	public void onTimePicked(String time, Calendar alarm) {
 	    tvAlarm.setText(time);
 	    mAlarm = alarm;
+
+	    ibDelete.setVisibility(View.VISIBLE);
 
 	    if (mCustomer == null) {
 		mCustomer = new Customer();

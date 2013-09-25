@@ -45,6 +45,7 @@ import com.rong360.creditassitant.widget.TitleBarCenter;
 
 public class CustomerManagementFragment extends BaseFragment implements
 	OnClickListener {
+    public static final String[] MONTHS = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
     private static final int FILTER_INDEX = 100;
 
     private static final String TAG = "CustomerManagementFragment";
@@ -56,8 +57,8 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    TITLE_POTENTIAL, TITLE_CONSISTENT, TITLE_UPGRADE, TITLE_SUCCEED,
 	    TITLE_FAIL, TITLE_UNCONSISTENT };
     
-    public static final int[] progressColor = new int[] {R.color.cp_fail, R.color.cp_potential,
-	R.color.cp_talked, R.color.cp_upgraded, R.color.cp_succeded, R.color.cp_fail};
+    public static final int[] progressColor = new int[] {R.color.text_fail, R.color.text_potential,
+	R.color.text_talked, R.color.text_upgraded, R.color.text_succeed, R.color.text_fail};
 
     private Button btnImport;
     private LinearLayout llNoCustomers;
@@ -450,7 +451,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 	Calendar lastCalc = Calendar.getInstance(Locale.CHINA);
 	Customer lastCustomer = customers.get(0);
 	lastCalc.setTimeInMillis(lastCustomer.getTime());
-	mSections.add(new Section(TYPE_HEAD, (lastCalc.get(Calendar.MONTH) + 1)
+	mSections.add(new Section(TYPE_HEAD, MONTHS[lastCalc.get(Calendar.MONTH)]
 		+ "月 "));
 	mSections.add(new Section(TYPE_CUSTOMER, lastCustomer));
 	Calendar nextCalc = Calendar.getInstance();
@@ -458,8 +459,8 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    Customer c = customers.get(i);
 	    nextCalc.setTimeInMillis(c.getTime());
 	    if (lastCalc.get(Calendar.MONTH) != nextCalc.get(Calendar.MONTH)) {
-		mSections.add(new Section(TYPE_HEAD, (nextCalc
-			.get(Calendar.MONTH) + 1) + "月 "));
+		mSections.add(new Section(TYPE_HEAD, MONTHS[nextCalc
+			.get(Calendar.MONTH)] + "月 "));
 		lastCalc = nextCalc;
 	    }
 
@@ -573,8 +574,9 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    }
 	    if (c.getLoan() > 0) {
 		tvLoan.setText(c.getLoan() + "");
+		tvLoan.setVisibility(View.VISIBLE);
 	    } else {
-		tvLoan.setText("");
+		tvLoan.setVisibility(View.GONE);
 	    }
 	    tvSource.setText(c.getSource());
 	    String progress = c.getProgress();
@@ -582,7 +584,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		tvProgress.setText(c.getProgress());
 		for (int i = 0; i < mProgress.length; i++) {
 		    if (mProgress[i].equalsIgnoreCase(progress)) {
-			tvProgress.setTextColor(getResources().getColor(progressColor[i]));
+			tvProgress.setTextColor(getResources().getColorStateList(progressColor[i]));
 			break;
 		    }
 		}

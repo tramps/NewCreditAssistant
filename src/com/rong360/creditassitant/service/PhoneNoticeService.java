@@ -19,10 +19,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
@@ -32,8 +29,6 @@ import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Communication;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.LocationHelper;
-import com.rong360.creditassitant.model.NoticeIgnore;
-import com.rong360.creditassitant.model.NoticeIgnoreHandler;
 import com.rong360.creditassitant.model.TelHelper;
 import com.rong360.creditassitant.service.WindowManagerHelper.DesktopLayout;
 import com.rong360.creditassitant.util.DateUtil;
@@ -121,6 +116,7 @@ public class PhoneNoticeService extends Service {
     private void showCustomedScreen() {
 	mHandler.removeCallbacks(mThread);
 	mHandler.postDelayed(mThread, 1000);
+	closePopUp(15000);
     }
 
     @Override

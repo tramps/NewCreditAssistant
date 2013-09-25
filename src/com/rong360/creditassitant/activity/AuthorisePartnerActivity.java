@@ -20,6 +20,7 @@ import com.rong360.creditassitant.task.HandleMessageTask;
 import com.rong360.creditassitant.task.HandleMessageTask.Callback;
 import com.rong360.creditassitant.task.TransferDataTask;
 import com.rong360.creditassitant.util.CloudHelper;
+import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.PreferenceHelper;
@@ -31,6 +32,7 @@ public class AuthorisePartnerActivity extends BaseActionBar {
 
     private TextView tvHint;
     private ImageView ivHint;
+    private ImageView ivSign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,16 @@ public class AuthorisePartnerActivity extends BaseActionBar {
 	String pass =
 		helper.readPreference(ImportPartnerActivity.PRE_KEY_BD_PASS);
 	if (tel != null && pass != null) {
+	    ivSign.setImageResource(R.drawable.ic_green_circle);
 	    CloudHelper.syncOrder(AuthorisePartnerActivity.this);
+	    ivHint.setVisibility(View.VISIBLE);
+	    String last = helper.readPreference(PRE_KEY_LAST_SYNC);
+	    if (last != null) {
+		tvHint.setText(DateUtil.getDisplayTimeForDetail(Long.valueOf(last)));
+	    }
+	} else {
+	    ivSign.setImageResource(R.drawable.ic_grey_circle);
+	    ivHint.setVisibility(View.GONE);
 	}
     }
 
@@ -65,14 +76,20 @@ public class AuthorisePartnerActivity extends BaseActionBar {
 	String pass =
 		helper.readPreference(ImportPartnerActivity.PRE_KEY_BD_PASS);
 	if (tel != null && pass != null) {
+	    ivSign.setImageResource(R.drawable.ic_green_circle);
 	    CloudHelper.syncOrder(AuthorisePartnerActivity.this);
+	    String last = helper.readPreference(PRE_KEY_LAST_SYNC);
+	    if (last != null) {
+		tvHint.setText(DateUtil.getDisplayTimeForDetail(Long.valueOf(last)));
+	    }
 	} else {
+	    ivSign.setImageResource(R.drawable.ic_grey_circle);
+	    ivHint.setVisibility(View.GONE);
 	    Intent intent =
 		    new Intent(AuthorisePartnerActivity.this,
 			    ImportPartnerActivity.class);
 	    startActivityForResult(intent, 10001);
 	}
-
     }
 
     @Override
@@ -85,6 +102,9 @@ public class AuthorisePartnerActivity extends BaseActionBar {
 		initContent();
 	    }
 	});
+	tvHint = (TextView) findViewById(R.id.tvHint);
+	ivHint = (ImageView) findViewById(R.id.ivHint);
+	ivSign = (ImageView) findViewById(R.id.ivSign);
     }
 
     @Override

@@ -213,7 +213,7 @@ public class ShowPassAliasActivity extends Activity implements OnClickListener {
 	} else {
 	    mWrongCount++;
 	    int leftCount = MAXIMUM_COUNT - mWrongCount;
-	    tvHint.setText(sb.toString() + "输错5次将锁定，你还有" + leftCount + "次机会");
+	    tvHint.setText("输错5次将锁定，你还有" + leftCount + "次机会");
 	    tvHint.setVisibility(View.VISIBLE);
 	    if (leftCount == 0) {
 		Intent intent = new Intent(this, LockActivity.class);

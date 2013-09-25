@@ -1,5 +1,8 @@
 package com.rong360.creditassitant.task;
 
+import com.rong360.creditassitant.util.MyToast;
+import com.rong360.creditassitant.util.NetUtil;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -9,6 +12,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 public abstract class BaseTask<A, B, C> extends AsyncTask<A, B, C> {
 	public static interface OnTaskCancelListener {

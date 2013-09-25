@@ -112,8 +112,9 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
     @Override
     protected void onResume() {
 	super.onResume();
-	mIsSliented = false;
-	MPlayHelper.playSound(this);
+	if (!mIsSliented) {
+	    MPlayHelper.playSound(this);
+	}
 	mHandler.postDelayed(mSilentThread, MPlayHelper.MAXIMIUM_DURATION);
 	Log.i(TAG, "resumed, alarm");
 	initContent();

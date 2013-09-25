@@ -28,12 +28,12 @@
     
     <style name="cmName">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/customer_content</item>
+        <item name="android:textColor">@color/text_black</item>
     </style>
     
     <style name="cmDetail">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/customer_label</item>
+        <item name="android:textColor">@color/text_label</item>
     </style>
     
     <style name="CustomerDetailLoan">

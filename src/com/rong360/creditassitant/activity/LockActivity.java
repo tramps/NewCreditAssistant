@@ -1,6 +1,7 @@
 package com.rong360.creditassitant.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.PreferenceHelper;
 
 public class LockActivity extends Activity {
@@ -20,7 +22,7 @@ public class LockActivity extends Activity {
     private TextView tvLeftTime;
     private Button btnUnlock;
 
-    private final int mTotalTime = 1 * 60;
+    private final int mTotalTime = 10 * 60;
     private final int mMinute = 60;
 
     private long mStartTime;
@@ -70,12 +72,19 @@ public class LockActivity extends Activity {
     
     @Override
     public void onBackPressed() {
-	stopTiming();
-	super.onBackPressed();
+//	stopTiming();
+//	super.onBackPressed();
     }
     
     private void stopTiming() {
 	mStop = true;
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mStop = false;
+        startTiming();
     }
 
     protected CharSequence getDisplay(long leftTime) {
@@ -93,6 +102,9 @@ public class LockActivity extends Activity {
     }
 
     private void startTiming() {
+	if (mStop) {
+	    return;
+	}
 	Log.i(TAG, "start timing");
 	mHandler.sendEmptyMessageDelayed(0, 1000);
     }
@@ -103,7 +115,9 @@ public class LockActivity extends Activity {
 	btnUnlock.setOnClickListener(new OnClickListener() {
 	    @Override
 	    public void onClick(View v) {
-		finish();
+		Intent intent = new Intent(LockActivity.this, LoginActivity.class);
+		IntentUtil.startActivity(LockActivity.this, intent);
+		stopTiming();
 	    }
 	});
     }

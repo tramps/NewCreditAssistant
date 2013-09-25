@@ -107,6 +107,7 @@ public class DataBackupHelper {
 		sb.append("电话").append(TAB);
 		sb.append("贷款").append(TAB);
 		sb.append("进度").append(TAB);
+		sb.append("来源").append(TAB);
 		sb.append("银行流水").append(TAB);
 		sb.append("现金流水").append(TAB);
 		sb.append("身份").append(TAB);
@@ -124,10 +125,15 @@ public class DataBackupHelper {
 		    sb.append(c.getLoan()).append(COMMA).append(TAB)
 			    .append(TAB);
 		    String progress = c.getProgress();
-		    if (c.getProgress() != null) {
+		    if (c.getProgress() == null) {
 			progress = "无";
-		    }
+		    } 
 		    sb.append(progress).append(COMMA).append(TAB).append(TAB);
+		    String source = c.getSource();
+		    if (source == null) {
+			source = "无";
+		    }
+		    sb.append(source).append(COMMA).append(TAB).append(TAB);
 		    if (c.getBank() == -1) {
 			sb.append("无").append(COMMA).append(TAB).append(TAB);
 		    } else {

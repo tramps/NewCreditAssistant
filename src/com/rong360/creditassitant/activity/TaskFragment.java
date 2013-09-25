@@ -2,9 +2,12 @@ package com.rong360.creditassitant.activity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,13 +66,19 @@ public class TaskFragment extends BaseFragment {
 		GlobalValue.getIns().getAllCustomers();
 
 	for (Customer c : allCustomers) {
-	    if (c.getAlarmTime() > mToday.getTimeInMillis()
-		    || c.getAlarmTime() != 0) {
+	    if (c.getAlarmTime() > mToday.getTimeInMillis()) {
 		mAlarmCustomers.add(c);
 	    }
 	}
 
 	if (mAlarmCustomers.size() > 0) {
+	    Collections.sort(mAlarmCustomers, new Comparator<Customer>() {
+
+		@Override
+		public int compare(Customer lhs, Customer rhs) {
+		    return rhs.getAlarmTime() - lhs.getAlarmTime() > 0 ? 1 : -1;
+		}
+	    });
 	    lvAlarm.setVisibility(View.VISIBLE);
 	    mAdapter.notifyDataSetChanged();
 	    tvHint.setVisibility(View.INVISIBLE);
@@ -88,11 +97,19 @@ public class TaskFragment extends BaseFragment {
 	private Context mContext;
 	private ArrayList<Customer> mCustomers;
 	private String[] mProgress;
+	
+	private ColorStateList mGrey;
+	private ColorStateList mBlack;
+	private ColorStateList mLabel;
 
 	public AlarmAdapter(Context context, ArrayList<Customer> customers) {
 	    mContext = context;
 	    mCustomers = customers;
+	    
 	    mProgress = mContext.getResources().getStringArray(R.array.progress);
+	    mGrey = mContext.getResources().getColorStateList(R.color.text_grey);
+	    mBlack = mContext.getResources().getColorStateList(R.color.text_black);
+	    mLabel = mContext.getResources().getColorStateList(R.color.text_label);
 	}
 
 	@Override
@@ -133,7 +150,7 @@ public class TaskFragment extends BaseFragment {
 		tvProgress.setText(c.getProgress());
 		for (int i = 0; i < mProgress.length; i++) {
 		    if (mProgress[i].equalsIgnoreCase(progress)) {
-			tvProgress.setTextColor(getResources().getColor(CustomerManagementFragment.progressColor[i]));
+			tvProgress.setTextColor(getResources().getColorStateList(CustomerManagementFragment.progressColor[i]));
 			break;
 		    }
 		}
@@ -150,6 +167,20 @@ public class TaskFragment extends BaseFragment {
 		    startActivity(intent);
 		}
 	    });
+	    
+	    if (c.getAlarmTime() < System.currentTimeMillis()) {
+		tvName.setTextColor(mGrey);
+		tvComment.setTextColor(mGrey);
+		tvDay.setTextColor(mGrey);
+		tvTime.setTextColor(mGrey);
+		tvProgress.setTextColor(mGrey);
+	    } else {
+		tvName.setTextColor(mBlack);
+		tvTime.setTextColor(mBlack);
+		
+		tvDay.setTextColor(mLabel);
+		tvComment.setTextColor(mLabel);
+	    }
 
 	    return convertView;
 	}

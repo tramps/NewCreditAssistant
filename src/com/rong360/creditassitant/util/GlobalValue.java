@@ -148,6 +148,7 @@ public class GlobalValue {
 
     public void setMsgDirty() {
 	mIsMsgDirty = true;
+	mHistoryMsgs.clear();
     }
 
     public void clearOnLogOut() {

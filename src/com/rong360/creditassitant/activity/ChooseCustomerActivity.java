@@ -86,7 +86,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
     private Button btnImport;
     private boolean mIsReturn = false;
     private final String mChoose = "选择";
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	mCustomers = GlobalValue.getIns().getAllCustomers();
@@ -494,7 +494,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	Calendar lastCalc = Calendar.getInstance(Locale.CHINA);
 	Customer lastCustomer = customers.get(0);
 	lastCalc.setTimeInMillis(lastCustomer.getTime());
-	mSections.add(new Section(TYPE_HEAD, (lastCalc.get(Calendar.MONTH) + 1)
+	mSections.add(new Section(TYPE_HEAD, CustomerManagementFragment.MONTHS[lastCalc.get(Calendar.MONTH)]
 		+ "月"));
 	mSections.add(new Section(TYPE_CUSTOMER, lastCustomer));
 	Calendar nextCalc = Calendar.getInstance();
@@ -502,8 +502,8 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    Customer c = customers.get(i);
 	    nextCalc.setTimeInMillis(c.getTime());
 	    if (lastCalc.get(Calendar.MONTH) != nextCalc.get(Calendar.MONTH)) {
-		mSections.add(new Section(TYPE_HEAD, (nextCalc
-			.get(Calendar.MONTH) + 1) + "月"));
+		mSections.add(new Section(TYPE_HEAD, CustomerManagementFragment.MONTHS[nextCalc
+			.get(Calendar.MONTH)] + "月"));
 		lastCalc = nextCalc;
 	    }
 
@@ -570,10 +570,14 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 
 	private Context mContenx;
 	private ArrayList<Section> mSections;
+	
+	private String[] mProgress;
 
 	public CustomerAdapter(Context context, ArrayList<Section> sections) {
 	    mContenx = context;
 	    mSections = sections;
+	    
+	    mProgress = mContenx.getResources().getStringArray(R.array.progress);
 	}
 
 	@Override
@@ -650,7 +654,16 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		tvLoan.setVisibility(View.INVISIBLE);
 	    }
 	    tvSource.setText(c.getSource());
-	    tvProgress.setText(c.getProgress());
+	    String progress = c.getProgress();
+	    if (progress != null) {
+		tvProgress.setText(c.getProgress());
+		for (int i = 0; i < mProgress.length; i++) {
+		    if (mProgress[i].equalsIgnoreCase(progress)) {
+			tvProgress.setTextColor(getResources().getColorStateList(CustomerManagementFragment.progressColor[i]));
+			break;
+		    }
+		}
+	    }
 	    return convertView;
 	}
 

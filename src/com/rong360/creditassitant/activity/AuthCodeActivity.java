@@ -14,6 +14,7 @@ import com.rong360.creditassitant.exception.JsonParseException;
 import com.rong360.creditassitant.json.JsonHelper;
 import com.rong360.creditassitant.model.result.AuthCode;
 import com.rong360.creditassitant.model.result.Result;
+import com.rong360.creditassitant.model.result.TResult;
 import com.rong360.creditassitant.task.BaseHttpsManager.RequestParam;
 import com.rong360.creditassitant.task.DomainHelper;
 import com.rong360.creditassitant.task.HandleMessageTask;
@@ -45,7 +46,7 @@ public class AuthCodeActivity extends BaseActionBar implements OnClickListener {
 	getSupportActionBar().setTitle("输入验证码");
 	mAuthCode = getIntent().getStringExtra(EXTRA_AUTH_CODE);
 	mTel = getIntent().getStringExtra(EXTRA_TEL);
-
+	mPass = getIntent().getStringExtra(EXTRA_PASS);
     }
 
     @Override
@@ -132,10 +133,10 @@ public class AuthCodeActivity extends BaseActionBar implements OnClickListener {
 		    public void onSuccess(HandleMessageTask task, Object t) {
 			try {
 			    Log.i(TAG, "res:" + task.getResult());
-			    Result res =
-				    JsonHelper.parseJSONToObject(Result.class,
+			    TResult res =
+				    JsonHelper.parseJSONToObject(TResult.class,
 					    task.getResult());
-			    if (res.getError() == (ECode.SUCCESS)) {
+			    if (res.mResult.getError() == (ECode.SUCCESS)) {
 				PreferenceHelper helper =
 					PreferenceHelper
 						.getHelper(AuthCodeActivity.this);
@@ -148,10 +149,10 @@ public class AuthCodeActivity extends BaseActionBar implements OnClickListener {
 				helper.writePreference(EXTRA_TEL, mTel);
 				helper.writePreference(EXTRA_PASS, mEpass);
 				finish();
-			    } else if (res.getError() == 2) {
+			    } else if (res.mResult.getError() == 2) {
 				MyToast.makeText(AuthCodeActivity.this, "验证码错误")
 					.show();
-			    } else if (res.getError() == 4) {
+			    } else if (res.mResult.getError() == 4) {
 				MyToast.makeText(AuthCodeActivity.this, "用户已存在")
 					.show();
 				Intent intent =
@@ -173,7 +174,6 @@ public class AuthCodeActivity extends BaseActionBar implements OnClickListener {
 
 		tTask.execute();
 	    } else {
-		;
 		Intent intent =
 			new Intent(AuthCodeActivity.this,
 				ResetPwdActivity.class);

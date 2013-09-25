@@ -33,6 +33,8 @@ public abstract class BaseFragment extends Fragment implements IFragment {
     private boolean mReuseOldViewEnable = false;
     private int mLayout;
 
+    private boolean mShallLock;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -57,9 +59,10 @@ public abstract class BaseFragment extends Fragment implements IFragment {
     public void onResume() {
 	super.onResume();
 	Log.i(TAG, "base action start:");
-	if (PassCheckHelper.getInstance(mContext).shouldLock(mContext)) {
-		Intent intent = new Intent(mContext, ShowPassAliasActivity.class);
-		startActivity(intent);
+	mShallLock = PassCheckHelper.getInstance(mContext).shouldLock(mContext);
+	if (mShallLock) {
+	    Intent intent = new Intent(mContext, ShowPassAliasActivity.class);
+	    startActivity(intent);
 	}
 	// MobclickAgent.onResume(mContext);
     }
@@ -69,16 +72,21 @@ public abstract class BaseFragment extends Fragment implements IFragment {
 	super.onPause();
 	// MobclickAgent.onPause(mContext);
 	Log.i(TAG, "base action pause");
-	PassCheckHelper.getInstance(mContext).init();
+	if (!mShallLock) {
+	    PassCheckHelper.getInstance(mContext).init();
+	}
     }
-    
+
     @Override
     public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "base action destroy");
-	PassCheckHelper.getInstance(mContext).init();
-        
+	super.onDestroy();
+	mShallLock = PassCheckHelper.getInstance(mContext).shouldLock(mContext);
+	if (!mShallLock) {
+	    Log.i(TAG, "base action destroy");
+	    PassCheckHelper.getInstance(mContext).init();
+	}
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 	super.onActivityCreated(savedInstanceState);
