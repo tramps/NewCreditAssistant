@@ -114,6 +114,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 		GlobalValue.getIns().putCustomer(mCustomer);
 	    }
 	}
+	mbv.setIsFirst(true);
 	initContent();
     }
 
@@ -290,6 +291,8 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    }
 	    startActivityForResult(intent, REQUEST_CODE);
 	} else if (v == btnClose) {
+	    MyToast.displayFeedback(CustomerDetailActivity.this,
+		    R.drawable.ic_alarm, "取消提醒", hlv);
 	    tvAlarm.setText("");
 	    mCustomer.setAlarmTime(0);
 	    mCustomer.setHasChecked(false);
@@ -378,7 +381,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    AlarmHelper.startAlarm(CustomerDetailActivity.this, true);
 
 	    MyToast.displayFeedback(CustomerDetailActivity.this,
-		    R.drawable.ic_alarm, "设置提醒", rlAlarm);
+		    R.drawable.ic_alarm, "设置提醒", hlv);
 	    btnClose.setVisibility(View.VISIBLE);
 	}
 
@@ -478,12 +481,14 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    TextView tvTime = (TextView) convertView.findViewById(R.id.tvTime);
 	    TextView tvContent =
 		    (TextView) convertView.findViewById(R.id.tvContent);
+	    TextView tvDetail = (TextView) convertView.findViewById(R.id.tvDetailTime);
 
 	    Action a = getItem(position);
 	    // Calendar calc = Calendar.getInstance();
 	    // calc.setTimeInMillis(a.getTime());
 	    tvTime.setText(DateUtil.getDisplayTimeForDetail(a.getTime()));
 	    tvContent.setText(a.getContent());
+	    tvDetail.setText(DateUtil.getExactTime(a.getTime()));
 
 	    return convertView;
 	}

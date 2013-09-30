@@ -2,16 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp"
-    android:paddingLeft="15dp">
+    android:paddingBottom="18dp"
+    android:background="@android:color/black">
     <TextView 
         android:id="@+id/tv_name"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="32dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="路子野"
-        style="@style/cmName"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@android:color/white"
         />
@@ -20,12 +18,12 @@
         android:id="@+id/tv_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_name"
+        android:layout_alignTop="@id/tv_name"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="18dp"
-        style="@style/cmDetail"
-        android:textColor="@android:color/white"
-        android:textSize="15dp"
+        android:layout_marginRight="25dp"
+        android:paddingTop="2dp"
+        android:textColor="@color/phone"
+        android:textSize="18dp"
         />
     
     <TextView 
@@ -37,22 +35,30 @@
         android:maxLength="15"
         android:singleLine="true"
         android:ellipsize="end"
-        style="@style/cmDetail"
-        android:layout_marginTop="5dp"
-        android:textColor="@android:color/white"
-        android:textSize="15dp"
+        android:layout_marginTop="24dp"
+        android:textColor="#1f1f1f"
+        android:textSize="16dp"
+        />
+    
+    <View 
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tv_comment"
+        android:layout_marginTop="18sp"
+        android:layout_marginBottom="18sp"
+        android:background="@drawable/divider_phone"
         />
     
     <TextView 
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_comment"
+        android:layout_below="@id/divider"
         android:layout_alignLeft="@id/tv_name"
-        android:layout_marginTop="8dp"
-        android:textSize="18dp"
-        android:text="3小时前联系过"
-        style="@style/cmDetail"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="16dp"
         android:textColor="@android:color/white"
         />
 

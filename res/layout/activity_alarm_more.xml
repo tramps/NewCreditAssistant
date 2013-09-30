@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:paddingBottom="20dp"
         android:layout_margin="20dp"
-        android:background="@drawable/bkg_black"
+        android:background="@drawable/bkg_dialog"
         android:gravity="center" >
 
         <TextView

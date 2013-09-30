@@ -5,6 +5,7 @@
         <item name="android:windowBackground">@color/bkg_color</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
 
         <!-- Widget -->
         <item name="titleBarStyle">@style/TitleBarStyle</item>

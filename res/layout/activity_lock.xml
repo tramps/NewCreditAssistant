@@ -14,8 +14,10 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
             android:text="已锁定" />
 
         <TextView
@@ -24,15 +26,19 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
             android:text="十分钟后尝试解锁" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/tvLeftTime"
-        style="@style/AddCustomerLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:textSize="50sp"
+        android:textColor="@color/customer_label"
         android:layout_marginBottom="35dp"
         android:layout_marginTop="55dp" />
 
@@ -42,7 +48,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
+        android:padding="15dp"
         android:background="@drawable/bkg_green"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
         android:text="登录融易记账号解锁" />
 
 </LinearLayout>

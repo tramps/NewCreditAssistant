@@ -21,7 +21,8 @@
        android:id="@+id/tv_name"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_marginLeft="25dp"
+       android:layout_marginLeft="5dp"
+       android:paddingBottom="2dp"
        />
 
 </LinearLayout>

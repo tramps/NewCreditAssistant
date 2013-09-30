@@ -118,7 +118,7 @@ public class ChooseOptionActivity extends BaseActionBar {
 		    }
 		}
 	    } else {
-		mItems = new String[] { "自有客户" };
+		mItems = new String[] { "自有客户", "融360导入客户"};
 		for (int i = 0; i < mItems.length; i++) {
 		    if (mItems[i].equalsIgnoreCase(current)) {
 			mSelectedIndex = i;

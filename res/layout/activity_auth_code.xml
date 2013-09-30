@@ -11,21 +11,28 @@
         android:layout_height="wrap_content"
         android:lineSpacingExtra="6dp"
         android:layout_marginTop="64dp"
+        android:text="2/2  意向您的手机号发送了一条验证码，请输入验证码完成注册"
+        android:textSize="12sp"
+        android:textColor="@color/customer_label"
         />
     
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@drawable/bkg_single_round"
         >
         <EditText 
             android:id="@+id/etAuthcode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:drawableLeft="@drawable/ic_pinch"
-            android:inputType="textPassword"
+            android:layout_marginLeft="5dp"
+            android:inputType="phone"
+            android:hint="输入验证码"
             android:drawablePadding="6dp"
+            android:background="@android:color/white"
             />
         
         <Button 
@@ -33,7 +40,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:text="重新获取验证码"
+            android:textColor="@color/customer_content"
+            android:background="@drawable/bkg_reget"
             />
         
     </LinearLayout>
@@ -44,6 +54,9 @@
         android:layout_height="wrap_content"
         android:text="确定"
         android:layout_marginTop="25dp"
+        android:padding="15dp"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
         android:background="@drawable/bkg_green"
         />
 

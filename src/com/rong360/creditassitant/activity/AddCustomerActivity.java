@@ -202,7 +202,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	if (mCustomer.getLoan() != 0) {
 	    etLoan.setText(mCustomer.getLoan() + "");
 	}
-	if (mCustomer.getAlarmTime() > 0) {
+	if (mCustomer.getAlarmTime() > System.currentTimeMillis()) {
 	    tvAlarm.setText(DateUtil.yyyyMMddHHmm.format(new Date(mCustomer
 		    .getAlarmTime())));
 	    ibDelete.setVisibility(View.VISIBLE);

@@ -56,7 +56,8 @@
 	           android:src="@drawable/ic_arrow"
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
-	           android:layout_alignBottom="@id/tvStar"
+	           android:layout_alignBottom="@id/tvCStar"
+	           android:paddingBottom="3dp"
 	           />
 	    </RelativeLayout>
 	    
@@ -104,6 +105,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvTime"
+	           android:paddingBottom="3dp"
 	           />
 	       </RelativeLayout>
 	</LinearLayout>
@@ -150,6 +152,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvProgress"
+	           android:paddingBottom="3dp"
 	           />
 	    </RelativeLayout>
 	    
@@ -196,6 +199,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvSource"
+	           android:paddingBottom="3dp"
 	           />
 	       </RelativeLayout>
 	</LinearLayout>
@@ -243,6 +247,7 @@
            android:layout_alignParentRight="true"
            android:layout_marginRight="15dp"
            android:layout_alignBottom="@id/tvBank"
+           android:paddingBottom="3dp"
            />
 	     </RelativeLayout>
 	    
@@ -291,6 +296,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvCash"
+	           android:paddingBottom="3dp"
 	           />
 	       </RelativeLayout>
 	       <View 
@@ -337,6 +343,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvIdentity"
+	           android:paddingBottom="3dp"
 	           />
 	       </RelativeLayout>
 	       
@@ -385,6 +392,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvCreditRecord"
+	           android:paddingBottom="3dp"
 	           />
 	       </RelativeLayout>
 	       
@@ -432,6 +440,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvHouse"
+	           android:paddingBottom="3dp"
 	           />
 	       </RelativeLayout>
 	       
@@ -480,6 +489,7 @@
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
 	           android:layout_alignBottom="@id/tvCar"
+	           android:paddingBottom="3dp"
 	           />
 	       </RelativeLayout>
 	       

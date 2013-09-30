@@ -299,6 +299,10 @@ public class ImportContactActivity extends BaseActionBar implements
     @Override
     public void onClick(View v) {
 	if (v == btnImport) {
+	    if (mCheckMap.size() == 0) {
+		MyToast.makeText(this, "请选择导入客户", Toast.LENGTH_SHORT).show();
+		return;
+	    }
 	    if (!mIsPorted) {
 		save2Customers();
 	    } else {
@@ -333,9 +337,9 @@ public class ImportContactActivity extends BaseActionBar implements
 		continue;
 	    }
 	    Customer customer = new Customer();
-	    // Log.i(TAG, "before pure: " + c.getTel());
+	     Log.i(TAG, "before pure: " + c.getTel());
 	    customer.setTel(TelHelper.getPureTel(c.getTel()));
-	    // Log.i(TAG, "after pure: " + customer.getTel());
+	     Log.i(TAG, "after pure: " + customer.getTel());
 	    if (c.getCreateTime() != 0) {
 		customer.setTime(c.getCreateTime());
 	    } else {
@@ -384,7 +388,7 @@ public class ImportContactActivity extends BaseActionBar implements
 	Log.i(TAG, "after insert: " + mCustomers.size());
 	ModelHeler.orderCustomersByTime(mCustomers);
 	finish();
-	
+
 	CloudHelper.back2Server(this, false);
     }
 

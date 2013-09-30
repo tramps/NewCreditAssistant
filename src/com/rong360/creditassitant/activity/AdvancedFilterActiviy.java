@@ -194,6 +194,7 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
 		String key = mValues.get(i);
 		Log.i(TAG, key);
 		String[] segs = key.split(",");
+		if (segs.length > 2)
 		if (index != QueryIndexer.SOURCE) {
 		    intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_INDEX,
 			    Integer.parseInt(segs[1]));
@@ -228,14 +229,16 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
 		String[] tis = data.getStringArrayExtra(EXTRA_RESULT_TEXT);
 		String title = "";
 		String id = "";
-		for (int idd : ids) {
-		    id += idd + "#";
+		if (ids.length > 0) {
+		    for (int idd : ids) {
+			id += idd + "#";
+		    }
+		    id = id.substring(0, id.length() - 1);
+		    for (String t : tis) {
+			title += t + "#";
+		    }
+		    title.substring(0, title.length() - 1);
 		}
-		id = id.substring(0, id.length() - 1);
-		for (String t : tis) {
-		    title += t + "#";
-		}
-		title.substring(0, title.length() - 1);
 		res[1] = id;
 		res[2] = title;
 
@@ -246,7 +249,12 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
 	    mIndexer.add(mCurrentIndex);
 	    mValues.add(res[0] + "," + res[1] + "," + res[2]);
 	    if (mCurrentIndex == QueryIndexer.SOURCE) {
-		mChooseMap.get(rlCurrent).setText(res[2].replace("#", ", "));
+		String source = res[2].replace("#", ", ");
+		if (source.length() > 2) {
+		    mChooseMap.get(rlCurrent).setText(source.substring(0, source.length() - 2));
+		} else {
+		    mChooseMap.get(rlCurrent).setText("");
+		}
 	    } else {
 		mChooseMap.get(rlCurrent).setText(res[2]);
 	    }

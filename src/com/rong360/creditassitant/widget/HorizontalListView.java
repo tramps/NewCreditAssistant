@@ -40,6 +40,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 
     private MovingBarView mMovingBar;
     
+    private int mHistoryOffset = 0;
+    
     public static interface IScrollBack {
 	public String getCurrentItemName();
 	public int setCurrentItem(int selected);
@@ -48,6 +50,10 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
     public HorizontalListView(Context context, AttributeSet attrs) {
 	super(context, attrs);
 	initView();
+    }
+    
+    public void setHistoryOffset(int offset) {
+	mHistoryOffset = offset;
     }
 
     private synchronized void initView() {
@@ -193,15 +199,19 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 	    mScroller.forceFinished(true);
 	}
 
+	if (mHistoryOffset > 0 && mCurrentX == 0) {
+	    mNextX = mHistoryOffset;
+	}
+	
 	int dx = mCurrentX - mNextX;
 
 	Log.i(TAG, "mCurrentX" + mCurrentX + " mNextX" + mNextX + " dx" + dx);
-	removeNonVisibleItems(dx);
+//	removeNonVisibleItems(dx);
 	fillList(dx);
 	positionItems(dx);
 
 	mCurrentX = mNextX;
-
+	
 	if (!mScroller.isFinished()) {
 	    post(new Runnable() {
 		@Override

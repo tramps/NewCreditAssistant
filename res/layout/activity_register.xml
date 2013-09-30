@@ -9,15 +9,20 @@
         android:id="@+id/tvHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="68dp"
         android:layout_marginBottom="15dp"
+         android:text="1/2  注册融易记账号或使用已有账号登录"
+            android:textSize="14sp"
+            android:textColor="@color/customer_label"
         />
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bkg_round"
+        android:padding="2dp"
         android:orientation="vertical"
         >
+        
         <LinearLayout 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +32,7 @@
                 android:id="@+id/etTel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="14dp"
                 android:drawableLeft="@drawable/ic_person"
                 android:drawablePadding="10dp"
                 android:hint="请输入手机号"
@@ -81,6 +86,8 @@
         android:padding="10dp"
         android:layout_marginTop="35dp"
         android:text="融易记账号登录"
+        android:textSize="16sp"
+        android:textColor="@color/customer_content"
         />
     
     <Button 
@@ -91,6 +98,8 @@
         android:padding="10dp"
         android:layout_marginTop="15dp"
         android:text="融360合作账号登录"
+        android:textSize="16sp"
+        android:textColor="@color/customer_content"
         />
 
 </LinearLayout>

@@ -2,27 +2,58 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+    <ImageView 
+        android:id="@+id/ivCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/ic_time_circle"
+        />
     
     <TextView 
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/ivCircle"
         android:text="sdf"
-        style="@style/CustomerDetailName"
+        android:textSize="18sp"
+        android:textColor="@color/customer_content"
         />
     
     <TextView 
         android:id="@+id/tvContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
         android:layout_below="@id/tvTime"
         android:layout_alignLeft="@id/tvTime"
         android:text="sdf"
-        style="@style/CustomerDetailLoan"
+        android:textSize="16sp"
+        android:textColor="@color/customer_label"
+        />
+    
+    <TextView 
+        android:id="@+id/tvDetailTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/tvContent"
+        android:layout_marginRight="15dp"
+        android:text="sdf"
+        android:textSize="16sp"
+        android:textColor="@color/customer_label"
+        />
+    
+    <ImageView 
+        android:layout_width="2dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_time_vertical"
+        android:layout_below="@id/ivCircle"
+        android:layout_alignLeft="@id/ivCircle"
+        android:layout_marginLeft="6dp"
+        android:layout_alignParentLeft="true"
         />
 
 </RelativeLayout>

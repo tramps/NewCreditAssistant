@@ -9,7 +9,7 @@
         android:id="@+id/tvHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="54dp"
         android:layout_marginBottom="15dp"
         />
     <LinearLayout 
@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bkg_round"
         android:orientation="vertical"
+        android:padding="2dp"
         >
         <LinearLayout 
             android:layout_width="match_parent"
@@ -80,6 +81,7 @@
             android:drawableLeft="@drawable/ic_pinch"
             android:gravity="bottom"
             android:duplicateParentState="true"
+            android:textColor="@color/customer_label"
             android:text="  忘记密码?"
             />
     </LinearLayout>
@@ -88,8 +90,11 @@
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="15dp"
         android:background="@drawable/bkg_green"
         android:text="登录"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
         />
   
 </LinearLayout>

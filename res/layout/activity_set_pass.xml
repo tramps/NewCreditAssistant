@@ -12,7 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="88dp"
+        android:textSize="16sp"
+        android:textColor="@color/customer_label"
         />
 
     <LinearLayout
@@ -20,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvHint"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:orientation="horizontal"
         android:paddingRight="15dp"
         android:paddingLeft="15dp" >
@@ -94,8 +96,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/llPass"
-        android:layout_marginTop="24dp"
-        android:textColor="@color/customer_content"
+        android:layout_marginTop="22dp"
+        android:textSize="16sp"
+        android:textColor="#d55f77"
         />
     
     <TableLayout 

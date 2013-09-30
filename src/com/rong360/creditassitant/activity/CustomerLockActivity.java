@@ -42,10 +42,12 @@ public class CustomerLockActivity extends BaseActionBar implements OnClickListen
 	    rlModifyPass.setOnClickListener(this);
 	    tvMPass.setTextColor(Color.BLACK);
 	    rlOpenPass.setClickable(false);
+	    tvOPass.setTextColor(getResources().getColor(R.color.customer_label));
 	} else {
 	    rlOpenPass.setOnClickListener(this);
 	    tvOPass.setTextColor(Color.BLACK);
 	    rlModifyPass.setClickable(false);
+	    tvMPass.setTextColor(getResources().getColor(R.color.customer_label));
 	}
     }
 

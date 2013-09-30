@@ -1,6 +1,7 @@
 package com.rong360.creditassitant.widget.wheel.adapter;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Numeric Wheel adapter.
@@ -57,17 +58,28 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
     public CharSequence getItemText(int index) {
         if (index >= 0 && index < getItemsCount()) {
             int value = minValue + index;
+            if (maxValue == 59) {
+        	value = minValue + index * 15;
+            }
             return format != null ? String.format(format, value) : Integer.toString(value);
         }
         return null;
     }
     
     public int getCurrentItem(int index) {
-	return minValue + index;
+	if (maxValue == 59) {
+	    return minValue + index * 15;
+	} else {
+	    return minValue + index;
+	}
     }
 
     @Override
     public int getItemsCount() {
-        return maxValue - minValue + 1;
+	if (maxValue == 59) {
+	    return 4;
+	} else {
+	    return maxValue - minValue + 1;
+	}
     }    
 }

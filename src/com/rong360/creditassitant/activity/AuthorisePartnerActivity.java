@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.CloudHelper.IOnFinished;
 
 public class AuthorisePartnerActivity extends BaseActionBar {
     protected static final String TAG = "AuthorisePartnerActivity";
@@ -33,6 +35,8 @@ public class AuthorisePartnerActivity extends BaseActionBar {
     private TextView tvHint;
     private ImageView ivHint;
     private ImageView ivSign;
+
+    private ProgressBar pbCircle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +60,57 @@ public class AuthorisePartnerActivity extends BaseActionBar {
 		helper.readPreference(ImportPartnerActivity.PRE_KEY_BD_PASS);
 	if (tel != null && pass != null) {
 	    ivSign.setImageResource(R.drawable.ic_green_circle);
-	    CloudHelper.syncOrder(AuthorisePartnerActivity.this);
-	    ivHint.setVisibility(View.VISIBLE);
-	    String last = helper.readPreference(PRE_KEY_LAST_SYNC);
-	    if (last != null) {
-		tvHint.setText(DateUtil.getDisplayTimeForDetail(Long.valueOf(last)));
-	    }
+	    pbCircle.setVisibility(View.VISIBLE);
+	    tvHint.setVisibility(View.GONE);
+	    CloudHelper.syncOrder(AuthorisePartnerActivity.this, onFinish);
+//	    ivHint.setVisibility(View.GONE);
+//	    String last = helper.readPreference(PRE_KEY_LAST_SYNC);
+//	    if (last != null) {
+//		tvHint.setText(DateUtil.getDisplayTimeForDetail(Long
+//			.valueOf(last)));
+//	    }
 	} else {
+	    pbCircle.setVisibility(View.GONE);
 	    ivSign.setImageResource(R.drawable.ic_grey_circle);
-	    ivHint.setVisibility(View.GONE);
+	    tvHint.setText("未绑定");
+	    tvHint.setVisibility(View.VISIBLE);
 	}
+	ivHint.setVisibility(View.GONE);
     }
+
+    private IOnFinished onFinish = new IOnFinished() {
+
+	@Override
+	public void onSuccess(int count) {
+	    ivSign.setImageResource(R.drawable.ic_green_circle);
+	    ivHint.setImageResource(R.drawable.ic_sucseed);
+	    ivHint.setVisibility(View.VISIBLE);
+	    pbCircle.setVisibility(View.GONE);
+	    tvHint.setText(DateUtil.getDisplayTimeForDetail(System
+		    .currentTimeMillis()));
+	    tvHint.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void onFail() {
+	    PreferenceHelper helper =
+		    PreferenceHelper.getHelper(AuthorisePartnerActivity.this);
+	    String tel =
+		    helper.readPreference(ImportPartnerActivity.PRE_KEY_BD_TEL);
+	    String pass =
+		    helper.readPreference(ImportPartnerActivity.PRE_KEY_BD_PASS);
+
+	    pbCircle.setVisibility(View.GONE);
+	    ivSign.setImageResource(R.drawable.ic_grey_circle);
+	    if (tel != null && pass != null) {
+		tvHint.setText("更新失败，请稍后重试");
+	    } else {
+		tvHint.setText("未绑定");
+	    }
+	    tvHint.setVisibility(View.VISIBLE);
+	    
+	}
+    };
 
     private void initContent() {
 	PreferenceHelper helper =
@@ -76,15 +120,11 @@ public class AuthorisePartnerActivity extends BaseActionBar {
 	String pass =
 		helper.readPreference(ImportPartnerActivity.PRE_KEY_BD_PASS);
 	if (tel != null && pass != null) {
-	    ivSign.setImageResource(R.drawable.ic_green_circle);
+	    ivSign.setVisibility(View.GONE);
+	    tvHint.setVisibility(View.GONE);
+	    pbCircle.setVisibility(View.VISIBLE);
 	    CloudHelper.syncOrder(AuthorisePartnerActivity.this);
-	    String last = helper.readPreference(PRE_KEY_LAST_SYNC);
-	    if (last != null) {
-		tvHint.setText(DateUtil.getDisplayTimeForDetail(Long.valueOf(last)));
-	    }
 	} else {
-	    ivSign.setImageResource(R.drawable.ic_grey_circle);
-	    ivHint.setVisibility(View.GONE);
 	    Intent intent =
 		    new Intent(AuthorisePartnerActivity.this,
 			    ImportPartnerActivity.class);
@@ -105,6 +145,8 @@ public class AuthorisePartnerActivity extends BaseActionBar {
 	tvHint = (TextView) findViewById(R.id.tvHint);
 	ivHint = (ImageView) findViewById(R.id.ivHint);
 	ivSign = (ImageView) findViewById(R.id.ivSign);
+
+	pbCircle = (ProgressBar) findViewById(R.id.pbCricle);
     }
 
     @Override
@@ -118,7 +160,10 @@ public class AuthorisePartnerActivity extends BaseActionBar {
 	    String pass =
 		    helper.readPreference(ImportPartnerActivity.PRE_KEY_BD_PASS);
 	    if (tel != null && pass != null) {
-		CloudHelper.syncOrder(AuthorisePartnerActivity.this);
+		CloudHelper.syncOrder(AuthorisePartnerActivity.this, onFinish);
+	    } else {
+		tvHint.setText("未绑定");
+		ivHint.setImageResource(R.drawable.ic_grey_circle);
 	    }
 	}
     }

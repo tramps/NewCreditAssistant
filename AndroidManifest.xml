@@ -168,7 +168,6 @@
         <activity
             android:name=".activity.AlarmActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:taskAffinity=""
             android:theme="@style/Theme.Translucent" >
@@ -190,6 +189,9 @@
         <receiver
             android:name=".receiver.AlarmReceiver"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
+            <intent-filter >
+                <action  android:name="time_to_alarm"/>
+            </intent-filter>
         </receiver>
         
         <receiver
@@ -222,7 +224,6 @@
             android:enabled="true" >
             <intent-filter android:priority="1000" >
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-
                 <category android:name="com.rong360.creditassitant" />
                 <!-- since 1.3.5 -->
             </intent-filter>

@@ -1,6 +1,7 @@
 package com.rong360.creditassitant.receiver;
 
 import com.rong360.creditassitant.activity.MainTabHost;
+import com.rong360.creditassitant.service.NotificationHelper;
 import com.rong360.creditassitant.util.CloudHelper;
 
 import cn.jpush.android.api.JPushInterface;
@@ -23,13 +24,23 @@ public class PushReceiver extends BroadcastReceiver {
 
 	if (JPushInterface.ACTION_MESSAGE_RECEIVED.equalsIgnoreCase(action)) {
 	    Log.d(TAG, "msg: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
-	    CloudHelper.syncOrder(context);
+	    CloudHelper.syncOrder(context, true);
+	} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equalsIgnoreCase(action)) {
+	    String msg = bundle.getString("n_title");
+	    Log.d(TAG, "msg: " + msg);
+	    int notificationId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
+	    Log.d(TAG, "id: " + notificationId);
+	    if (msg != null) {
+		NotificationHelper.cancelNotification(context, notificationId);
+	    }
+	    CloudHelper.syncOrder(context, true);
 	} else if (JPushInterface.ACTION_NOTIFICATION_OPENED
 		.equalsIgnoreCase(action)) {
 	    Log.d(TAG, "opened: ");
 	    Intent notificationIntent = new Intent(context, MainTabHost.class);
 	    notificationIntent.putExtra(MainTabHost.EXTRA_INDEX_TAG,
 		    MainTabHost.TAG_FOLLOW);
+	    notificationIntent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
 	    notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 	    context.startActivity(notificationIntent);
 	}

@@ -13,4 +13,7 @@
     <color name="cp_succeded">#26be62</color>
      <color name="bkg_imported">#e3f8ff</color>
      <color name="grey">#e9e9e9</color>
+     <color name="search">#dfeafe</color>
+      <color name="green">#0c95c1</color>
+      <color name="phone">#1f1f1f</color>
 </resources>

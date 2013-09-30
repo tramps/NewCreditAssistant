@@ -1,73 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.rong360.creditassitant"
-    android:background="@android:color/white"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:paddingBottom="10dp" >
 
-    <com.rong360.creditassitant.widget.wheel.WheelVerticalView
-        android:id="@+id/wvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
-        app:selectionDividerActiveAlpha="10"
-        app:selectionDividerDimmedAlpha="100"
-        app:selectionDividerHeight="1px"
-        app:visibleItems="10" >
-    </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
-    
-    <com.rong360.creditassitant.widget.wheel.WheelVerticalView
-        android:id="@+id/wvHour"
-        android:layout_toRightOf="@id/wvDate"
-        android:layout_marginLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
-        app:selectionDividerActiveAlpha="10"
-        app:selectionDividerDimmedAlpha="100"
-        app:selectionDividerHeight="1px"
-        app:visibleItems="10" >
-    </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
-    
-    <com.rong360.creditassitant.widget.wheel.WheelVerticalView
-        android:id="@+id/wvMin"
-        android:layout_toRightOf="@id/wvHour"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
-        app:selectionDividerActiveAlpha="10"
-        app:selectionDividerDimmedAlpha="100"
-        app:selectionDividerHeight="1px"
-        app:visibleItems="10" >
-    </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
-    
-    <LinearLayout 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <com.rong360.creditassitant.widget.wheel.WheelVerticalView
+            android:id="@+id/wvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+            app:selectionDividerActiveAlpha="10"
+            app:selectionDividerDimmedAlpha="100"
+            app:selectionDividerHeight="3dp"
+            app:visibleItems="10" >
+        </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
+
+        <TextView
+            android:id="@+id/tvDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/wvDate"
+            android:padding="8dp"
+            android:text=":" />
+
+        <com.rong360.creditassitant.widget.wheel.WheelVerticalView
+            android:id="@+id/wvHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvDay"
+            app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+            app:selectionDividerActiveAlpha="10"
+            app:selectionDividerDimmedAlpha="100"
+            app:selectionDividerHeight="3dp"
+            app:visibleItems="10" >
+        </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
+
+        <TextView
+            android:id="@+id/tvHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/wvHour"
+            android:padding="8dp"
+            android:text=":" />
+
+        <com.rong360.creditassitant.widget.wheel.WheelVerticalView
+            android:id="@+id/wvMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvHour"
+            app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+            app:selectionDividerActiveAlpha="10"
+            app:selectionDividerDimmedAlpha="100"
+            app:selectionDividerHeight="3dp"
+            app:visibleItems="10" >
+        </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/wvDate"
-        android:orientation="horizontal"
-        >
-    <Button 
-        android:id="@+id/btnCancel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="取消"
-        android:padding="10dp"
-        />
-    
-     <Button 
-        android:id="@+id/btnOk"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="确定"
-        android:padding="10dp"
-        />
-    
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bkg_white"
+            android:padding="10dp"
+            android:text="取消" />
+
+        <Button
+            android:id="@+id/btnOk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bkg_white"
+            android:padding="10dp"
+            android:text="确定" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

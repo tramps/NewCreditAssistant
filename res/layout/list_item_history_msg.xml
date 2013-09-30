@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bkg_section"
     android:orientation="vertical" >
     
     <TextView 
@@ -11,7 +12,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        style="@style/AddCustomerLabel"
+        android:text="asdf"
+        style="@style/AddCustomerContent"
         />
 
 </LinearLayout>

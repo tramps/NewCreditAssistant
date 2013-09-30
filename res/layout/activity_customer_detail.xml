@@ -66,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:padding="1dp"
+            android:padding="2dp"
             android:background="@drawable/bkg_single_round" >
 
             <TableRow android:gravity="center" >
@@ -211,10 +211,11 @@
                     android:id="@+id/btnClose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/tvAlarm"
+                    android:paddingBottom="4dp"
+                    android:layout_alignTop="@id/tvAlarm"
+                    android:layout_marginTop="3dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="-3dp"
                     android:background="@drawable/ic_delete_grey" />
             </RelativeLayout>
 
@@ -246,6 +247,7 @@
                     android:layout_alignBottom="@id/tvComment"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
+                    android:paddingBottom="4dp"
                     android:src="@drawable/ic_arrow" />
 
                 <TextView

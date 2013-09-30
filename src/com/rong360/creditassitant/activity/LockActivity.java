@@ -19,6 +19,7 @@ import com.rong360.creditassitant.util.PreferenceHelper;
 public class LockActivity extends Activity {
 
     private static final String TAG = "LockActivity";
+    public static final String EXTRA_LOCK = "extra_lock";
     private TextView tvLeftTime;
     private Button btnUnlock;
 
@@ -116,10 +117,19 @@ public class LockActivity extends Activity {
 	    @Override
 	    public void onClick(View v) {
 		Intent intent = new Intent(LockActivity.this, LoginActivity.class);
-		IntentUtil.startActivity(LockActivity.this, intent);
+		intent.putExtra(EXTRA_LOCK, false);
+		startActivityForResult(intent, 10001);
 		stopTiming();
 	    }
 	});
+    }
+    
+    @Override
+    protected void
+            onActivityResult(int requestCode, int resultCode, Intent data) {
+	if (resultCode == RESULT_OK) {
+	    finish();
+	}
     }
 
 }

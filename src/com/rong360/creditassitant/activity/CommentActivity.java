@@ -1,15 +1,19 @@
 package com.rong360.creditassitant.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.Comment;
 import com.rong360.creditassitant.model.Customer;
+import com.rong360.creditassitant.task.PostDataTask;
 import com.rong360.creditassitant.util.GlobalValue;
 
 public class CommentActivity extends BaseActionBar {
@@ -41,6 +45,12 @@ public class CommentActivity extends BaseActionBar {
 	}
 
     }
+    
+    private void closeImm() {
+   	InputMethodManager imm =
+   		(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+   	imm.hideSoftInputFromWindow(etComment.getWindowToken(), 0);
+       }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,12 +69,24 @@ public class CommentActivity extends BaseActionBar {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-	if (item.getItemId() == R.id.finish) {
-	    saveComment();
-	    return true;
-	}
-	return super.onOptionsItemSelected(item);
+    public boolean onOptionsItemSelected(final MenuItem item) {
+	closeImm();
+	Handler handler = new Handler();
+	handler.postDelayed(new Runnable() {
+	    
+	    @Override
+	    public void run() {
+		if (item.getItemId() == R.id.finish) {
+		    saveComment();
+		    return;
+		}
+		
+		CommentActivity.super.onOptionsItemSelected(item);
+	    }
+	}, 200);
+	
+	return false;
+	
     }
 
     private void saveComment() {

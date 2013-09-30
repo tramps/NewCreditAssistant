@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.rong360.creditassitant.model.Communication;
+import com.rong360.creditassitant.service.WindowManagerHelper;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -64,6 +65,8 @@ public class IntentUtil {
 	Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tel));
 	startActivity(context, intent);
 
+//	WindowManagerHelper.mShallShow = false;
+	
 	ArrayList<Communication> coms =
 		GlobalValue.getIns().getAllComunication(context);
 	int i = -1, j = -1;

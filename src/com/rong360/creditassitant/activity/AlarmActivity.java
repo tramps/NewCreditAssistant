@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +60,8 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
     private AlarmAdatper mAdapter;
 
     private Handler mHandler = new Handler();
+    
+    private WakeLock mLock;
 
     // private int count = 0;
 
@@ -67,6 +71,9 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	mAdapter = new AlarmAdatper(this, mAlarmCustomers);
 	setAlarm();
 	super.onCreate(savedInstanceState);
+	
+	PowerManager pm = (PowerManager)getSystemService(POWER_SERVICE);
+	mLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP|PowerManager.SCREEN_BRIGHT_WAKE_LOCK,"alarm");
     }
 
     private void setAlarm() {
@@ -112,12 +119,24 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
     @Override
     protected void onResume() {
 	super.onResume();
+	if (mLock != null) {
+	    mLock.acquire();
+	}
 	if (!mIsSliented) {
 	    MPlayHelper.playSound(this);
 	}
+	mHandler.removeCallbacks(mSilentThread);
 	mHandler.postDelayed(mSilentThread, MPlayHelper.MAXIMIUM_DURATION);
 	Log.i(TAG, "resumed, alarm");
 	initContent();
+    }
+    
+    @Override
+    protected void onDestroy() {
+	if (null != mLock) {
+	    mLock.release();
+	}
+        super.onDestroy();
     }
 
     private void initContent() {
@@ -195,9 +214,9 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    clearStatus();
 	    finish();
 	} else if (v == btnSlient) {
-	    if (mIsSliented) {
-		return;
-	    }
+//	    if (mIsSliented) {
+//		return;
+//	    }
 	    mIsSliented = true;
 	    btnSlient.setBackgroundResource(R.drawable.ic_silented);
 	    clearDisplay();
@@ -210,6 +229,7 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    // finish();
 	}
 
+	mHandler.removeCallbacks(mSilentThread);
 	mHandler.post(mSilentThread);
     }
 

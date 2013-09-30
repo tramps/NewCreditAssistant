@@ -37,7 +37,7 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
     private String mTel;
     private String mPass;
     private String mEpass;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -72,6 +72,11 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 		params.addNameValuePair("password", mEpass);
 		params.addNameValuePair("app_type", 1);
 		params.addNameValuePair("mobile", mTel);
+		String bdAccount = PreferenceHelper.getHelper(this).readPreference(ImportPartnerActivity.PRE_KEY_BD_TEL);
+		if (bdAccount == null) {
+		    bdAccount = "";
+		}
+		params.addNameValuePair("bd_account", bdAccount);
 		TransferDataTask tTask =
 			new TransferDataTask(this, DomainHelper.getFullUrl(
 				DomainHelper.SUFFIX_LOGIN, params));
@@ -98,6 +103,7 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 					AuthCodeActivity.EXTRA_TEL, mTel);
 				helper.writePreference(
 					AuthCodeActivity.EXTRA_PASS, mEpass);
+				setResult(RESULT_OK);
 				finish();
 			    } else if (res.mResult.getError() == 2) {
 				MyToast.makeText(LoginActivity.this, "用户被封禁")
@@ -130,6 +136,7 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 	} else if (v == llForget) {
 	    Intent intent = new Intent(LoginActivity.this, ForgetPwdActivity.class);
 	    IntentUtil.startActivity(LoginActivity.this, intent);
+	    finish();
 	}
     }
 

@@ -22,6 +22,7 @@ public class DomainHelper {
     public static final String SUFFIX_BACKUP = "/backup?";
     public static final String SUFFIX_RECOVER = "/recover?";
     public static final String SUFFIX_FIND_PASS = "/findPassword?";
+    public static final String SUFFIX_DELETE = "/deleteCustomer?";
     
     
     private static final String SECRET_TOKEN = "@rong360#ryj-app";

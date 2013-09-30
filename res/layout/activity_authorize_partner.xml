@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="5dp" >
+    android:padding="8dp" >
 
     <RelativeLayout
         android:id="@+id/rlAuthorize"
@@ -41,6 +41,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:duplicateParentState="true"
+            android:layout_marginRight="5dp"
             />
         
         <ImageView 
@@ -52,6 +53,16 @@
             android:duplicateParentState="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
+            />
+        
+        <ProgressBar 
+            android:id="@+id/pbCricle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateDrawable="@drawable/ic_circle"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
             />
         
     </RelativeLayout>

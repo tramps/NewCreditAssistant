@@ -60,6 +60,11 @@ public class ImportPartnerActivity extends BaseActionBar implements
 	    params.addNameValuePair("mobile", mTel);
 	    params.addNameValuePair("password", mPass);
 	    params.addNameValuePair("app_type", 2);
+	    String ryj = PreferenceHelper.getHelper(this).readPreference(AuthCodeActivity.EXTRA_TEL);
+	    if (ryj == null) {
+		ryj = "";
+	    }
+	    params.addNameValuePair("ryj_account", ryj);
 	    TransferDataTask tTask =
 		    new TransferDataTask(this, DomainHelper.getFullUrl(
 			    DomainHelper.SUFFIX_LOGIN, params));

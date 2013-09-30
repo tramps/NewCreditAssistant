@@ -27,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -38,6 +39,7 @@ import com.rong360.creditassitant.activity.AdvancedFilterActiviy.QueryIndexer;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
 import com.rong360.creditassitant.util.GlobalValue;
+import com.rong360.creditassitant.util.PreferenceHelper;
 import com.rong360.creditassitant.widget.ActionItem;
 import com.rong360.creditassitant.widget.QuickAction;
 import com.rong360.creditassitant.widget.QuickAction.OnActionItemClickListener;
@@ -45,7 +47,8 @@ import com.rong360.creditassitant.widget.TitleBarCenter;
 
 public class CustomerManagementFragment extends BaseFragment implements
 	OnClickListener {
-    public static final String[] MONTHS = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
+    public static final String[] MONTHS = { "一", "二", "三", "四", "五", "六", "七",
+	    "八", "九", "十", "十一", "十二" };
     private static final int FILTER_INDEX = 100;
 
     private static final String TAG = "CustomerManagementFragment";
@@ -56,9 +59,10 @@ public class CustomerManagementFragment extends BaseFragment implements
     private String[] mFilter = new String[] { TITLE_ALL, TITLE_STAR,
 	    TITLE_POTENTIAL, TITLE_CONSISTENT, TITLE_UPGRADE, TITLE_SUCCEED,
 	    TITLE_FAIL, TITLE_UNCONSISTENT };
-    
-    public static final int[] progressColor = new int[] {R.color.text_fail, R.color.text_potential,
-	R.color.text_talked, R.color.text_upgraded, R.color.text_succeed, R.color.text_fail};
+
+    public static final int[] progressColor = new int[] { R.color.text_fail,
+	    R.color.text_potential, R.color.text_talked, R.color.text_upgraded,
+	    R.color.text_succeed, R.color.text_fail };
 
     private Button btnImport;
     private LinearLayout llNoCustomers;
@@ -79,18 +83,21 @@ public class CustomerManagementFragment extends BaseFragment implements
 
     private TextView tvHeadHint;
     private LinearLayout llHeader;
-    
+    private RelativeLayout rlOpen;
+    private RelativeLayout rlClose;
+    private ImageButton ibClose;
+
     private OnClickListener mMsgListener = new OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(mContext, ChooseCustomerActivity.class);
-            intent.putExtra(ChooseCustomerActivity.EXTRA_INDEX, mFilterIndex);
-            intent.putExtra(AdvancedFilterActiviy.EXTRA_QUERY, mQueryIndex);
-            mContext.startActivity(intent);
-        }
+
+	@Override
+	public void onClick(View v) {
+	    Intent intent = new Intent(mContext, ChooseCustomerActivity.class);
+	    intent.putExtra(ChooseCustomerActivity.EXTRA_INDEX, mFilterIndex);
+	    intent.putExtra(AdvancedFilterActiviy.EXTRA_QUERY, mQueryIndex);
+	    mContext.startActivity(intent);
+	}
     };
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -219,6 +226,14 @@ public class CustomerManagementFragment extends BaseFragment implements
 	llNoCustomers = (LinearLayout) findViewById(R.id.ll_no_customer);
 	lvCustomers = (ListView) findViewById(R.id.lv_customers);
 	llHeader = (LinearLayout) findViewById(R.id.llHeader);
+	rlOpen = (RelativeLayout) findViewById(R.id.rlOpen);
+	rlClose = (RelativeLayout) findViewById(R.id.rlClose);
+	ibClose = (ImageButton) findViewById(R.id.ibClose);
+	
+	rlOpen.setOnClickListener(this);
+	rlClose.setOnClickListener(this);
+	ibClose.setOnClickListener(this);
+
 	lvCustomers.setAdapter(mAdapter);
 
 	mQueryheader = findViewById(R.id.rlQuery);
@@ -257,13 +272,34 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    mAdapter.notifyDataSetChanged();
 	}
 
+	PreferenceHelper helper = PreferenceHelper.getHelper(mContext);
 	if (mQueryHint.length() == 0 || mFilterIndex != FILTER_INDEX) {
 	    llHeader.setVisibility(View.GONE);
+	    String isSafe =
+		    helper.readPreference(CustomerSafeActivity.PRE_KEY_IS_SAFED);
+	    if (isSafe == null || !Boolean.valueOf(isSafe)) {
+		rlClose.setVisibility(View.GONE);
+		if (mCustomers.size() >= 5) {
+		    rlOpen.setVisibility(View.VISIBLE);
+		} else {
+		    rlOpen.setVisibility(View.GONE);
+		}
+	    } else {
+		rlOpen.setVisibility(View.GONE);
+		String hasHinted = helper.readPreference(CustomerSafeActivity.PRE_KEY_HAS_HINTED);
+		if (hasHinted != null && hasHinted.length() > 0) {
+		    rlClose.setVisibility(View.GONE);
+		} else {
+		    rlClose.setVisibility(View.VISIBLE);
+		}
+	    }
 	} else {
 	    if (mQueryHint.length() > 0) {
 		tvHeadHint.setText(mQueryHint);
 	    }
 	    llHeader.setVisibility(View.VISIBLE);
+	    rlOpen.setVisibility(View.GONE);
+	    rlClose.setVisibility(View.GONE);
 	}
     }
 
@@ -451,8 +487,8 @@ public class CustomerManagementFragment extends BaseFragment implements
 	Calendar lastCalc = Calendar.getInstance(Locale.CHINA);
 	Customer lastCustomer = customers.get(0);
 	lastCalc.setTimeInMillis(lastCustomer.getTime());
-	mSections.add(new Section(TYPE_HEAD, MONTHS[lastCalc.get(Calendar.MONTH)]
-		+ "月 "));
+	mSections.add(new Section(TYPE_HEAD, MONTHS[lastCalc
+		.get(Calendar.MONTH)] + "月 "));
 	mSections.add(new Section(TYPE_CUSTOMER, lastCustomer));
 	Calendar nextCalc = Calendar.getInstance();
 	for (int i = 1; i < customers.size(); i++) {
@@ -480,7 +516,15 @@ public class CustomerManagementFragment extends BaseFragment implements
 	if (v == btnImport) {
 	    Intent intent = new Intent(mContext, ImportContactActivity.class);
 	    startActivity(intent);
-	}
+	} else if (v == rlOpen) {
+	    Intent intent = new Intent(mContext, CustomerSafeActivity.class);
+	    startActivity(intent);
+	} else if (v == ibClose) {
+	    PreferenceHelper helper = PreferenceHelper.getHelper(mContext);
+	    helper.writePreference(CustomerSafeActivity.PRE_KEY_HAS_HINTED,
+		    "true");
+	    rlClose.setVisibility(View.GONE);
+	} 
     }
 
     private class CustomerAdapter extends BaseAdapter {
@@ -492,7 +536,8 @@ public class CustomerManagementFragment extends BaseFragment implements
 	public CustomerAdapter(Context context, ArrayList<Section> sections) {
 	    mContext = context;
 	    mSections = sections;
-	    mProgress = mContext.getResources().getStringArray(R.array.progress);
+	    mProgress =
+		    mContext.getResources().getStringArray(R.array.progress);
 	}
 
 	@Override
@@ -551,7 +596,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    startActivity(intent);
 		}
 	    });
-	    
+
 	    if (c.isImported()) {
 		convertView.setBackgroundResource(R.drawable.bkg_import);
 	    } else {
@@ -584,12 +629,13 @@ public class CustomerManagementFragment extends BaseFragment implements
 		tvProgress.setText(c.getProgress());
 		for (int i = 0; i < mProgress.length; i++) {
 		    if (mProgress[i].equalsIgnoreCase(progress)) {
-			tvProgress.setTextColor(getResources().getColorStateList(progressColor[i]));
+			tvProgress.setTextColor(getResources()
+				.getColorStateList(progressColor[i]));
 			break;
 		    }
 		}
 	    }
-	    
+
 	    return convertView;
 	}
 

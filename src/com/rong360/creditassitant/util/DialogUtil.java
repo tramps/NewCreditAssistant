@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.activity.CustomerDetailActivity;
 import com.rong360.creditassitant.widget.wheel.WheelVerticalView;
 import com.rong360.creditassitant.widget.wheel.adapter.AbstractWheelTextAdapter;
 import com.rong360.creditassitant.widget.wheel.adapter.NumericWheelAdapter;
@@ -50,8 +52,8 @@ public class DialogUtil {
 	return dlg;
     }
 
-    private static void initTimePicker(Context context, final Dialog dialog,
-	    View parent, final ITimePicker picker) {
+    private static void initTimePicker(final Context context,
+	    final Dialog dialog, View parent, final ITimePicker picker) {
 	final WheelVerticalView wvDate =
 		(WheelVerticalView) parent.findViewById(R.id.wvDate);
 	final WheelVerticalView wvHour =
@@ -74,7 +76,12 @@ public class DialogUtil {
 	// set current time
 	Calendar calendar = Calendar.getInstance(Locale.US);
 	wvHour.setCurrentItem(calendar.get(Calendar.HOUR_OF_DAY));
-	wvMin.setCurrentItem(calendar.get(Calendar.MINUTE));
+	int min = (calendar.get(Calendar.MINUTE) + 7) / 15;
+	Log.i("dialog", "min : " + min);
+	if (min > 3) {
+	    min = 3;
+	}
+	wvMin.setCurrentItem(min);
 	wvDate.setCurrentItem(calendar.get(Calendar.AM_PM));
 
 	final DayArrayAdapter dayAdapter =
@@ -89,14 +96,20 @@ public class DialogUtil {
 	    @Override
 	    public void onClick(View v) {
 		Calendar alarm = dayAdapter.getDay(wvDate.getCurrentItem());
-		String time =
-			dayAdapter.getFormattedTime(alarm);
+		String time = dayAdapter.getFormattedTime(alarm);
 		int hour = hourAdapter.getCurrentItem(wvHour.getCurrentItem());
 		alarm.set(Calendar.HOUR_OF_DAY, hour);
 		int min = minAdapter.getCurrentItem(wvMin.getCurrentItem());
 		alarm.set(Calendar.MINUTE, min);
-		time +=  " " + hour + ":";
+		if (alarm.getTimeInMillis() <= System.currentTimeMillis()) {
+		    MyToast.makeText(context, "提醒时间必须大于当前时间").show();
+		    return;
+		}
+		time += " " + hour + ":";
 		time += min;
+		if (min == 0) {
+		    time += "0";
+		}
 		if (picker != null) {
 		    picker.onTimePicked(time, alarm);
 		    dialog.dismiss();
@@ -119,7 +132,7 @@ public class DialogUtil {
      */
     private static class DayArrayAdapter extends AbstractWheelTextAdapter {
 	// Count of days to be shown
-	private final int daysCount = 4;
+	private final int daysCount = 30;
 
 	// Calendar
 	Calendar calendar;
@@ -135,12 +148,12 @@ public class DialogUtil {
 	}
 
 	public int getToday() {
-	    return daysCount / 2;
+	    return 0;
 	}
 
 	@Override
 	public View getItem(int index, View cachedView, ViewGroup parent) {
-	    int day = -daysCount / 2 + index;
+	    int day = index;
 	    Calendar newCalendar = (Calendar) calendar.clone();
 	    newCalendar.roll(Calendar.DAY_OF_YEAR, day);
 
@@ -160,11 +173,11 @@ public class DialogUtil {
 		monthday.setText("Today");
 		monthday.setTextColor(0xFF0000F0);
 	    } else {
-		DateFormat format = new SimpleDateFormat("MMM d");
+		DateFormat format = new SimpleDateFormat("MMM dd");
 		monthday.setText(format.format(newCalendar.getTime()));
 		monthday.setTextColor(0xFF111111);
 	    }
-	    DateFormat dFormat = new SimpleDateFormat("MMM d");
+	    DateFormat dFormat = new SimpleDateFormat("MMM dd");
 	    view.setTag(dFormat.format(newCalendar.getTime()));
 	    return view;
 	}
@@ -175,7 +188,7 @@ public class DialogUtil {
 		    Calendar.DAY_OF_MONTH)) {
 		title = "Today ";
 	    } else {
-		DateFormat format = new SimpleDateFormat("MMM d");
+		DateFormat format = new SimpleDateFormat("MMM dd");
 		title = format.format(calc.getTime());
 	    }
 
@@ -186,7 +199,7 @@ public class DialogUtil {
 	}
 
 	public Calendar getDay(int index) {
-	    int day = -daysCount / 2 + index;
+	    int day = index;
 	    Calendar newCalendar = (Calendar) calendar.clone();
 	    newCalendar.roll(Calendar.DAY_OF_YEAR, day);
 

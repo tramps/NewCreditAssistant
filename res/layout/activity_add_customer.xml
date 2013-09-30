@@ -124,6 +124,7 @@
 	        android:layout_alignBottom="@id/tvLoan"
 	        android:focusable="true"
 	        android:inputType="numberDecimal"
+	        android:digits="0123456789"
 	        android:cursorVisible="true"
 	        android:gravity="right"
 	        android:hint=" "
@@ -261,7 +262,6 @@
 	        style="@style/AddCustomerContent"
 	        android:duplicateParentState="true"
 	        android:inputType="phone"
-	        android:text="dfs"
 	        android:gravity="right"
 	        />
 	      
@@ -272,8 +272,8 @@
 	           android:background="@drawable/ic_delete_grey"
 	           android:layout_alignParentRight="true"
 	           android:layout_marginRight="15dp"
-	           android:layout_alignBottom="@id/tvCAlarm"
-	           android:paddingBottom="6dp"
+	           android:layout_alignTop="@id/tvCAlarm"
+	           android:layout_marginTop="3dp"
 	           />
 	       </RelativeLayout>
 	</LinearLayout>

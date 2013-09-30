@@ -241,8 +241,8 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	    TextView tvTime = (TextView) convertView.findViewById(R.id.tv_time);
 	    TextView tvContent =
 		    (TextView) convertView.findViewById(R.id.tv_content);
-	    LinearLayout llMsg =
-		    (LinearLayout) convertView.findViewById(R.id.ll_msg);
+//	    LinearLayout llMsg =
+//		    (LinearLayout) convertView.findViewById(R.id.ll_msg);
 	    final Communication c = getItem(position);
 
 //	    llMsg.setOnClickListener(new OnClickListener() {

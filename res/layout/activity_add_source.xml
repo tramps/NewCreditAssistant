@@ -9,10 +9,11 @@
         android:id="@+id/etSource"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLength="10"
+        android:hint="最长不超过10个字"
         android:layout_marginTop="70dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="@drawable/bkg_single_round"
         />
     
 </LinearLayout>

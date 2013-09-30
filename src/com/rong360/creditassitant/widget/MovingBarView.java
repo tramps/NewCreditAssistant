@@ -11,6 +11,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.util.DisplayUtils;
@@ -95,13 +97,13 @@ public class MovingBarView extends View {
     }
 
     public void initRect(int width, int height, int offY) {
-	Log.i(TAG, "width: " + width + " height: " + height);
-//	width = 230;
-//	height = 120;
+	// Log.i(TAG, "width: " + width + " height: " + height);
+	// width = 230;
+	// height = 120;
 	mSingleViewWidth = width;
 	int w = mSlider.getIntrinsicWidth();
 	int h = mSlider.getIntrinsicHeight();
-	 Log.i(TAG, "w" + w + " h" + h);
+	// Log.i(TAG, "w" + w + " h" + h);
 	int margin = height - h;
 	mRect = new Rect(0, margin / 2, w, h);
 	// Log.i(TAG, mRect.toString());
@@ -118,9 +120,11 @@ public class MovingBarView extends View {
 	}
 
 	if (mIndex > 0 && mIsFirst) {
-	     Log.i(TAG, "index:" + mIndex);
 	    mHlvOffset = (mIndex) * mSingleViewWidth;
+	    Log.i(TAG, "offset:" + mHlvOffset);
 	    mHlv.setCurrentX(mHlvOffset);
+	    mHlv.setHistoryOffset(mHlvOffset);
+	    // invalidate();
 	    mIsFirst = false;
 	}
 
@@ -128,6 +132,10 @@ public class MovingBarView extends View {
 
     public void setIndex(int index) {
 	mIndex = index;
+    }
+
+    public void setIsFirst(Boolean isFirst) {
+	mIsFirst = isFirst;
     }
 
     @Override
@@ -225,7 +233,7 @@ public class MovingBarView extends View {
 
 	    if (shallMove) {
 		moveBottom(mHlvOffset);
-		Log.i(TAG, "mhlvoffset:" + mHlvOffset);
+		Log.i(TAG, mIndex + "mhlvoffset:" + mHlvOffset);
 	    }
 
 	    post(new SlideBackAnim());
@@ -264,7 +272,57 @@ public class MovingBarView extends View {
     }
 
     private void moveBottom(float movingOffset) {
-	mHlv.scrollTo((int) movingOffset);
+	int offset = (int) movingOffset;
+	mHlv.scrollTo(offset);
+	mHlv.setCurrentX(offset);
+	mHlv.setHistoryOffset(offset);
+
+//	setText();
+    }
+
+    private void setText() {
+	int left = mIndex - 2;
+	int center = mIndex - 1;
+	if (left > 0) {
+	    TextView tv = getChildTextView(mHlv.getChildAt(left));
+	    if (tv != null) {
+		tv.setText(mProgress[left]);
+	    }
+	}
+
+	if (center > 0) {
+	    TextView tv = getChildTextView(mHlv.getChildAt(center));
+	    if (tv != null) {
+		tv.setText(mProgress[center]);
+	    }
+	}
+
+	TextView tv = getChildTextView(mHlv.getChildAt(mIndex-1));
+	if (tv != null) {
+	    tv.setText(mProgress[mIndex]);
+	}
+    }
+    
+    
+    private TextView getChildTextView (View parent) {
+	if (parent == null) {
+	    return null;
+	}
+	if (parent instanceof ViewGroup) {
+	    ViewGroup group = (ViewGroup) parent;
+	    for (int i = 0; i < group.getChildCount(); i++) {
+		View child = group.getChildAt(i);
+		if (child instanceof TextView) {
+		    return (TextView)child;
+		} else if (child instanceof ViewGroup){
+		    return getChildTextView(child);
+		} else {
+		    continue;
+		}
+	    }
+	}
+	
+	return null;
     }
 
     private boolean isInRect(int x, int y) {

@@ -2,11 +2,7 @@ package com.rong360.creditassitant.service;
 
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.List;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,22 +11,13 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.TextView;
 
-import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.activity.AfterPhoneActivity;
-import com.rong360.creditassitant.activity.MainTabHost;
-import com.rong360.creditassitant.model.CommuHandler;
-import com.rong360.creditassitant.model.Communication;
-import com.rong360.creditassitant.model.Customer;
-import com.rong360.creditassitant.model.LocationHelper;
 import com.rong360.creditassitant.model.TelHelper;
-import com.rong360.creditassitant.service.WindowManagerHelper.DesktopLayout;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.PreferenceHelper;
@@ -44,7 +31,6 @@ public class PhoneNoticeService extends Service {
     public static final String PRE_KEY_STARTED = "pre_key_started";
     public static final String PRE_KEY_DATE = "pre_key_date";
     private static final long MAX_AVAILABLE_SERVICE_TIME = 3600 * 1000;
-    private static final int notification_id = 132432;
 
     private String mIncomingNumber = "";
     private String mLastEffectiveNumber = "";
@@ -54,34 +40,21 @@ public class PhoneNoticeService extends Service {
     private long mLastChangeStateTime;
     private int mLastCallState = -1;
 
-    private WindowManager mWindowManager;
-    private DesktopLayout mContent;
-    private WindowManager.LayoutParams mLayoutParams;
     private boolean mIsAttached;
-
-    private static final String TIME_SUFFIX = "联系过";
-    private static final String NO_CONTENT = "暂无备注";
 
     private ShowCustomerScreenThread mThread;
     private Handler mHandler;
-    private boolean mShallShown = false;
+    private boolean mShallShown;
     private boolean mIsOutGoing = false;
 
-    private String mLast = "";
+    public static String mLast = "";
 
     @Override
     public void onCreate() {
 	super.onCreate();
 	Log.i(TAG, "**start service**");
-	mWindowManager =
-		WindowManagerHelper
-			.createWindowManager(getApplicationContext());
-	mContent =
-		WindowManagerHelper
-			.createDesktopLayout(getApplicationContext());
-	mLayoutParams = WindowManagerHelper.createLayoutParams();
 	mIsAttached = false;
-
+	mShallShown = false;
     }
 
     // private BroadcastReceiver mTaskChangeReceiver = new BroadcastReceiver() {
@@ -105,7 +78,7 @@ public class PhoneNoticeService extends Service {
 			intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
 		mLastEffectiveNumber =
 			TelHelper.getPureTel(mLastEffectiveNumber);
-		Log.i(TAG, "out going" + mLastEffectiveNumber);
+//		Log.i(TAG, "out going" + mLastEffectiveNumber);
 		mIsOutGoing = true;
 		showCustomedScreen();
 	    }
@@ -115,7 +88,7 @@ public class PhoneNoticeService extends Service {
 
     private void showCustomedScreen() {
 	mHandler.removeCallbacks(mThread);
-	mHandler.postDelayed(mThread, 1000);
+	mHandler.postDelayed(mThread, 3000);
 	closePopUp(15000);
     }
 
@@ -161,9 +134,9 @@ public class PhoneNoticeService extends Service {
 	    return START_STICKY;
 	}
 
-	Log.i(TAG, "notify...");
-	Notification notification = getNotification();
-	startForeground(notification_id, notification);
+//	Log.i(TAG, "notify...");
+//	Notification notification = NotificationHelper.getNotification(getBaseContext(), 0);
+//	startForeground(100, notification);
 
 	mHandler = new Handler(getMainLooper());
 	mThread = new ShowCustomerScreenThread();
@@ -196,82 +169,6 @@ public class PhoneNoticeService extends Service {
 	// registerReceiver(mTaskChangeReceiver, filter);
     }
 
-    private Notification getNotification() {
-	Notification notification =
-		new Notification(R.drawable.ic_launcher, "新增用户",
-			System.currentTimeMillis());
-	Intent notificationIntent = new Intent(this, MainTabHost.class);
-	notificationIntent.putExtra(MainTabHost.EXTRA_INDEX_TAG,
-		MainTabHost.TAG_FOLLOW);
-	notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-	PendingIntent pendingIntent =
-		PendingIntent.getActivity(this, 0, notificationIntent, 0);
-	List<Customer> cuses = GlobalValue.getIns().getAllCustomers();
-	if (cuses.size() == 0) {
-	    GlobalValue.getIns().loadAllCustomerFromDb(cuses,
-		    getApplicationContext());
-	}
-
-	String[] spilt;
-	Calendar today = Calendar.getInstance();
-	PreferenceHelper.getHelper(getApplicationContext()).writePreference(
-		PRE_KEY_DATE, DateUtil.yyyy_MM_dd.format(today.getTime()));
-	Calendar date;
-	int count = 0;
-	int totalCount = 0;
-	// for (Customer c : cuses) {
-	// spilt =
-	// c.getLastFollowComment().split(
-	// AddCommentActivity.DEFAULT_SEPARATOR);
-	// Log.i(TAG, Arrays.toString(spilt));
-	// date = Calendar.getInstance();
-	// long notifyTime = 0;
-	// try {
-	// notifyTime = Long.parseLong(spilt[spilt.length - 1]);
-	// } catch (Exception e) {
-	// Log.e(TAG, e.toString());
-	// }
-	// date.setTimeInMillis(notifyTime);
-	//
-	// if (DateUtil.isSameDay(today, date)) {
-	// totalCount++;
-	// if (!c.isHasChecked()) {
-	// count++;
-	// }
-	// }
-	// }
-
-	if (totalCount == 0) {
-	    notification.setLatestEventInfo(this, "新增用户", "0", pendingIntent);
-	} else {
-	    if (count == 0) {
-		notification.setLatestEventInfo(this, "新增用户", "0",
-			pendingIntent);
-	    } else {
-		notification.setLatestEventInfo(this, "新增用户", "新增用户" + count
-			+ "个", pendingIntent);
-	    }
-	}
-	return notification;
-    }
-
-    private class UpdateTaskThread extends Thread {
-
-	@Override
-	public void run() {
-	    mHandler.post(new Runnable() {
-
-		@Override
-		public void run() {
-		    Notification notification = getNotification();
-		    NotificationManager manager =
-			    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		    manager.notify(notification_id, notification);
-		}
-	    });
-	}
-
-    }
 
     class TeleListener extends PhoneStateListener {
 
@@ -279,8 +176,8 @@ public class PhoneNoticeService extends Service {
 	    super.onCallStateChanged(state, incomingNumber);
 	    GlobalValue.getIns().setNeedUpdateCommunication(true);
 	    
-	    Log.i(TAG, "call state: " + state + " number: " + incomingNumber
-		    + " last: " + mLastEffectiveNumber);
+//	    Log.i(TAG, "call state: " + state + " number: " + incomingNumber
+//		    + " last: " + mLastEffectiveNumber);
 	    if (mLastCallState == -1) {
 		mLastCallState = state;
 	    }
@@ -291,11 +188,12 @@ public class PhoneNoticeService extends Service {
 		if (mLastEffectiveNumber.length() == 0) {
 		    return;
 		}
-		Log.i(TAG, "call state changed: show dialog "
-			+ mLastEffectiveNumber);
-		if (!mShallShown) {
+		if (!WindowManagerHelper.mShallShow) {
+//		    Log.i(TAG, "shall show is false");
+		    WindowManagerHelper.mShallShow = true;
 		    return;
 		}
+		
 		mShallShown = false;
 		// if (SystemClock.uptimeMillis() - mLastChangeStateTime >=
 		// MIN_DURATION) {
@@ -319,15 +217,15 @@ public class PhoneNoticeService extends Service {
 	    mLastChangeStateTime = SystemClock.uptimeMillis();
 	    switch (state) {
 	    case TelephonyManager.CALL_STATE_IDLE: {
-		Log.i(TAG, "idle: now" + mIncomingNumber + " last:"
-			+ mLastEffectiveNumber);
+//		Log.i(TAG, "idle: now" + mIncomingNumber + " last:"
+//			+ mLastEffectiveNumber);
 		if (mIncomingNumber.length() > 0) {
 		    closePopUp(0);
 		}
 		break;
 	    }
 	    case TelephonyManager.CALL_STATE_OFFHOOK: {
-		Log.i(TAG, "off hook:" + mIncomingNumber);
+//		Log.i(TAG, "off hook:" + mIncomingNumber);
 		if (mIsOutGoing) {
 		    closePopUp(15000);
 		} else {
@@ -338,7 +236,7 @@ public class PhoneNoticeService extends Service {
 	    }
 	    case TelephonyManager.CALL_STATE_RINGING: {
 		mLastEffectiveNumber = mIncomingNumber;
-		Log.i(TAG, "ring last:" + mLastEffectiveNumber);
+//		Log.i(TAG, "ring last:" + mLastEffectiveNumber);
 		showCustomedScreen();
 		break;
 	    }
@@ -353,7 +251,12 @@ public class PhoneNoticeService extends Service {
 
     private class ShowCustomerScreenThread extends Thread {
 	public void run() {
-	    Log.i(TAG, "isattached: " + mIsAttached);
+	    if (IsAirModeOn(getApplicationContext())) {
+		Log.i(TAG, "air on");
+		return;
+	    }
+	    
+//	    Log.i(TAG, "isattached: " + mIsAttached);
 	    if (mIsDestroyed || mIsAttached) {
 		return;
 	    }
@@ -362,14 +265,20 @@ public class PhoneNoticeService extends Service {
 
 	    if (!global.getContactPhones(getBaseContext()).contains(
 		    mLastEffectiveNumber)
-		    || global.getCustomerHandler(getApplicationContext())
+		    || global.getCustomerHandler(getBaseContext())
 			    .getCustomerByTel(mLastEffectiveNumber) != null) {
-		Log.i(TAG, "number: " + mLastEffectiveNumber
-			+ "not containded in contacts");
+//		Log.i(TAG, "number: " + mLastEffectiveNumber
+//			+ "not containded in contacts");
 		showCustomer(mLastEffectiveNumber);
 	    }
 	}
     }
+    
+    public boolean IsAirModeOn(Context context) {  
+        return (Settings.System.getInt(context.getContentResolver(),  
+                Settings.System.AIRPLANE_MODE_ON, 0) == 1 ? true : false);  
+    }  
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -377,79 +286,27 @@ public class PhoneNoticeService extends Service {
     }
 
     private void showCustomer(String tel) {
-	Log.i(TAG, "show customer tel~" + tel);
+//	Log.i(TAG, "show customer tel~" + tel);
 	if (tel.length() == 0) {
 	    Log.w(TAG, "tel number abnomal");
 	    return;
 	}
-	initContent(mContent, tel);
-	try {
-	    mWindowManager.addView(mContent, mLayoutParams);
-	    mShallShown = true;
-	} catch (Exception e) {
-	    Log.e(TAG, e.toString());
-	}
-	mIsAttached = true;
+	
+	mIsAttached = WindowManagerHelper.showContent(getBaseContext(), tel);
+	mShallShown = mIsAttached;
     }
 
     private Runnable mCloseWindowRunnable = new Runnable() {
 	@Override
 	public void run() {
 	    // TODO
-	    Log.i(TAG, "thread close customer" + mIsAttached);
+//	    Log.i(TAG, "thread close customer" + mIsAttached);
 	    if (mIsAttached) {
-		try {
-		    mWindowManager.removeView(mContent);
-		} catch (Exception e) {
-		    Log.e(TAG, e.toString());
-		}
-		mIsAttached = false;
+		mIsAttached = WindowManagerHelper.hideContent(getBaseContext());
 	    }
 	}
     };
 
-    private void initContent(View parent, String tel) {
-	TextView tvName = (TextView) parent.findViewById(R.id.tv_name);
-	TextView tvProgress = (TextView) parent.findViewById(R.id.tv_progress);
-	TextView tvComment = (TextView) parent.findViewById(R.id.tv_comment);
-	TextView tvTime = (TextView) parent.findViewById(R.id.tv_time);
-
-	Customer c =
-		GlobalValue.getIns()
-			.getCustomerHandler(getApplicationContext())
-			.getCustomerByTel(tel);
-
-	if (null == c) {
-	    tvName.setText(tel);
-	    tvComment.setText("");
-	    tvProgress.setText(LocationHelper.getAreaByNumber(
-		    getApplicationContext(), tel));
-	} else {
-	    GlobalValue.getIns().putCustomer(c);
-	    tvName.setText(c.getName());
-	    if (c.getProgress() != null) {
-		tvProgress.setText(c.getProgress());
-	    } else {
-		tvProgress.setText(LocationHelper.getAreaByNumber(
-			getApplicationContext(), tel));
-	    }
-	    tvProgress.setVisibility(View.VISIBLE);
-	    String comment = c.getLastFollowComment();
-	    if (comment != null && comment.length() > 0) {
-		tvComment.setText(comment);
-	    } else {
-		tvComment.setText(NO_CONTENT);
-	    }
-	}
-
-	Communication com = CommuHandler.getLastCallOfTel(this, tel);
-	if (null == com) {
-	    tvTime.setText("第一次联系");
-	} else {
-	    tvTime.setText(DateUtil.getDisplayTime(com.getTime()) + TIME_SUFFIX);
-	}
-
-	mLast = tvTime.getText().toString();
-    }
+    
 
 }

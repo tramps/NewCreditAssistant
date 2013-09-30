@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 
 import com.rong360.creditassitant.R;
@@ -136,11 +137,13 @@ public abstract class AbstractWheelView extends AbstractWheel {
         super.initData(context);
 
         // creating animators
-        mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, 1, 0);
-
-        mDimSeparatorsAnimator = ObjectAnimator.ofInt(this, PROPERTY_SEPARATORS_PAINT_ALPHA,
-                mSelectionDividerActiveAlpha, mSelectionDividerDimmedAlpha
-        );
+        if (Build.VERSION.SDK_INT > 9) {
+            mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, 1, 0);
+    
+            mDimSeparatorsAnimator = ObjectAnimator.ofInt(this, PROPERTY_SEPARATORS_PAINT_ALPHA,
+                    mSelectionDividerActiveAlpha, mSelectionDividerDimmedAlpha
+            );
+        }
 
         // creating paints
         mSeparatorsPaint = new Paint();
@@ -192,8 +195,10 @@ public abstract class AbstractWheelView extends AbstractWheel {
 
     @Override
     protected void onScrollTouched() {
-        mDimSelectorWheelAnimator.cancel();
-        mDimSeparatorsAnimator.cancel();
+	if (mDimSelectorWheelAnimator != null) {
+	    mDimSelectorWheelAnimator.cancel();
+	    mDimSeparatorsAnimator.cancel();
+	}
         setSelectorPaintCoeff(1);
         setSeparatorsPaintAlpha(mSelectionDividerActiveAlpha);
     }
@@ -221,6 +226,9 @@ public abstract class AbstractWheelView extends AbstractWheel {
      * @param animationDuration The duration of the animation.
      */
     private void fadeSelectorWheel(long animationDuration) {
+	if (mDimSelectorWheelAnimator == null) {
+	    return;
+	}
         mDimSelectorWheelAnimator.setDuration(animationDuration);
         mDimSelectorWheelAnimator.start();
     }
@@ -231,6 +239,9 @@ public abstract class AbstractWheelView extends AbstractWheel {
      * @param animationDuration The duration of the animation.
      */
     private void lightSeparators(long animationDuration) {
+	if (mDimSeparatorsAnimator == null) {
+	    return;
+	}
         mDimSeparatorsAnimator.setDuration(animationDuration);
         mDimSeparatorsAnimator.start();
     }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -11,11 +13,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.rong360.creditassitant.activity.AlarmActivity;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.receiver.AlarmReceiver;
 
 public class AlarmHelper {
     private static final String TAG = "AlarmHelper";
+    
+    private static Timer mTimer = new Timer();
+    private static AlarmTask mTask;
 
     public static ArrayList<Customer> getCurrentAlarmCustomer(boolean shallNext) {
 	ArrayList<Customer> customers = GlobalValue.getIns().getAllCustomers();
@@ -57,9 +63,11 @@ public class AlarmHelper {
 		}
 	    }
 	} else {
+	    long max = c.getAlarmTime() + 60;
+	    long min = c.getAlarmTime() - 60;
 	    for (int i = 1; i < alarmCustomers.size(); i++) {
 		Customer nextCustomer = alarmCustomers.get(i);
-		if (c.getAlarmTime() == nextCustomer.getAlarmTime()) {
+		if (max > nextCustomer.getAlarmTime() && min < nextCustomer.getAlarmTime()) {
 		    currentAlarms.add(nextCustomer);
 		} else {
 		    break;
@@ -91,17 +99,46 @@ public class AlarmHelper {
 	// sb.append(customers.get(i).getId());
 	// sb.append(",");
 	// }
-	AlarmManager manager =
-		(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//	AlarmManager manager =
+//		(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 	Customer c = alarms.get(alarms.size() -1);
 	long leftTime = c.getAlarmTime() - System.currentTimeMillis();
 	Log.i(TAG, c.getId() + "-" + c.getName() + "next time: " + leftTime);
 	// receiver.setAction(sb.toString());
 	// Log.i(TAG, sb.toString());
-	Intent receiver = new Intent(context, AlarmReceiver.class);
-	PendingIntent intent =
-		PendingIntent.getBroadcast(context, 10001, receiver, 0);
-	manager.set(AlarmManager.RTC_WAKEUP, c.getAlarmTime(), intent);
+//	Intent receiver = new Intent(context, AlarmReceiver.class);
+//	PendingIntent intent =
+//		PendingIntent.getBroadcast(context, 10001, receiver, 0);
+//	manager.set(AlarmManager.RTC_WAKEUP, c.getAlarmTime(), intent);
+	if (mTimer != null) {
+	    mTimer.cancel();
+	    mTimer = new Timer();
+	} else {
+	    mTimer = new Timer();
+	}
+	
+	mTask = new AlarmTask(context);
+	
+	if (leftTime < 0) {
+	    leftTime = 1;
+	}
+	
+	mTimer.schedule(mTask, leftTime);
 	return null;
+    }
+    
+    private static class AlarmTask extends TimerTask {
+	private Context mContext;
+	public AlarmTask(Context context) {
+	    mContext = context;
+	}
+	@Override
+	public void run() {
+	    mContext.sendBroadcast(new Intent(AlarmReceiver.TIME_TO_ALARM));
+	    Log.i(TAG, "sended");
+//	    Intent displya = new Intent(mContext, AlarmActivity.class);
+//	    displya.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//	    IntentUtil.startActivity(mContext, displya);
+	}
     }
 }

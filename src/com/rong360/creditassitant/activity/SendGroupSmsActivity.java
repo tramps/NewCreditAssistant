@@ -128,7 +128,7 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 		MyToast.makeText(this, "请输入短信内容~", Toast.LENGTH_SHORT).show();
 		return;
 	    }
-	    sendMsg();
+//	    sendMsg();
 	    insert2History();
 	    finish();
 	}

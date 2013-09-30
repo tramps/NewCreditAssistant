@@ -29,6 +29,7 @@ public class CustomerSafeActivity extends BaseActionBar implements
 
     public static final String PRE_KEY_IS_LOGINED = "pre_key_is_logined";
     public static final String PRE_KEY_IS_SAFED = "pre_key_is_safed";
+    public static final String PRE_KEY_HAS_HINTED = "pre_key_has_hinted";
 
     private boolean mIsSafed;
 

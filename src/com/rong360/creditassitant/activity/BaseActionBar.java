@@ -57,6 +57,10 @@ public abstract class BaseActionBar extends Activity {
     protected void onResume() {
 	super.onResume();
 	Log.i(TAG, "base action start:");
+	mShallLock = getIntent().getBooleanExtra(LockActivity.EXTRA_LOCK, true);
+	if (!mShallLock) {
+	    return;
+	}
 	mShallLock = PassCheckHelper.getInstance(this).shouldLock(this);
 	if (mShallLock) {
 		Intent intent = new Intent(this, ShowPassAliasActivity.class);

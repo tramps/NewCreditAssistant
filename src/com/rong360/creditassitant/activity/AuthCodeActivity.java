@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.exception.ECode;
@@ -39,6 +40,13 @@ public class AuthCodeActivity extends BaseActionBar implements OnClickListener {
     private String mPass;
     private String mTel;
     private String mEpass;
+    
+    private TextView tvHint;
+    
+    private String hint = "2/2  已向您的手机号";
+    private String suffix = "发送了一条验证码，请输入验证码";
+    
+    private boolean isForget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +55,24 @@ public class AuthCodeActivity extends BaseActionBar implements OnClickListener {
 	mAuthCode = getIntent().getStringExtra(EXTRA_AUTH_CODE);
 	mTel = getIntent().getStringExtra(EXTRA_TEL);
 	mPass = getIntent().getStringExtra(EXTRA_PASS);
+	
+	isForget = getIntent().getBooleanExtra(EXTRA_IS_FORGET, false);
     }
 
     @Override
     protected int getLayout() {
 	return R.layout.activity_auth_code;
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        if (!isForget) {
+            tvHint.setText(hint + mTel + suffix + "完成注册");
+        } else {
+            tvHint.setText(hint + mTel + suffix + "找回密码");
+        }
     }
 
     @Override
@@ -61,6 +82,8 @@ public class AuthCodeActivity extends BaseActionBar implements OnClickListener {
 	btnReget = (Button) findViewById(R.id.btnReget);
 	btnReget.setOnClickListener(this);
 	etAuth = (EditText) findViewById(R.id.etAuthcode);
+	
+	tvHint = (TextView) findViewById(R.id.tvHint);
     }
 
     @Override
@@ -90,7 +113,9 @@ public class AuthCodeActivity extends BaseActionBar implements OnClickListener {
 		    Log.i(TAG, "res:" + task.getResult());
 		    if (res.getResult().getError() == (ECode.SUCCESS)) {
 			mAuthCode = res.getAuth_Code();
+			MyToast.makeText(AuthCodeActivity.this, "发送成功，请稍候！").show();
 		    } else {
+			MyToast.makeText(AuthCodeActivity.this, "网络较差，请过后再试试吧！").show();
 			Log.e(TAG, "auth code resend error " + mAuthCode);
 		    }
 		} catch (JsonParseException e) {
@@ -110,8 +135,6 @@ public class AuthCodeActivity extends BaseActionBar implements OnClickListener {
     private void handleOk() {
 	String auth = etAuth.getText().toString().trim();
 	if (mAuthCode.equalsIgnoreCase(auth)) {
-	    boolean isForget =
-		    getIntent().getBooleanExtra(EXTRA_IS_FORGET, false);
 	    TransferDataTask tTask;
 	    if (!isForget) {
 		RequestParam params = new RequestParam();
@@ -160,6 +183,7 @@ public class AuthCodeActivity extends BaseActionBar implements OnClickListener {
 						LoginActivity.class);
 				IntentUtil.startActivity(AuthCodeActivity.this,
 					intent);
+				finish();
 			    }
 			} catch (JsonParseException e) {
 			    Log.e(TAG, e.toString());
