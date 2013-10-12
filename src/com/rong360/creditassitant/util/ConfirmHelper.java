@@ -50,6 +50,43 @@ public class ConfirmHelper {
 	dialog.setCanceledOnTouchOutside(true);
 	dialog.setContentView(content);
     }
+    
+    public static void showSafeDialog(final Context context, final OnRefresh cancel) {
+	final AlertDialog dialog = new AlertDialog.Builder(context).create();
+
+	View content =
+		LayoutInflater.from(context).inflate(
+			R.layout.dialog_safe, null);
+	
+	TextView tvTitle = (TextView) content.findViewById(R.id.tvTitle);
+	TextView tvHint = (TextView) content.findViewById(R.id.tvHint);
+	
+	Button btnDelete = (Button) content.findViewById(R.id.btnDelete);
+	Button btnCancel = (Button) content.findViewById(R.id.btnCancel);
+	
+	btnDelete.setOnClickListener(new OnClickListener() {
+	    
+	    public void onClick(View v) {
+		cancel.onRefresh(0);
+		dialog.cancel();
+	    }
+	});
+	
+	btnCancel.setOnClickListener(new OnClickListener() {
+	    
+	    @Override
+	    public void onClick(View v) {
+		dialog.cancel();
+	    }
+	});
+	
+	tvTitle.setText("确定关闭保险箱");
+	tvHint.setText("关闭保险箱将不能保护您的资料");
+	
+	dialog.show();
+	dialog.setCanceledOnTouchOutside(true);
+	dialog.setContentView(content);
+    }
 
     public static interface OnRefresh {
 	public void onRefresh(int pos);

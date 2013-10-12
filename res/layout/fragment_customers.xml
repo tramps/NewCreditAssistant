@@ -20,7 +20,7 @@
 		    android:layout_gravity="center_horizontal"
 		    android:text="您未存入客户"
 		    android:layout_marginBottom="22dp"
-		    android:textSize="14sp"
+		    android:textSize="16sp"
 		    android:textColor="@color/customer_label"
 		    />
 		
@@ -53,6 +53,7 @@
         android:id="@+id/lv_customers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+       android:footerDividersEnabled="true"
         android:layout_below="@id/llHead"
         >
     </ListView>

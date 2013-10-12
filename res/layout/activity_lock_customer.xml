@@ -8,11 +8,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="70dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/bkg_round"
             android:orientation="vertical"
-            android:padding="10dp" >
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp" >
 
             <RelativeLayout
                 android:id="@+id/rlOpenPass"
@@ -22,18 +23,19 @@
 
                 <TextView
                     android:id="@+id/tvOpenPass"
-                    style="@style/AddCustomerLabel"
+                    style="@style/Option"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="打开密码" />
+                    android:text="开启密码锁" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/tvOpenPass"
+                    android:layout_alignTop="@id/tvOpenPass"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
+                    android:layout_marginTop="4dp"
                     android:src="@drawable/ic_arrow" />
             </RelativeLayout>
 
@@ -59,12 +61,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="8dp"
-                    android:text="更改密码" />
+                    android:text="更改密码锁" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/tvMPass"
+                    android:layout_alignTop="@id/tvMPass"
+                    android:layout_marginTop="4dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
                     android:src="@drawable/ic_arrow" />

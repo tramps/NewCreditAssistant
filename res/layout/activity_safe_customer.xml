@@ -31,6 +31,7 @@
             android:layout_marginLeft="35dp"
             android:layout_alignTop="@id/ivSafe"
             android:layout_toRightOf="@id/ivSafe"
+            style="@style/cmName"
             />
          <TextView 
             android:id="@+id/tvSafeDetail"
@@ -38,7 +39,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvSafeTitle"
             android:layout_alignLeft="@id/tvSafeTitle"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="8dp"
+            android:textSize="14sp"
+            android:textColor="@color/customer_label"
             />
          
          <Button 
@@ -48,8 +51,8 @@
              android:layout_below="@id/tvSafeDetail"
              android:layout_alignLeft="@id/tvSafeDetail"
              android:background="@drawable/ic_start"
-             android:layout_marginTop="25dp"
-             android:layout_marginBottom="25dp"
+             android:layout_marginTop="18dp"
+             android:layout_marginBottom="18dp"
              />
     </RelativeLayout>
     

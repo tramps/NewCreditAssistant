@@ -90,6 +90,7 @@ public class ResetPwdActivity extends BaseActionBar implements OnClickListener {
 				    mTel);
 			    helper.writePreference(AuthCodeActivity.EXTRA_PASS,
 				    mEpass);
+			    MyToast.displayFeedback(ResetPwdActivity.this, R.drawable.ic_right, "修改密码成功");
 			    finish();
 			} else if (res.mResult.getError() == 2) {
 			    MyToast.makeText(ResetPwdActivity.this, "验证码错误")

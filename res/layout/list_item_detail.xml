@@ -10,7 +10,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:maxWidth="100dp"
-        android:gravity="right"
+        android:gravity="left"
         style="@style/AddCustomerContent"
         />
     

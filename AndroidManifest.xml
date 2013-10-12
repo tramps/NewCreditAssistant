@@ -66,6 +66,7 @@
         </activity>
         <activity
             android:name=".activity.SendGroupSmsActivity"
+            android:theme="@style/BottomTheme"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -86,6 +87,7 @@
         </activity>
         <activity
             android:name=".activity.ChooseCustomerActivity"
+            android:theme="@style/BottomTheme"
             android:screenOrientation="portrait" >
         </activity>
         <activity

@@ -16,4 +16,6 @@
      <color name="search">#dfeafe</color>
       <color name="green">#0c95c1</color>
       <color name="phone">#1f1f1f</color>
+      <color name="level">#2c794b</color>
+       <color name="time">#37b3e2</color>
 </resources>

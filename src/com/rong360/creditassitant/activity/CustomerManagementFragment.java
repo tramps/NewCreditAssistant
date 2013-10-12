@@ -55,6 +55,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 
     private static final int TYPE_HEAD = 0;
     private static final int TYPE_CUSTOMER = 1;
+    private static final int TYPE_CENTER = 2;
 
     private String[] mFilter = new String[] { TITLE_ALL, TITLE_STAR,
 	    TITLE_POTENTIAL, TITLE_CONSISTENT, TITLE_UPGRADE, TITLE_SUCCEED,
@@ -97,6 +98,14 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    mContext.startActivity(intent);
 	}
     };
+    private OnClickListener mAddListener = new OnClickListener() {
+        
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(mContext, AddCustomerActivity.class);
+	    startActivity(intent);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,6 +123,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    }
 	});
 	mTitleCenter.setMsgListener(mMsgListener);
+	mTitleCenter.setAddListener(mAddListener );
 	setReuseOldViewEnable(true);
 	setHasOptionsMenu(false);
 
@@ -279,7 +289,9 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    helper.readPreference(CustomerSafeActivity.PRE_KEY_IS_SAFED);
 	    if (isSafe == null || !Boolean.valueOf(isSafe)) {
 		rlClose.setVisibility(View.GONE);
-		if (mCustomers.size() >= 5) {
+		if (helper.readPreference(CustomerSafeActivity.PRE_KEY_HAS_HINTED) != null) {
+		    rlOpen.setVisibility(View.GONE);
+		} else if (mCustomers.size() >= 5) {
 		    rlOpen.setVisibility(View.VISIBLE);
 		} else {
 		    rlOpen.setVisibility(View.GONE);
@@ -313,17 +325,28 @@ public class CustomerManagementFragment extends BaseFragment implements
 		String[] qqqs = query.split(",");
 		int index = Integer.parseInt(qqqs[0]);
 		if (index == QueryIndexer.STAR) {
-		    head.append(qqqs[2]).append(", ");
+		    head.append(qqqs[2].replace("#", ", ")).append(", ");
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
 		    isAdd = true;
-		    filter.append(CustomerHandler.IS_FAVORED);
-		    filter.append("=");
-		    filter.append(qqqs[1]);
-		    filter.append(" ");
+		    String[] sources = qqqs[1].split("#");
+		    filter.append(" ( ");
+		    boolean isOr = false;
+		    for (String s : sources) {
+			if (isOr) {
+			    filter.append(" or ");
+			}
+			filter.append(CustomerHandler.IS_FAVORED);
+			filter.append("=");
+			filter.append("\"" + s + "\"");
+			filter.append(" ");
+			isOr = true;
+		    }
+		    filter.append(" ) ");
 		} else if (index == QueryIndexer.TIME) {
-		    head.append(qqqs[2]).append(", ");
+		    String queryTime = qqqs[2].substring(qqqs[2].lastIndexOf("#"), qqqs[2].length() -1);
+		    head.append(queryTime).append(", ");
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -331,7 +354,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    filter.append(CustomerHandler.TIME);
 		    filter.append(">");
 		    Calendar t = Calendar.getInstance();
-		    int ix = Integer.parseInt(qqqs[1]);
+		    int ix = Integer.parseInt(qqqs[1].substring(qqqs[1].length() -3, qqqs[1].length()-2));
 		    int dn = 0;
 		    if (ix == 0) {
 			dn = -1;
@@ -346,20 +369,31 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    filter.append(t.getTimeInMillis());
 		    filter.append(" ");
 		} else if (index == QueryIndexer.PROGRESS) {
-		    head.append(qqqs[2]).append(", ");
+		    head.append(qqqs[2].replace("#", ", ")).append(", ");
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
 		    isAdd = true;
-		    filter.append(CustomerHandler.PROGRESS);
-		    filter.append("=");
-		    filter.append("\"" + qqqs[2] + "\"");
-		    filter.append(" ");
+		    String[] sources = qqqs[2].split("#");
+		    filter.append(" ( ");
+		    boolean isOr = false;
+		    for (String s : sources) {
+			if (isOr) {
+			    filter.append(" or ");
+			}
+			filter.append(CustomerHandler.PROGRESS);
+			filter.append("=");
+			filter.append("\"" + s + "\"");
+			filter.append(" ");
+			isOr = true;
+		    }
+		    filter.append(" ) ");
 		} else if (index == QueryIndexer.SOURCE) {
 		    head.append(qqqs[2].replace("#", ", ")).append(", ");
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
+		    isAdd = true;
 		    String[] sources = qqqs[2].split("#");
 		    filter.append(" ( ");
 		    boolean isOr = false;
@@ -375,65 +409,125 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.BANK) {
-		    head.append(qqqs[2]).append(", ");
+		    head.append(qqqs[2].replace("#", ", ")).append(", ");
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
 		    isAdd = true;
-		    filter.append(CustomerHandler.BANK);
-		    filter.append("=");
-		    filter.append(qqqs[1]);
-		    filter.append(" ");
+		    String[] sources = qqqs[1].split("#");
+		    filter.append(" ( ");
+		    boolean isOr = false;
+		    for (String s : sources) {
+			if (isOr) {
+			    filter.append(" or ");
+			}
+			filter.append(CustomerHandler.BANK);
+			filter.append("=");
+			filter.append("\"" + s + "\"");
+			filter.append(" ");
+			isOr = true;
+		    }
+		    filter.append(" ) ");
 		} else if (index == QueryIndexer.CASH) {
-		    head.append(qqqs[2]).append(", ");
+		    head.append(qqqs[2].replace("#", ", ")).append(", ");
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
 		    isAdd = true;
-		    filter.append(CustomerHandler.CASH);
-		    filter.append("=");
-		    filter.append(qqqs[1]);
-		    filter.append(" ");
+		    String[] sources = qqqs[1].split("#");
+		    filter.append(" ( ");
+		    boolean isOr = false;
+		    for (String s : sources) {
+			if (isOr) {
+			    filter.append(" or ");
+			}
+			filter.append(CustomerHandler.CASH);
+			filter.append("=");
+			filter.append("\"" + s + "\"");
+			filter.append(" ");
+			isOr = true;
+		    }
+		    filter.append(" ) ");
 		} else if (index == QueryIndexer.IDENTITY) {
-		    head.append(qqqs[2]).append(", ");
+		    head.append(qqqs[2].replace("#", ", ")).append(", ");
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
 		    isAdd = true;
-		    filter.append(CustomerHandler.IDENTITY);
-		    filter.append("=");
-		    filter.append(qqqs[1]);
-		    filter.append(" ");
+		    String[] sources = qqqs[1].split("#");
+		    filter.append(" ( ");
+		    boolean isOr = false;
+		    for (String s : sources) {
+			if (isOr) {
+			    filter.append(" or ");
+			}
+			filter.append(CustomerHandler.IDENTITY);
+			filter.append("=");
+			filter.append("\"" + s + "\"");
+			filter.append(" ");
+			isOr = true;
+		    }
+		    filter.append(" ) ");
 		} else if (index == QueryIndexer.CREDIT) {
-		    head.append(qqqs[2]).append(", ");
+		    head.append(qqqs[2].replace("#", ", ")).append(", ");
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
 		    isAdd = true;
-		    filter.append(CustomerHandler.CREDIT_RECORD);
-		    filter.append("=");
-		    filter.append(qqqs[1]);
-		    filter.append(" ");
+		    String[] sources = qqqs[1].split("#");
+		    filter.append(" ( ");
+		    boolean isOr = false;
+		    for (String s : sources) {
+			if (isOr) {
+			    filter.append(" or ");
+			}
+			filter.append(CustomerHandler.CREDIT_RECORD);
+			filter.append("=");
+			filter.append("\"" + s + "\"");
+			filter.append(" ");
+			isOr = true;
+		    }
+		    filter.append(" ) ");
 		} else if (index == QueryIndexer.HOUSE) {
-		    head.append(qqqs[2]).append(", ");
+		    head.append(qqqs[2].replace("#", ", ")).append(", ");
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
 		    isAdd = true;
-		    filter.append(CustomerHandler.HOUSE);
-		    filter.append("=");
-		    filter.append(qqqs[1]);
-		    filter.append(" ");
+		    String[] sources = qqqs[1].split("#");
+		    filter.append(" ( ");
+		    boolean isOr = false;
+		    for (String s : sources) {
+			if (isOr) {
+			    filter.append(" or ");
+			}
+			filter.append(CustomerHandler.HOUSE);
+			filter.append("=");
+			filter.append("\"" + s + "\"");
+			filter.append(" ");
+			isOr = true;
+		    }
+		    filter.append(" ) ");
 		} else if (index == QueryIndexer.CAR) {
-		    head.append(qqqs[2]).append(", ");
+		    head.append(qqqs[2].replace("#", ", ")).append(", ");
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
 		    isAdd = true;
-		    filter.append(CustomerHandler.CAR);
-		    filter.append("=");
-		    filter.append(qqqs[1]);
-		    filter.append(" ");
+		    String[] sources = qqqs[1].split("#");
+		    filter.append(" ( ");
+		    boolean isOr = false;
+		    for (String s : sources) {
+			if (isOr) {
+			    filter.append(" or ");
+			}
+			filter.append(CustomerHandler.CAR);
+			filter.append("=");
+			filter.append("\"" + s + "\"");
+			filter.append(" ");
+			isOr = true;
+		    }
+		    filter.append(" ) ");
 		}
 	    }
 	    Log.i(TAG, "filter:" + filter.toString());
@@ -557,11 +651,60 @@ public class CustomerManagementFragment extends BaseFragment implements
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-	    if (getItemViewType(position) == TYPE_CUSTOMER) {
+	    int type = getItemViewType(position); 
+	    if (type == TYPE_CUSTOMER) {
 		return initCustomer(position, convertView);
-	    } else {
+	    } else if (type == TYPE_HEAD){
 		return initTitle(position, convertView);
+	    } else {
+		return initCenter(position, convertView);
 	    }
+	}
+
+	private View initCenter(int position, View convertView) {
+	    if (convertView == null) {
+		convertView =
+			LayoutInflater.from(mContext).inflate(
+				R.layout.list_item_center, null);
+	    }
+
+	    final Customer c = getItem(position).customer;
+	    convertView.setOnClickListener(new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+		    Intent intent =
+			    new Intent(mContext, CustomerDetailActivity.class);
+		    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
+			    c.getId());
+		    Log.i(TAG, c.getId() + c.getName());
+		    startActivity(intent);
+		}
+	    });
+
+	    if (c.isImported()) {
+		convertView.setBackgroundResource(R.drawable.bkg_import);
+	    } else {
+		convertView.setBackgroundResource(R.drawable.bkg_section);
+	    }
+
+	    TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
+	    TextView tvProgress =
+		    (TextView) convertView.findViewById(R.id.tvProgress);
+	    tvName.setText(c.getName());
+	    String progress = c.getProgress();
+	    if (progress != null) {
+		tvProgress.setText(c.getProgress());
+		for (int i = 0; i < mProgress.length; i++) {
+		    if (mProgress[i].equalsIgnoreCase(progress)) {
+			tvProgress.setTextColor(getResources()
+				.getColorStateList(progressColor[i]));
+			break;
+		    }
+		}
+	    }
+
+	    return convertView;
 	}
 
 	private View initTitle(int position, View convertView) {
@@ -618,7 +761,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		ivStar.setVisibility(View.GONE);
 	    }
 	    if (c.getLoan() > 0) {
-		tvLoan.setText(c.getLoan() + "");
+		tvLoan.setText(c.getLoan() + "万");
 		tvLoan.setVisibility(View.VISIBLE);
 	    } else {
 		tvLoan.setVisibility(View.GONE);
@@ -641,12 +784,22 @@ public class CustomerManagementFragment extends BaseFragment implements
 
 	@Override
 	public int getItemViewType(int position) {
-	    return getItem(position).type;
+	    int type = getItem(position).type;
+	    if (type == TYPE_HEAD) {
+		return TYPE_HEAD;
+	    } else {
+		Customer c = getItem(position).customer;
+		if (c.getLoan() == 0 && (c.getSource() == null || c.getSource().length() == 0)) {
+		    return TYPE_CENTER;
+		} else {
+		    return TYPE_CUSTOMER;
+		}
+	    }
 	}
 
 	@Override
 	public int getViewTypeCount() {
-	    return 2;
+	    return 3;
 	}
 
     }

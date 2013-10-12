@@ -186,6 +186,8 @@ public class DateUtil {
 	    sb.append(TOMMORROW);
 	} else if (isSameWeek(now, callTime)) {
 	    sb.append(getWeekDay(callTime.getTime()));
+	} else {
+	    sb.append(yyyy_MM_dd.format(callTime.getTime()));
 	}
 	return sb.toString();
     }

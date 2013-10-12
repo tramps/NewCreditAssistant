@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@drawable/bkg_pop_alarm"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -17,27 +18,37 @@
 
         <TextView
             android:id="@+id/tvTime"
-            style="@style/AddCustomerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
+        
+        <ImageView
+            android:id="@+id/iv_div"
+            android:layout_width="wrap_content" 
+            android:layout_height="1dp"
+            android:src="@drawable/divider_alarm"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/tvTime"
+            android:layout_centerHorizontal="true"
+            />
 
         <Button
             android:id="@+id/btnClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/ic_close" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvTime"
+            android:layout_below="@id/iv_div"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp" >
 
@@ -45,9 +56,8 @@
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tvProgress"
@@ -64,17 +74,27 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/tvName"
                 android:layout_below="@id/tvName"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_toLeftOf="@id/tvProgress"
                 android:ellipsize="end"
                 android:singleLine="true" />
+            
+            <ImageView
+            android:id="@+id/iv_divvv"
+            android:layout_width="wrap_content" 
+            android:layout_height="1dp"
+            android:src="@drawable/divider_alarm"
+            android:layout_below="@id/tvComment"
+            android:layout_centerHorizontal="true"
+            />
 
             <TextView
                 android:id="@+id/tvLast"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/tvName"
-                android:layout_below="@id/tvComment"
+                android:layout_below="@id/iv_divvv"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 style="@style/AddCustomerLabel"/>
@@ -92,7 +112,8 @@
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/bkg_white"
-                    android:padding="10dp"
+                    android:padding="12dp"
+                    android:textSize="14sp"
                     android:text="查看该客户" />
 
                 <Button
@@ -101,19 +122,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bkg_white"
-                    android:padding="10dp"
+                    android:padding="12dp"
+                    android:textSize="14sp"
                     android:text="联系该客户" />
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/btnSound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/rlContent"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
         android:background="@drawable/ic_silent" />
 
 </RelativeLayout>

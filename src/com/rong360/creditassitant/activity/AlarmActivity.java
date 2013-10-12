@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,7 +41,7 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 
     private Button btnClose;
     private Button btnView;
-    private Button btnSlient;
+    private ImageButton btnSlient;
     private View parent;
 
     // for single;
@@ -170,7 +171,7 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
     protected void initElements() {
 	btnClose = (Button) findViewById(R.id.btnClose);
 	btnView = (Button) findViewById(R.id.btnView);
-	btnSlient = (Button) findViewById(R.id.btnSound);
+	btnSlient = (ImageButton) findViewById(R.id.btnSound);
 	parent = findViewById(R.id.pop_parent);
 	parent.setOnClickListener(this);
 	btnSlient.setOnClickListener(this);

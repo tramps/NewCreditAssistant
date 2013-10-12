@@ -19,7 +19,7 @@ import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.GlobalValue;
 
 public class WindowManagerHelper {
-    private static final String TAG = WindowManager.class.getSimpleName();
+    private static final String TAG = "PhoneNoticeService";
     
     private static WindowManager mWindowManager;
     private static DesktopLayout mDesktopLayout;
@@ -56,9 +56,8 @@ public class WindowManagerHelper {
 	    mParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
 	    mParams.x = 0;
-	    mParams.y = 0;
+	    mParams.y = 80;
 	}
-
 	return mParams;
     }
 

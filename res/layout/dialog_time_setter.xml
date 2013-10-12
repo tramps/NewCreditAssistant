@@ -4,22 +4,47 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:orientation="vertical"
-    android:paddingBottom="10dp" >
-
-    <RelativeLayout
+    android:orientation="vertical">
+    
+	<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
+        
+        <TextView 
+            android:id="@+id/tvTitle"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="设置日期"
+	        android:textSize="24sp"
+	        android:layout_marginTop="18dp"
+	        android:layout_marginLeft="34dp"
+	        android:textColor="@color/time"
+        />
+    
+    <ImageView 
+        android:id="@+id/divider"
+        android:layout_below="@id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:src="@drawable/divider_dark_gradient_horizontal"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="22dp"
+        />
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        >
         <com.rong360.creditassitant.widget.wheel.WheelVerticalView
             android:id="@+id/wvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+            app:selectionDividerHeight="3dp"
             app:selectionDividerActiveAlpha="10"
             app:selectionDividerDimmedAlpha="100"
-            app:selectionDividerHeight="3dp"
-            app:visibleItems="10" >
+            app:visibleItems="6" >
         </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
 
         <TextView
@@ -37,10 +62,10 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/tvDay"
             app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+            app:selectionDividerHeight="3dp"
             app:selectionDividerActiveAlpha="10"
             app:selectionDividerDimmedAlpha="100"
-            app:selectionDividerHeight="3dp"
-            app:visibleItems="10" >
+            app:visibleItems="6" >
         </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
 
         <TextView
@@ -58,35 +83,47 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/tvHour"
             app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+            app:selectionDividerHeight="3dp"
             app:selectionDividerActiveAlpha="10"
             app:selectionDividerDimmedAlpha="100"
-            app:selectionDividerHeight="3dp"
-            app:visibleItems="10" >
+            app:visibleItems="6" >
         </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
     </RelativeLayout>
-
+    
+    </RelativeLayout>
+    
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/dialog_divider"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/wvDate"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:layout_weight="1"
-            android:background="@drawable/bkg_white"
-            android:padding="10dp"
+            android:gravity="center"
+            android:background="@drawable/ic_dialog"
             android:text="取消" />
+        
+        <View 
+            android:layout_width="1dp"
+            android:layout_height="44dp"
+            android:background="@drawable/dialog_divider"
+            />
 
         <Button
             android:id="@+id/btnOk"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:layout_weight="1"
-            android:background="@drawable/bkg_white"
-            android:padding="10dp"
+            android:gravity="center"
+            android:background="@drawable/ic_dialog"
             android:text="确定" />
     </LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.rong360.creditassitant.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -104,10 +105,10 @@ public class CloudHelper {
 		updateCustomers.add(c);
 	    }
 	}
-	// if (!isForce && DateUtil.getDaySpan(lastUpdateTime) < 3
-	// && updateCustomers.size() < 10) {
-	// return;
-	// }
+	 if (!isForce && DateUtil.getDaySpan(lastUpdateTime) < 3
+	 && updateCustomers.size() < 10) {
+	 return;
+	 }
 
 	JSONObject jArray = new JSONObject();
 
@@ -247,6 +248,7 @@ public class CloudHelper {
 				MyToast.makeText(context,
 					"已同步" + res.mRes_total + "个订单").show();
 			    }
+			    if (onFinish != null)
 			    onFinish.onSuccess(res.mRes_total);
 			    // finish();
 			} else if (res.mResult.getError() == 1) {
@@ -254,12 +256,14 @@ public class CloudHelper {
 			}
 		    } catch (JsonParseException e) {
 			Log.e(TAG, e.toString());
+			if (onFinish != null)
 			onFinish.onSuccess(0);
 		    }
 		}
 
 		@Override
 		public void onFail(HandleMessageTask task, Object t) {
+		    if (onFinish != null)
 		    onFinish.onFail();
 		}
 	    });
@@ -327,6 +331,8 @@ public class CloudHelper {
 		GlobalValue.getIns().getCustomerHandler(context);
 	int i = 0;
 	int maxId = -1;
+	
+	Calendar calendar = Calendar.getInstance();
 	for (BDCustomer bd : res.mData) {
 	    // Log.i(TAG, "mobile :" + bd.mUser_mobile);
 	    String mobile = TelHelper.getPureTel(bd.mUser_mobile);
@@ -344,7 +350,11 @@ public class CloudHelper {
 	    }
 	    c.setName(name);
 	    c.setTel(mobile);
+	    
 	    c.setTime(bd.mCreate_time * 1000);
+	    calendar.setTimeInMillis(c.getTime());
+	    Log.i(TAG, "create tiem: " + DateUtil.yyyy_MM_dd.format(calendar.getTime()));
+	    
 	    c.setLoan(bd.mLoan_limit);
 	    c.setSource("融360");
 	    c.setOrderNo(bd.mId);

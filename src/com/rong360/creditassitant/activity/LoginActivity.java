@@ -85,10 +85,10 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 		    @Override
 		    public void onSuccess(HandleMessageTask task, Object t) {
 			try {
+			    Log.i(TAG, "res:" + task.getResult());
 			    TResult res =
 				    JsonHelper.parseJSONToObject(TResult.class,
 					    task.getResult());
-			    Log.i(TAG, "res:" + task.getResult());
 			    if (res.mResult.getError() == (ECode.SUCCESS)) {
 				PreferenceHelper helper =
 					PreferenceHelper
@@ -151,7 +151,7 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 	}
 
 	if (mPass.length() != 6) {
-	    MyToast.makeText(this, "请输入六位数字密码", Toast.LENGTH_SHORT).show();
+	    MyToast.makeText(this, "请输入六位密码", Toast.LENGTH_SHORT).show();
 	    etPass.requestFocus();
 	    return false;
 	}

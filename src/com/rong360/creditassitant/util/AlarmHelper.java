@@ -26,8 +26,9 @@ public class AlarmHelper {
     public static ArrayList<Customer> getCurrentAlarmCustomer(boolean shallNext) {
 	ArrayList<Customer> customers = GlobalValue.getIns().getAllCustomers();
 	ArrayList<Customer> alarmCustomers = new ArrayList<Customer>();
+	long now = System.currentTimeMillis();
 	for (Customer c : customers) {
-	    if (c.getAlarmTime() != 0 && !c.isHasChecked()
+	    if (c.getAlarmTime() > now && !c.isHasChecked()
 		    && !c.IsDisplayed()) {
 		alarmCustomers.add(c);
 	    }
@@ -49,7 +50,7 @@ public class AlarmHelper {
 
 	Customer c = alarmCustomers.get(0);
 	currentAlarms.add(c);
-	long now = System.currentTimeMillis();
+//	long now = System.currentTimeMillis();
 	if (c.getAlarmTime() < now) {
 	    for (int i = 1; i < alarmCustomers.size(); i++) {
 		Customer next = alarmCustomers.get(i);
@@ -112,6 +113,7 @@ public class AlarmHelper {
 //	manager.set(AlarmManager.RTC_WAKEUP, c.getAlarmTime(), intent);
 	if (mTimer != null) {
 	    mTimer.cancel();
+	    mTimer.purge();
 	    mTimer = new Timer();
 	} else {
 	    mTimer = new Timer();
@@ -120,7 +122,7 @@ public class AlarmHelper {
 	mTask = new AlarmTask(context);
 	
 	if (leftTime < 0) {
-	    leftTime = 1;
+	    leftTime = 10000;
 	}
 	
 	mTimer.schedule(mTask, leftTime);

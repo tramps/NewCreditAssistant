@@ -8,7 +8,7 @@ public class BDCustomer implements JSONBean {
     public String mUser_name;
     public String mUser_address;
     public int mLoan_limit;
-    public long mCreate_time;
+    public int mCreate_time;
     public int mStatus;
     public String mProduct_name;
     public int mApplication_type;

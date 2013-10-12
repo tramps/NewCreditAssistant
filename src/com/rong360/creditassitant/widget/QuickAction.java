@@ -3,8 +3,10 @@ package com.rong360.creditassitant.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar.Tab;
 import android.content.Context;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -267,8 +269,8 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	// showArrow(((onTop) ? R.id.arrow_down : R.id.arrow_up), arrowPos);
 
 	setAnimationStyle(screenWidth, anchorRect.centerX(), onTop);
-
-	mWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, xPos, yPos);
+	Log.i("quickaction:", "xpos: " + xPos + " ypos : " + yPos);
+	mWindow.showAtLocation(anchor, Gravity.LEFT | Gravity.TOP, xPos, yPos - 30);
     }
 
     /**

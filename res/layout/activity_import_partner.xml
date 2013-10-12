@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
+    android:padding="10dp"
     android:orientation="vertical" >
     
     <TextView 
@@ -10,7 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="54dp"
-        android:layout_marginBottom="15dp"
         />
     <LinearLayout 
         android:layout_width="match_parent"
@@ -26,14 +25,16 @@
             >
             <EditText 
                 android:id="@+id/etTel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:drawableLeft="@drawable/ic_person"
                 android:drawablePadding="10dp"
+                
                 android:hint="请输入手机号"
                 android:inputType="phone"
                 android:maxLength="11"
+                style="@style/Login"
                 android:background="@android:color/white"
                 />
         </LinearLayout>
@@ -51,15 +52,15 @@
             >
             <EditText 
                 android:id="@+id/etPass"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_pinch"
                 android:drawablePadding="14dp"
                 android:layout_margin="10dp"
-                android:hint="请输入六位数字密码"
-                android:maxLength="6"
-                android:inputType="textPassword"
+                android:hint="请输入密码"
+                style="@style/Login"
                 android:background="@android:color/white"
+                android:inputType="textPassword"
                 />
         </LinearLayout>
         

@@ -359,8 +359,8 @@ public class ImportContactActivity extends BaseActionBar implements
 		    Log.e(TAG, "insert error");
 		    continue;
 		}
-		Action a = new Action(customer.getId(), ActionHandler.TYPE_NEW);
-		GlobalValue.getIns().getActionHandler(this).handleAction(a);
+//		Action a = new Action(customer.getId(), ActionHandler.TYPE_NEW);
+//		GlobalValue.getIns().getActionHandler(this).handleAction(a);
 		customer.setIsImported(true);
 		GlobalValue.getIns().putCustomer(customer);
 		mCustomers.add(customer);

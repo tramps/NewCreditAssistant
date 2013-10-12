@@ -13,6 +13,7 @@
         android:layout_marginTop="70dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:paddingLeft="5dp"
         android:background="@drawable/bkg_single_round"
         />
     

@@ -113,6 +113,7 @@ public class RegisterActivity extends BaseActionBar implements OnClickListener {
 	    finish();
 	} else if (v == btnLoginBD) {
 	    Intent intent = new Intent(this, ImportPartnerActivity.class);
+	    intent.putExtra(ImportPartnerActivity.EXTRA_MODE, ImportPartnerActivity.MODE_LOGIN);
 	    IntentUtil.startActivity(this, intent);
 	    finish();
 	}

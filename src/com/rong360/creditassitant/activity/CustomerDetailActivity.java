@@ -92,7 +92,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    Intent intent = new Intent(this, AddCustomerActivity.class);
 	    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID, mCustomerId);
 	    startActivity(intent);
-	    // finish();
+	    finish();
 	    return true;
 	}
 	return super.onOptionsItemSelected(item);
@@ -176,10 +176,16 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    tvAlarm.setText(DateUtil.yyyyMMddHHmm.format(instance.getTime()));
 	} else {
 	    tvAlarm.setText("点击设置提醒");
+	    tvAlarm.setTextColor(getResources().getColor(R.color.customer_label));
 	    btnClose.setVisibility(View.GONE);
 	}
 
-	tvComment.setText(mCustomer.getLastFollowComment());
+	if (mCustomer.getLastFollowComment() == null || mCustomer.getLastFollowComment().length() == 0) {
+	    tvComment.setText("点击添加备注");
+	    tvComment.setTextColor(getResources().getColor(R.color.customer_label));
+	} else {
+	    tvComment.setText(mCustomer.getLastFollowComment());
+	}
 
 	initDetail();
 
@@ -210,7 +216,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    if (items == null) {
 		items = res.getStringArray(R.array.bankCash);
 	    }
-	    detailMap.put("现金流水", items[mCustomer.getCash()]);
+	    detailMap.put("现金流水(元)", items[mCustomer.getCash()]);
 	}
 	if (mCustomer.getIdentity() >= 0) {
 	    items = res.getStringArray(R.array.identity);
@@ -343,8 +349,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	if (resultCode == RESULT_OK) {
 	    String comment =
 		    data.getStringExtra(CommentActivity.RESULT_COMMENT);
-	    if (comment.length() > 0
-		    && !comment.equalsIgnoreCase(mCustomer
+	    if (!comment.equalsIgnoreCase(mCustomer
 			    .getLastFollowComment())) {
 		mCustomer.setLastFollowComment(comment);
 		GlobalValue.getIns().getCustomerHandler(this)
@@ -356,6 +361,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 		GlobalValue.getIns().getActionHandler(this)
 			.handleAction(action);
 		tvComment.setText(comment);
+		tvComment.setTextColor(getResources().getColor(R.color.customer_content));
 	    }
 	}
     }
@@ -365,6 +371,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	@Override
 	public void onTimePicked(String time, Calendar alarm) {
 	    tvAlarm.setText(time);
+	    tvAlarm.setTextColor(getResources().getColor(R.color.customer_content));
 	    mCustomer.setAlarmTime(alarm.getTimeInMillis());
 	    mCustomer.setHasChecked(false);
 	    mCustomer.setIsDisplayed(false);
@@ -488,8 +495,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    // calc.setTimeInMillis(a.getTime());
 	    tvTime.setText(DateUtil.getDisplayTimeForDetail(a.getTime()));
 	    tvContent.setText(a.getContent());
-	    tvDetail.setText(DateUtil.getExactTime(a.getTime()));
-
+//	    tvDetail.setText(DateUtil.getExactTime(a.getTime()));
 	    return convertView;
 	}
 

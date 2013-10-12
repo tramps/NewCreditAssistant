@@ -69,7 +69,7 @@ public class MyToast extends Toast {
 	    tvHint.setText(hint);
 	    t.setView(v);
 	    t.setGravity(Gravity.CENTER, 0, 0);
-	    t.setDuration(Toast.LENGTH_LONG);
+	    t.setDuration(Toast.LENGTH_SHORT);
 	    t.show();
 	}
 	

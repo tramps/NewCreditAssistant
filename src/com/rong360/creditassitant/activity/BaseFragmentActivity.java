@@ -54,7 +54,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 	super.onResume();
 	// MobclickAgent.onResume(this);
 	if (PassCheckHelper.getInstance(this).shouldLock(this)) {
-	    Intent intent = new Intent(this, ShowPassActivity.class);
+	    Intent intent = new Intent(this, ShowPassAliasActivity.class);
 	    startActivity(intent);
 	}
     }

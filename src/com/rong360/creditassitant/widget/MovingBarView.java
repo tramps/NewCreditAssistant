@@ -2,10 +2,12 @@ package com.rong360.creditassitant.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.R.color;
 import com.rong360.creditassitant.util.DisplayUtils;
 
 public class MovingBarView extends View {
@@ -26,7 +29,8 @@ public class MovingBarView extends View {
     // private int mAlpha;
 
     private Paint mPaint;
-    private Paint mWhitePain;
+    private Paint mWhitePaint;
+    private Paint mLevelPaint;
     private Rect mRect;
     private Drawable mSlider;
     private Rect mFixedRect;
@@ -75,10 +79,19 @@ public class MovingBarView extends View {
 	mPaint.setColor(Color.BLACK);
 	mPaint.setStrokeWidth(2);
 
-	mWhitePain = new Paint();
-	mWhitePain.setAntiAlias(true);
-	mWhitePain.setColor(Color.WHITE);
-	mWhitePain.setTextSize(30);
+	mWhitePaint = new Paint();
+	mWhitePaint.setAntiAlias(true);
+	Resources res = getResources();
+	int cProgress = res.getColor(R.color.customer_content);
+	mWhitePaint.setColor(cProgress);
+	mWhitePaint.setTextSize(23);
+	mWhitePaint.setTypeface(Typeface.DEFAULT_BOLD);
+
+	mLevelPaint = new Paint();
+	mLevelPaint.setAntiAlias(true);
+	int cLevel = res.getColor(R.color.level);
+	mLevelPaint.setColor(cLevel);
+	mLevelPaint.setTextSize(23);
 
 	mScreenWidth = DisplayUtils.getScreenWidth(context);
 	mSlider = context.getResources().getDrawable(R.drawable.ic_slide);
@@ -105,15 +118,15 @@ public class MovingBarView extends View {
 	int h = mSlider.getIntrinsicHeight();
 	// Log.i(TAG, "w" + w + " h" + h);
 	int margin = height - h;
-	mRect = new Rect(0, margin / 2, w, h);
-	// Log.i(TAG, mRect.toString());
+	mRect = new Rect(0, margin / 2 + 3, w, h + margin / 2 + 3);
+	Log.i(TAG, mRect.toString());
 	if (mRect.left < 10) {
 	    // mRect = new RectF(0, 0, width, height);
-	    int offset = (int) ((mScreenWidth - mRect.width()) / 2);
+	    int offset = (int) ((mScreenWidth - mRect.width()) / 2 - 15);
 	    mRect.offset(offset, 0);
 	    // mRect.offset(offset, 0);
 	}
-	// Log.i(TAG, mRect.toString());
+	Log.i(TAG, mRect.toString());
 	if (mFixedRect == null) {
 	    mFixedRect = new Rect(mRect);
 	    // Log.i(TAG, "init");
@@ -124,7 +137,9 @@ public class MovingBarView extends View {
 	    Log.i(TAG, "offset:" + mHlvOffset);
 	    mHlv.setCurrentX(mHlvOffset);
 	    mHlv.setHistoryOffset(mHlvOffset);
-	    // invalidate();
+	    //TODO
+//	    moveBottom(mHlvOffset);
+//	    invalidate();
 	    mIsFirst = false;
 	}
 
@@ -155,8 +170,12 @@ public class MovingBarView extends View {
 	mSlider.setBounds(mRect);
 	mSlider.draw(canvas);
 	// canvas.drawRect(mRect, mPaint);
-	canvas.drawText(mProgress[mIndex], mRect.centerX() - 55,
-		mRect.centerY() + 10, mWhitePain);
+	canvas.drawText(mProgress[mIndex], mRect.centerX() - 46,
+		mRect.centerY() - 3, mWhitePaint);
+	canvas.drawText("阶段", mRect.centerX() - 22, mRect.centerY() + 22,
+		mLevelPaint);
+	
+	
     }
 
     @Override
@@ -276,35 +295,59 @@ public class MovingBarView extends View {
 	mHlv.scrollTo(offset);
 	mHlv.setCurrentX(offset);
 	mHlv.setHistoryOffset(offset);
-
-//	setText();
+	setText();
     }
 
     private void setText() {
-	int left = mIndex - 2;
-	int center = mIndex - 1;
-	if (left > 0) {
-	    TextView tv = getChildTextView(mHlv.getChildAt(left));
+	if (mIndex == 0) {
+	    TextView tv = getChildTextView(mHlv.getChildAt(mIndex));
 	    if (tv != null) {
-		tv.setText(mProgress[left]);
+		tv.setText("");
 	    }
-	}
 
-	if (center > 0) {
-	    TextView tv = getChildTextView(mHlv.getChildAt(center));
+	    tv = getChildTextView(mHlv.getChildAt(mIndex+1));
 	    if (tv != null) {
-		tv.setText(mProgress[center]);
+		tv.setText(mProgress[mIndex]);
 	    }
-	}
 
-	TextView tv = getChildTextView(mHlv.getChildAt(mIndex-1));
-	if (tv != null) {
-	    tv.setText(mProgress[mIndex]);
+	    tv = getChildTextView(mHlv.getChildAt(mIndex + 2));
+	    if (tv != null) {
+		tv.setText(mProgress[mIndex + 1]);
+	    }
+	} else if (mIndex == mProgress.length - 1) {
+	    TextView tv = getChildTextView(mHlv.getChildAt(mIndex + 2));
+	    if (tv != null) {
+		tv.setText("");
+	    }
+
+	    tv = getChildTextView(mHlv.getChildAt(mIndex +1));
+	    if (tv != null) {
+		tv.setText(mProgress[mIndex]);
+	    }
+
+	    tv = getChildTextView(mHlv.getChildAt(mIndex));
+	    if (tv != null) {
+		tv.setText(mProgress[mIndex - 1]);
+	    }
+	} else {
+	    TextView tv = getChildTextView(mHlv.getChildAt(mIndex));
+	    if (tv != null) {
+		tv.setText(mProgress[mIndex - 1]);
+	    }
+
+	    tv = getChildTextView(mHlv.getChildAt(mIndex+1));
+	    if (tv != null) {
+		tv.setText(mProgress[mIndex]);
+	    }
+
+	    tv = getChildTextView(mHlv.getChildAt(mIndex + 2));
+	    if (tv != null) {
+		tv.setText(mProgress[mIndex + 1]);
+	    }
 	}
     }
-    
-    
-    private TextView getChildTextView (View parent) {
+
+    private TextView getChildTextView(View parent) {
 	if (parent == null) {
 	    return null;
 	}
@@ -313,15 +356,15 @@ public class MovingBarView extends View {
 	    for (int i = 0; i < group.getChildCount(); i++) {
 		View child = group.getChildAt(i);
 		if (child instanceof TextView) {
-		    return (TextView)child;
-		} else if (child instanceof ViewGroup){
+		    return (TextView) child;
+		} else if (child instanceof ViewGroup) {
 		    return getChildTextView(child);
 		} else {
 		    continue;
 		}
 	    }
 	}
-	
+
 	return null;
     }
 

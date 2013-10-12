@@ -137,7 +137,7 @@ public abstract class AbstractWheelView extends AbstractWheel {
         super.initData(context);
 
         // creating animators
-        if (Build.VERSION.SDK_INT > 9) {
+        if (Build.VERSION.SDK_INT >= 11) {
             mDimSelectorWheelAnimator = ObjectAnimator.ofFloat(this, PROPERTY_SELECTOR_PAINT_COEFF, 1, 0);
     
             mDimSeparatorsAnimator = ObjectAnimator.ofInt(this, PROPERTY_SEPARATORS_PAINT_ALPHA,

@@ -76,7 +76,7 @@ public class TaskFragment extends BaseFragment {
 
 		@Override
 		public int compare(Customer lhs, Customer rhs) {
-		    return rhs.getAlarmTime() - lhs.getAlarmTime() > 0 ? 1 : -1;
+		    return rhs.getAlarmTime() - lhs.getAlarmTime() < 0 ? 1 : -1;
 		}
 	    });
 	    lvAlarm.setVisibility(View.VISIBLE);
@@ -144,7 +144,12 @@ public class TaskFragment extends BaseFragment {
 	    TextView tvTime = (TextView) convertView.findViewById(R.id.tvTime);
 	    final Customer c = getItem(position);
 	    tvName.setText(c.getName());
-	    tvComment.setText(c.getLastFollowComment());
+	    String comment = c.getLastFollowComment();
+	    if (comment != null && comment.length() > 0) {
+		tvComment.setText(c.getLastFollowComment());
+	    } else {
+		tvComment.setText("暂无备注");
+	    }
 	    String progress = c.getProgress();
 	    if (progress != null) {
 		tvProgress.setText(c.getProgress());

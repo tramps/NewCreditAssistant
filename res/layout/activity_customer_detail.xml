@@ -13,7 +13,7 @@
         android:orientation="vertical" >
 
         <RelativeLayout
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="62dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
@@ -51,7 +51,7 @@
                 android:layout_alignLeft="@id/tvName"
                 android:layout_below="@id/tvName"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="6dp" />
 
             <TextView
                 android:id="@+id/tvSource"
@@ -68,7 +68,6 @@
             android:layout_marginTop="12dp"
             android:padding="2dp"
             android:background="@drawable/bkg_single_round" >
-
             <TableRow android:gravity="center" >
 
                 <LinearLayout
@@ -76,7 +75,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/bkg_section"
+                    android:background="@drawable/bkg_left"
                     android:descendantFocusability="blocksDescendants"
                     android:gravity="center"
                     android:orientation="vertical" >
@@ -91,6 +90,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        style="@style/CustomerDetailLoan"
+                        android:layout_marginTop="4dp"
                         android:text="电话" />
                 </LinearLayout>
 
@@ -119,6 +120,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        style="@style/CustomerDetailLoan"
+                        android:layout_marginTop="3dp"
                         android:text="短信" />
                 </LinearLayout>
 
@@ -132,7 +135,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/bkg_section"
+                    android:background="@drawable/bkg_right"
                     android:descendantFocusability="blocksDescendants"
                     android:gravity="center"
                     android:orientation="vertical" >
@@ -147,6 +150,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        style="@style/CustomerDetailLoan"
+                        android:layout_marginTop="6dp"
                         android:text="通讯记录" />
                 </LinearLayout>
             </TableRow>
@@ -156,7 +161,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/bkg_slide" >
 
             <com.rong360.creditassitant.widget.HorizontalListView
@@ -169,15 +174,15 @@
             <com.rong360.creditassitant.widget.MovingBarView
                 android:id="@+id/movingBar"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="match_parent" >
             </com.rong360.creditassitant.widget.MovingBarView>
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/bkg_round"
             android:orientation="vertical"
             android:paddingBottom="10dp"
@@ -194,7 +199,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="提醒" />
+                    android:text="提醒:" />
 
                 <TextView
                     android:id="@+id/tvCAlarm"
@@ -238,7 +243,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="备注" />
+                    android:text="备注:" />
 
                 <ImageView
                     android:id="@+id/ivArrow"
@@ -264,6 +269,7 @@
                     android:ellipsize="end"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
+                    android:text="点击设置备注"
                     android:gravity="left"
                     android:singleLine="true" />
             </RelativeLayout>
@@ -298,7 +304,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/divider_horizontal" />
 
@@ -306,6 +312,7 @@
             android:id="@+id/llHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
             android:layout_marginBottom="45dp"
             android:orientation="vertical"
             android:paddingBottom="35dp" >

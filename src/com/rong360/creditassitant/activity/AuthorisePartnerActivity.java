@@ -120,10 +120,10 @@ public class AuthorisePartnerActivity extends BaseActionBar {
 	String pass =
 		helper.readPreference(ImportPartnerActivity.PRE_KEY_BD_PASS);
 	if (tel != null && pass != null) {
-	    ivSign.setVisibility(View.GONE);
+	    ivHint.setVisibility(View.GONE);
 	    tvHint.setVisibility(View.GONE);
 	    pbCircle.setVisibility(View.VISIBLE);
-	    CloudHelper.syncOrder(AuthorisePartnerActivity.this);
+	    CloudHelper.syncOrder(AuthorisePartnerActivity.this, onFinish);
 	} else {
 	    Intent intent =
 		    new Intent(AuthorisePartnerActivity.this,

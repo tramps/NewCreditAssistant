@@ -12,8 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.PreferenceHelper;
 
 public class SetPassActivity extends BaseActionBar implements OnClickListener {
@@ -21,6 +23,7 @@ public class SetPassActivity extends BaseActionBar implements OnClickListener {
 
     public static final int MODE_SET = 0;
     public static final int MODE_MODIFY = 1;
+    public static final int MODE_CLOSE = 2;
 
     public static final String PRE_KEY_PASS = "pre_key_pass";
 
@@ -73,25 +76,27 @@ public class SetPassActivity extends BaseActionBar implements OnClickListener {
 	mMode = getIntent().getIntExtra(EXTRA_MODE, MODE_SET);
 	if (mMode == MODE_SET) {
 	    getSupportActionBar().setTitle("设置密码");
+	} else if (mMode == MODE_CLOSE) {
+	    getSupportActionBar().setTitle("关闭密码");
 	} else {
 	    getSupportActionBar().setTitle("修改密码");
 	}
-	
+
     }
 
     private void initContent() {
-	if (mMode == MODE_SET) {
+	if (mMode != MODE_MODIFY) {
 	    tvHint.setText("请输入密码");
 	} else {
 	    tvHint.setText("请输入旧密码");
 	}
 	tvError.setText("");
     }
-    
+
     @Override
     protected void onResume() {
-        super.onResume();
-        initContent();
+	super.onResume();
+	initContent();
     }
 
     @Override
@@ -166,7 +171,9 @@ public class SetPassActivity extends BaseActionBar implements OnClickListener {
 	    mCurrentE.setText(clicked.getText());
 	    mCurrentE = mForwardMap.get(mCurrentE);
 	    if (mCurrentE == null) {
-		if (mMode == MODE_SET) {
+		if (mMode == MODE_CLOSE) {
+		    mHandler.post(mValidate);
+		} else if (mMode == MODE_SET) {
 		    if (mStep == 0) {
 			reInputPass();
 		    } else {
@@ -240,6 +247,24 @@ public class SetPassActivity extends BaseActionBar implements OnClickListener {
 	String pass = getPass();
 	if (mMode == MODE_SET) {
 	    isMatch = checkDoublePass();
+	} else if (mMode == MODE_CLOSE) {
+	    String oldPass =
+			PreferenceHelper.getHelper(this).readPreference(
+				PRE_KEY_PASS);
+		if (pass.equalsIgnoreCase(oldPass)) {
+		    PreferenceHelper.getHelper(this).removePreference(PRE_KEY_PASS);
+		    MyToast.displayFeedback(this, R.drawable.ic_right, "密码已关闭");
+		    finish();
+		} else {
+		    mWrongCount++;
+		    int leftCount = MAXIMUM_COUNT - mWrongCount;
+		    tvError.setText(pass + "输错5次将锁定，你还有" + leftCount + "次机会");
+		    if (leftCount == 0) {
+			Intent intent = new Intent(this, LockActivity.class);
+			startActivity(intent);
+			mWrongCount = 0;
+		    }
+		}
 	} else {
 	    if (mStep == 0) {
 		String oldPass =
@@ -272,9 +297,14 @@ public class SetPassActivity extends BaseActionBar implements OnClickListener {
 	if (pass.equalsIgnoreCase(mPass)) {
 	    PreferenceHelper.getHelper(this).writePreference(PRE_KEY_PASS,
 		    mPass);
+	    if (mMode == MODE_SET) {
+		MyToast.displayFeedback(this, R.drawable.ic_right, "成功开启密码锁");
+	    } else {
+		MyToast.displayFeedback(this, R.drawable.ic_right, "成功修改密码锁");
+	    }
 	    finish();
 	    return true;
-	    
+
 	} else {
 	    tvError.setText("密码不匹配，请再输入一次");
 	    return false;

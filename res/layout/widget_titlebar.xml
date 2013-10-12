@@ -18,7 +18,6 @@
     
     <RelativeLayout 
         android:id="@+id/rlTitle"
-        android:layout_marginBottom="2dp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -40,8 +39,7 @@
 	        android:shadowDx="1"
 	        android:shadowDy="0"
 	        android:shadowRadius="1"
-	        android:text="hello"
-	        android:textAppearance="?android:textAppearanceMedium"
+	        android:textSize="19sp"
 	        android:textColor="@android:color/white" />
 	    
 	    <ImageView 
@@ -69,6 +67,16 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" >
     </FrameLayout>
+    
+    <Button
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_add"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_centerVertical="true"/>
     
     </RelativeLayout>
 

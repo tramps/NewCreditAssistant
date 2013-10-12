@@ -19,55 +19,54 @@
 
     <LinearLayout
         android:id="@+id/llPass"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_below="@id/tvHint"
         android:layout_marginTop="28dp"
-        android:orientation="horizontal"
-        android:paddingRight="15dp"
-        android:paddingLeft="15dp" >
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/etPassO"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_marginRight="18dp"
             android:background="@drawable/ic_pass"
             android:gravity="center"
             android:cursorVisible="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:digits="0123456789"
+            android:textSize="40sp"
             android:inputType="textPassword"
             android:maxLength="1" />
 
         <EditText
             android:id="@+id/etPassS"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_marginRight="18dp"
             android:background="@drawable/ic_pass"
             android:focusable="true"
             android:cursorVisible="false"
             android:clickable="false"
             android:focusableInTouchMode="false"
             android:gravity="center"
+            android:textSize="40sp"
             android:inputType="textPassword"
             android:digits="0123456789"
             android:maxLength="1" />
 
         <EditText
             android:id="@+id/etPassT"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_marginRight="18dp"
             android:background="@drawable/ic_pass"
             android:focusable="true"
             android:cursorVisible="false"
             android:clickable="false"
+            android:textSize="40sp"
             android:focusableInTouchMode="false"
             android:digits="0123456789"
             android:gravity="center"
@@ -76,9 +75,8 @@
 
         <EditText
             android:id="@+id/etPassF"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
             android:background="@drawable/ic_pass"
             android:focusable="true"
             android:cursorVisible="false"
@@ -86,6 +84,8 @@
             android:focusableInTouchMode="false"
             android:gravity="center"
             android:digits="0123456789"
+            android:textSize="40sp"
+            android:text=""
             android:inputType="textPassword"
             android:maxLength="1" />
     </LinearLayout>

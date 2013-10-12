@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.util.IntentUtil;
+import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.PreferenceHelper;
 
 public class LockActivity extends Activity {
@@ -23,7 +24,7 @@ public class LockActivity extends Activity {
     private TextView tvLeftTime;
     private Button btnUnlock;
 
-    private final int mTotalTime = 10 * 60;
+    private final int mTotalTime = 1 * 60;
     private final int mMinute = 60;
 
     private long mStartTime;
@@ -40,7 +41,11 @@ public class LockActivity extends Activity {
 	    if (leftTime <= 0) {
 		PreferenceHelper.getHelper(LockActivity.this).removePreference(
 			PRE_KEY_START_LOCK_TIME);
+		Intent intent = new Intent(LockActivity.this, ShowPassAliasActivity.class);
+		startActivity(intent);
 		finish();
+		mStop = true;
+		return false;
 	    }
 	    Log.i(TAG, "refresh...");
 	    tvLeftTime.setText(getDisplay(leftTime));
@@ -97,6 +102,9 @@ public class LockActivity extends Activity {
 	}
 	sb.append(min);
 	sb.append(":");
+	if (sec < 10) {
+	    sb.append("0");
+	}
 	sb.append(sec);
 
 	return sb.toString();
@@ -128,7 +136,16 @@ public class LockActivity extends Activity {
     protected void
             onActivityResult(int requestCode, int resultCode, Intent data) {
 	if (resultCode == RESULT_OK) {
-	    finish();
+	    stopTiming();
+	    PreferenceHelper.getHelper(this).removePreference(SetPassActivity.PRE_KEY_PASS);
+	    PreferenceHelper.getHelper(this).removePreference(PRE_KEY_START_LOCK_TIME);
+	    MyToast.displayFeedback(this, R.drawable.ic_right, "密码已关闭");
+	    new Handler().postDelayed(new Runnable() {
+	        @Override
+	        public void run() {
+	    	    LockActivity.this.finish();
+	        }
+	    }, 200);
 	}
     }
 

@@ -5,20 +5,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
             android:layout_marginTop="70dp" >
 
             <Button
                 android:id="@+id/btnSafe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="35dp"
+                android:layout_marginLeft="40dp"
                 android:background="@drawable/ic_safe_no" />
 
             <TextView
@@ -27,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/btnSafe"
                 android:layout_below="@id/btnSafe"
-                android:layout_marginTop="15dp"
+                android:textColor="@color/customer_label"
                 android:text="客户保险箱" />
 
             <Button
@@ -36,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/btnSafe"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="35dp"
+                android:layout_marginRight="40dp"
                 android:background="@drawable/ic_lock_no" />
 
             <TextView
@@ -44,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/btnLock"
                 android:layout_below="@id/btnLock"
-                android:layout_marginTop="15dp"
+                android:textColor="@color/customer_label"
                 android:text="客户密码锁" />
         </RelativeLayout>
 
@@ -52,10 +51,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:padding="2dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingRight="1dp"
             android:background="@drawable/bkg_round"
             android:orientation="vertical" >
 
@@ -65,7 +64,6 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_marginTop="-2dp"
-                android:background="@drawable/bkg_section"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView
@@ -98,7 +96,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:background="@drawable/bkg_section"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView
@@ -131,7 +128,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:background="@drawable/bkg_section"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView
@@ -163,7 +159,6 @@
                 android:id="@+id/rlSource"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bkg_section"
                 android:padding="10dp"
                 android:descendantFocusability="blocksDescendants" >
 
@@ -189,11 +184,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:padding="2dp"
+            android:paddingRight="1dp"
             android:background="@drawable/bkg_round"
             android:orientation="vertical">
 
@@ -202,7 +196,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:background="@drawable/bkg_section"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView
@@ -235,7 +228,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:background="@drawable/bkg_section"
                 android:descendantFocusability="blocksDescendants" >
 
                 <TextView

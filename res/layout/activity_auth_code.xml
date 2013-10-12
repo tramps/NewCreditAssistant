@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
+    android:padding="10dp"
     android:orientation="vertical" >
     
     <TextView 
@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="6dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="58dp"
         android:text="2/2  意向您的手机号发送了一条验证码，请输入验证码完成注册"
         android:textSize="12sp"
         android:textColor="@color/customer_label"
@@ -28,10 +28,11 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:drawableLeft="@drawable/ic_pinch"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="8dp"
             android:inputType="phone"
             android:hint="输入验证码"
             android:drawablePadding="6dp"
+            style="@style/Login"
             android:background="@android:color/white"
             />
         
@@ -54,7 +55,7 @@
         android:layout_height="wrap_content"
         android:text="确定"
         android:layout_marginTop="25dp"
-        android:padding="15dp"
+        android:padding="10dp"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         android:background="@drawable/bkg_green"

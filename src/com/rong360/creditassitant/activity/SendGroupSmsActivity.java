@@ -2,12 +2,15 @@ package com.rong360.creditassitant.activity;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,7 +35,7 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 
     private ArrayList<String[]> mReceiver;
     private StringBuilder mBuilder;
-    private String mCustomerInfo;
+    private String mCustomerInfo = "";
     private int mFilterIndex;
     private ArrayList<String> mQueryIndex;
 
@@ -52,6 +55,18 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 	Log.i(TAG, "mquery size: " + (mQueryIndex == null? 0 : mQueryIndex.size()));
     }
 
+    private void closeImm() {
+   	InputMethodManager imm =
+   		(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+   	imm.hideSoftInputFromWindow(etMsg.getWindowToken(), 0);
+       }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+	closeImm();
+        return super.onOptionsItemSelected(item);
+    }
+    
     private void setReciver(Intent intent) {
 	mCustomerInfo = intent.getStringExtra(EXTRA_CUSTOMER);
 	Log.i(TAG, "customerinfo: " + mCustomerInfo);
@@ -119,6 +134,7 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 
     @Override
     public void onClick(View v) {
+	closeImm();
 	if (v == btnAdd) {
 	    addMoreCustomer();
 	} else if (v == btnHistory) {
@@ -128,7 +144,7 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 		MyToast.makeText(this, "请输入短信内容~", Toast.LENGTH_SHORT).show();
 		return;
 	    }
-//	    sendMsg();
+	    sendMsg();
 	    insert2History();
 	    finish();
 	}

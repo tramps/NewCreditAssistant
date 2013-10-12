@@ -88,7 +88,7 @@ public class PhoneNoticeService extends Service {
 
     private void showCustomedScreen() {
 	mHandler.removeCallbacks(mThread);
-	mHandler.postDelayed(mThread, 3000);
+	mHandler.postDelayed(mThread, 1000);
 	closePopUp(15000);
     }
 
@@ -184,7 +184,7 @@ public class PhoneNoticeService extends Service {
 
 	    if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK
 		    && state == TelephonyManager.CALL_STATE_IDLE) {
-		closePopUp(0);
+		closePopUp(2000);
 		if (mLastEffectiveNumber.length() == 0) {
 		    return;
 		}
@@ -219,9 +219,7 @@ public class PhoneNoticeService extends Service {
 	    case TelephonyManager.CALL_STATE_IDLE: {
 //		Log.i(TAG, "idle: now" + mIncomingNumber + " last:"
 //			+ mLastEffectiveNumber);
-		if (mIncomingNumber.length() > 0) {
-		    closePopUp(0);
-		}
+		closePopUp(2000);
 		break;
 	    }
 	    case TelephonyManager.CALL_STATE_OFFHOOK: {
@@ -229,7 +227,7 @@ public class PhoneNoticeService extends Service {
 		if (mIsOutGoing) {
 		    closePopUp(15000);
 		} else {
-		    closePopUp(0);
+		    closePopUp(2000);
 		}
 		mIsOutGoing = false;
 		break;
@@ -300,10 +298,8 @@ public class PhoneNoticeService extends Service {
 	@Override
 	public void run() {
 	    // TODO
-//	    Log.i(TAG, "thread close customer" + mIsAttached);
-	    if (mIsAttached) {
-		mIsAttached = WindowManagerHelper.hideContent(getBaseContext());
-	    }
+	    Log.i(TAG, "thread close customer" + mIsAttached);
+	    mIsAttached = WindowManagerHelper.hideContent(getBaseContext());
 	}
     };
 

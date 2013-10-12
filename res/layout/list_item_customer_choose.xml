@@ -1,71 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants"
-    android:padding="10dp">
-    
-    <CheckBox 
-       android:id="@+id/cb_choose"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:button="@drawable/ic_checkbox"
-       android:clickable="false"
-       android:focusable="false"
-       android:layout_marginRight="15dp"
-       android:layout_centerVertical="true"
-       android:duplicateParentState="true"
-       />
-    
-    
-    <TextView 
-        android:id="@+id/tvName"
-        android:layout_toRightOf="@id/cb_choose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/cmName"
-        />
-    
-    <ImageView 
-        android:id="@+id/ivStar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/tvName"
-        android:layout_marginLeft="10dp"
-        android:layout_alignBottom="@id/tvName"
-        android:src="@drawable/ic_single_star"
-        />
-    
-    <TextView 
-        android:id="@+id/tvLoan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/tvName"
-        android:layout_below="@id/tvName"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        style="@style/cmDetail"
-        />
-    
-    <TextView 
-        android:id="@+id/tvSource"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvName"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="80dp"
-        style="@style/cmDetail"
-        />
-    
-    <TextView 
-        android:id="@+id/tvProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:textSize="16sp"
-        />
-    
+    android:layout_height="wrap_content"
+    android:background="@drawable/bkg_section"
+    android:descendantFocusability="blocksDescendants" >
 
-</RelativeLayout>
+    <CheckBox
+        android:id="@+id/cb_choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:button="@drawable/ic_checkbox"
+        android:clickable="false"
+        android:duplicateParentState="true"
+        android:focusable="false" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-10dp"
+        android:paddingBottom="8dp" >
+
+        <TextView
+            android:id="@+id/tvName"
+            style="@style/cmName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="2dp"
+            android:text="sdf" />
+
+        <ImageView
+            android:id="@+id/ivStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tvName"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/tvName"
+            android:src="@drawable/ic_single_star" />
+
+        <TextView
+            android:id="@+id/tvLoan"
+            style="@style/cmDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tvName"
+            android:layout_below="@id/tvName"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:text="sdf" />
+
+        <TextView
+            android:id="@+id/tvSource"
+            style="@style/cmDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvName"
+            android:layout_toRightOf="@id/tvLoan"
+            android:layout_alignBottom="@id/tvLoan"
+            android:text="sdf" />
+
+        <TextView
+            android:id="@+id/tvProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="sdf"
+            android:textSize="11sp" />
+    </RelativeLayout>
+
+</LinearLayout>

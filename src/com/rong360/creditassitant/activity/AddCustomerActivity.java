@@ -195,9 +195,12 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    if (mTel != null) {
 		etTel.setText(mTel);
 	    }
+
+	    ibDelete.setVisibility(View.GONE);
 	    return;
 	}
 	etName.setText(mCustomer.getName());
+	etName.setSelection(mCustomer.getName().length());
 	etTel.setText(mCustomer.getTel());
 	if (mCustomer.getLoan() != 0) {
 	    etLoan.setText(mCustomer.getLoan() + "");
@@ -304,16 +307,14 @@ public class AddCustomerActivity extends BaseActionBar implements
 
 	    save2Db();
 	    // AlarmHelper.startAlarm(this, true);
-	    if (mCustomerId == -1) {
-		go2Detail();
-	    }
-	    closeImm();
-	    finish();
-	    return true;
-
+	}
+	
+	if (mCustomer != null) {
+	    go2Detail();
 	}
 	closeImm();
-	return super.onOptionsItemSelected(item);
+	finish();
+	return true;
     }
 
     private boolean validateInput() {
@@ -405,13 +406,13 @@ public class AddCustomerActivity extends BaseActionBar implements
 
 	String progress = tvProgress.getText().toString();
 	if (progress != null
-		&& progress.equalsIgnoreCase(mCustomer.getProgress())) {
+		&& !progress.equalsIgnoreCase(mCustomer.getProgress())) {
 	    Action action =
 		    new Action(mCustomerId, ActionHandler.TYPE_PROGRESS);
-	    action.setContent(mCustomer.getProgress());
+	    action.setContent(progress);
 	    mActions.add(action);
 	}
-	mCustomer.setProgress(tvProgress.getText().toString());
+	mCustomer.setProgress(progress);
 	if (mAlarm != null) {
 	    mCustomer.setAlarmTime(mAlarm.getTimeInMillis());
 	}
@@ -609,7 +610,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    }
 	    PreferenceHelper.getHelper(this).writePreference(
 		    CloudHelper.PRE_KEY_DELETE_IDS, ids);
-	    
+
 	    CloudHelper.deleteCustomer(this);
 	    finish();
 	} else if (v == ibDelete) {

@@ -24,12 +24,11 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
-import com.rong360.creditassitant.activity.BaseActionBar;
-import com.rong360.creditassitant.activity.ChooseCustomerActivity;
 import com.rong360.creditassitant.util.DisplayUtils;
 import com.rong360.creditassitant.widget.FitTextView.ITitle;
 
@@ -39,6 +38,7 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener,
     private static final String TAG = TitleBarCenter.class.getSimpleName();
 
     private Button mLeft;
+    private Button mRight;
     private TextView mTitle;
     private RelativeLayout mRlCenter;
     private View mIndictator;
@@ -83,14 +83,23 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener,
 	mRlCenter = (RelativeLayout) findViewById(R.id.rlTitle);
 	mLeft.setOnClickListener(this);
 	mLeft.setVisibility(View.VISIBLE);
+	mLeft.setBackgroundResource(R.drawable.ic_group_send);
+	
+	mRight = (Button) findViewById(R.id.add);
+//	mRight.setOnClickListener(this);
     }
 
     public void setTitleListener(OnClickListener onClick) {
 	mRlCenter.setOnClickListener(onClick);
     }
-    
+
     public void setMsgListener(OnClickListener onclick) {
 	mLeft.setOnClickListener(onclick);
+    }
+    
+    public void setAddListener(OnClickListener onclick) {
+	mRight.setVisibility(View.VISIBLE);
+	mRight.setOnClickListener(onclick);
     }
 
     public void displayIndicator(boolean isShow) {
@@ -134,29 +143,33 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener,
 	int margin = DisplayUtils.getPixel(context, 10);
 	for (int i = 0; i < mMenuImpl.size(); i++) {
 	    MenuItem menuItem = mMenuImpl.getItem(i);
-	    Button itemView = new Button(context);
-	    itemView.setId(menuItem.getItemId());
 	    if (menuItem.getIcon() != null) {
-		itemView.setBackgroundDrawable(menuItem.getIcon());
+//		mRight.setVisibility(vi)
+		// itemView = new Button(context);
+		// ((Button)itemView).setBackgroundResource(R.drawable.ic_add);
+		// ((ImageButton)itemView).setBackgroundResource(R.drawable.bkg_blue);
 	    } else {
-		itemView.setText(menuItem.getTitle());	
-		itemView.setTextColor(Color.WHITE);
-		itemView.setBackgroundResource(R.drawable.bkg_green);
+		View itemView;
+		itemView = new Button(context);
+		((Button) itemView).setText(menuItem.getTitle());
+		((Button) itemView).setTextColor(Color.WHITE);
+		((Button) itemView).setBackgroundResource(R.drawable.bkg_green);
+		itemView.setId(menuItem.getItemId());
+		itemView.setOnClickListener(this);
+		mMenuItemMap.put(itemView, menuItem);
+		addView(itemView);
+		// itemView.setPadding(margin, 0, margin, 0);
+		RelativeLayout.LayoutParams param =
+			(LayoutParams) itemView.getLayoutParams();
+		param.rightMargin = margin;
+		param.addRule(RelativeLayout.CENTER_VERTICAL);
+		if (lastId == 0) {
+		    param.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		} else {
+		    param.addRule(RelativeLayout.LEFT_OF, lastId);
+		}
+		lastId = itemView.getId();
 	    }
-	    itemView.setOnClickListener(this);
-	    // itemView.setPadding(margin, 0, margin, 0);
-	    mMenuItemMap.put(itemView, menuItem);
-	    addView(itemView);
-	    RelativeLayout.LayoutParams param =
-		    (LayoutParams) itemView.getLayoutParams();
-	    param.rightMargin = margin;
-	    param.addRule(RelativeLayout.CENTER_VERTICAL);
-	    if (lastId == 0) {
-		param.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-	    } else {
-		param.addRule(RelativeLayout.LEFT_OF, lastId);
-	    }
-	    lastId = itemView.getId();
 	}
     }
 
@@ -189,7 +202,7 @@ public class TitleBarCenter extends RelativeLayout implements OnClickListener,
 		Activity act = (Activity) context;
 		act.onOptionsItemSelected(item);
 	    }
-	}
+	} 
     }
 
     public void setDisplayHomeAsUpEnabled(boolean b) {

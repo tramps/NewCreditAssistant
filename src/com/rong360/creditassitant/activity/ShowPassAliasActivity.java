@@ -218,6 +218,7 @@ public class ShowPassAliasActivity extends Activity implements OnClickListener {
 	    if (leftCount == 0) {
 		Intent intent = new Intent(this, LockActivity.class);
 		startActivity(intent);
+		finish();
 	    }
 	}
 	return isMatch;

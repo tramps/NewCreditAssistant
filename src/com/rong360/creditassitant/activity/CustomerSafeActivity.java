@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.util.CloudHelper;
+import com.rong360.creditassitant.util.ConfirmHelper.OnRefresh;
+import com.rong360.creditassitant.util.ConfirmHelper;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
+import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.PreferenceHelper;
 
 import android.content.Intent;
@@ -32,6 +35,8 @@ public class CustomerSafeActivity extends BaseActionBar implements
     public static final String PRE_KEY_HAS_HINTED = "pre_key_has_hinted";
 
     private boolean mIsSafed;
+    
+    private boolean mIsSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,11 @@ public class CustomerSafeActivity extends BaseActionBar implements
 	    if (customers.size() == 0) {
 		CloudHelper.restoreFromCloud(this);
 	    }
+	    
+	    if (mIsSet) {
+		MyToast.displayFeedback(this, R.drawable.ic_right, "已开启保险箱");
+		mIsSet = false;
+	    }
 	} else {
 	    ivSafe.setImageResource(R.drawable.ic_save_no_normal);
 	    tvTitle.setText("尚未开启客户保险箱");
@@ -91,14 +101,12 @@ public class CustomerSafeActivity extends BaseActionBar implements
     public void onClick(View v) {
 	if (v == btnSafe) {
 	    if (mIsSafed) {
-		mIsSafed = false;
-		PreferenceHelper.getHelper(this).writePreference(
-			PRE_KEY_IS_SAFED, Boolean.FALSE + "");
-		initContent();
+		ConfirmHelper.showSafeDialog(this, mOnClose);
 	    } else {
 		boolean isLogined =
 			Boolean.valueOf(PreferenceHelper.getHelper(this)
 				.readPreference(PRE_KEY_IS_LOGINED));
+		mIsSet = true;
 		if (isLogined) {
 		    mIsSafed = true;
 		    PreferenceHelper.getHelper(this).writePreference(
@@ -112,5 +120,17 @@ public class CustomerSafeActivity extends BaseActionBar implements
 	}
 
     }
+    
+    private OnRefresh mOnClose = new OnRefresh() {
+        
+        @Override
+        public void onRefresh(int pos) {
+            mIsSafed = false;
+		PreferenceHelper.getHelper(CustomerSafeActivity.this).writePreference(
+			PRE_KEY_IS_SAFED, Boolean.FALSE + "");
+		PreferenceHelper.getHelper(CustomerSafeActivity.this).writePreference(PRE_KEY_HAS_HINTED, "true");
+		initContent();
+        }
+    };
 
 }

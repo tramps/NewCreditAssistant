@@ -36,9 +36,8 @@
             android:layout_toRightOf="@id/back"
             android:gravity="center"
             android:layout_centerVertical="true"
-            android:text="df"
+            android:textSize="19sp"
             android:lines="1"
-            android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@android:color/white" />
     </RelativeLayout>
 

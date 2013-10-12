@@ -21,7 +21,10 @@
        android:id="@+id/tv_name"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_marginLeft="5dp"
+       android:layout_marginLeft="-10dp"
+       android:text="sdf"
+       android:textSize="14sp"
+       android:textColor="@color/customer_content"
        android:paddingBottom="2dp"
        />
 

@@ -4,7 +4,10 @@
     android:id="@+id/myScrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
- 	android:padding="5dp">
+    android:scrollbars="none"
+ 	android:paddingLeft="10dp"
+ 	android:paddingRight="10dp"
+ 	android:paddingTop="10dp">
 
 <LinearLayout 
     android:layout_width="match_parent"
@@ -86,6 +89,7 @@
 	        android:layout_alignBottom="@id/tvTel"
 	        style="@style/AddCustomerContent"
 	        android:hint="必填"
+	        android:maxLength="15"
 	        android:inputType="phone"
 	        android:gravity="right"
 	        />
@@ -127,6 +131,7 @@
 	        android:digits="0123456789"
 	        android:cursorVisible="true"
 	        android:gravity="right"
+	        android:maxLength="4"
 	        android:hint=" "
 	        style="@style/AddCustomerContent"
 	        />
@@ -248,7 +253,7 @@
 	         android:layout_height="wrap_content"
 	         style="@style/AddCustomerLabel"
 	         android:layout_marginLeft="8dp"
-	         android:text="更新提醒"
+	         android:text="设置提醒"
 	         />
 	     
 	      <TextView

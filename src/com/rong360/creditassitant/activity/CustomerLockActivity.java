@@ -19,6 +19,8 @@ public class CustomerLockActivity extends BaseActionBar implements OnClickListen
     private TextView tvOPass;
     private TextView tvMPass;
     
+    private boolean mCanClose = false;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +43,11 @@ public class CustomerLockActivity extends BaseActionBar implements OnClickListen
 	if (pass != null && pass.length() > 0) {
 	    rlModifyPass.setOnClickListener(this);
 	    tvMPass.setTextColor(Color.BLACK);
-	    rlOpenPass.setClickable(false);
-	    tvOPass.setTextColor(getResources().getColor(R.color.customer_label));
+	    tvOPass.setText("关闭密码锁");
+	    mCanClose = true;
 	} else {
-	    rlOpenPass.setOnClickListener(this);
+	    mCanClose = false;
+	    tvOPass.setText("打开密码锁");
 	    tvOPass.setTextColor(Color.BLACK);
 	    rlModifyPass.setClickable(false);
 	    tvMPass.setTextColor(getResources().getColor(R.color.customer_label));
@@ -66,6 +69,9 @@ public class CustomerLockActivity extends BaseActionBar implements OnClickListen
     public void onClick(View v) {
 	Intent intent = new Intent(this, SetPassActivity.class);
 	if (v == rlOpenPass) {
+	    if (mCanClose) {
+		intent.putExtra(SetPassActivity.EXTRA_MODE, SetPassActivity.MODE_CLOSE);
+	    }
 	} else if (v == rlModifyPass) {
 	    intent.putExtra(SetPassActivity.EXTRA_MODE, SetPassActivity.MODE_MODIFY);
 	}

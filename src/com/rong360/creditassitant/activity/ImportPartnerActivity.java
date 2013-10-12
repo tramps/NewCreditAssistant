@@ -1,5 +1,6 @@
 package com.rong360.creditassitant.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,19 +13,21 @@ import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.exception.ECode;
 import com.rong360.creditassitant.exception.JsonParseException;
 import com.rong360.creditassitant.json.JsonHelper;
-import com.rong360.creditassitant.model.result.Result;
 import com.rong360.creditassitant.model.result.TResult;
 import com.rong360.creditassitant.task.BaseHttpsManager.RequestParam;
 import com.rong360.creditassitant.task.DomainHelper;
 import com.rong360.creditassitant.task.HandleMessageTask;
 import com.rong360.creditassitant.task.HandleMessageTask.Callback;
 import com.rong360.creditassitant.task.TransferDataTask;
+import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.PreferenceHelper;
 
 public class ImportPartnerActivity extends BaseActionBar implements
 	OnClickListener {
     protected static final String TAG = "ImportPartnerActivity";
+    public static final String EXTRA_MODE = "extra_mode";
+    public static final int MODE_LOGIN = 1;
     public static final String PRE_KEY_BD_TEL = "pre_key_bd_tel";
     public static final String PRE_KEY_BD_PASS = "pre_key_bd_pwd";
     private EditText etTel;
@@ -51,6 +54,10 @@ public class ImportPartnerActivity extends BaseActionBar implements
 	etPass = (EditText) findViewById(R.id.etPass);
 	btnOk = (Button) findViewById(R.id.btnLogin);
 	btnOk.setOnClickListener(this);
+	int mode = getIntent().getIntExtra(EXTRA_MODE, 0);
+	if (mode == MODE_LOGIN) {
+	    btnOk.setText("登录");
+	}
     }
 
     @Override
@@ -60,7 +67,9 @@ public class ImportPartnerActivity extends BaseActionBar implements
 	    params.addNameValuePair("mobile", mTel);
 	    params.addNameValuePair("password", mPass);
 	    params.addNameValuePair("app_type", 2);
-	    String ryj = PreferenceHelper.getHelper(this).readPreference(AuthCodeActivity.EXTRA_TEL);
+	    String ryj =
+		    PreferenceHelper.getHelper(this).readPreference(
+			    AuthCodeActivity.EXTRA_TEL);
 	    if (ryj == null) {
 		ryj = "";
 	    }
@@ -86,7 +95,8 @@ public class ImportPartnerActivity extends BaseActionBar implements
 				    .writePreference(PRE_KEY_BD_PASS, mPass);
 			    finish();
 			    setResult(RESULT_OK);
-			} else if (tResult.mResult.getError() == 1 || tResult.mResult.getError() == 110) {
+			} else if (tResult.mResult.getError() == 1
+				|| tResult.mResult.getError() == 110) {
 			    MyToast.makeText(ImportPartnerActivity.this,
 				    "用户不存在").show();
 			} else if (tResult.mResult.getError() == 2) {
@@ -95,6 +105,14 @@ public class ImportPartnerActivity extends BaseActionBar implements
 			} else if (tResult.mResult.getError() == 3) {
 			    MyToast.makeText(ImportPartnerActivity.this,
 				    "用户被封禁").show();
+			} else if (tResult.mResult.getError() == 120) {
+			    Intent intent =
+				    new Intent(ImportPartnerActivity.this,
+					    ResetPwdActivity.class);
+			    intent.putExtra(AuthCodeActivity.EXTRA_TEL, mTel);
+			    IntentUtil.startActivity(ImportPartnerActivity.this,
+				    intent);
+			    finish();
 			}
 		    } catch (JsonParseException e) {
 			Log.e(TAG, e.toString());
@@ -123,12 +141,6 @@ public class ImportPartnerActivity extends BaseActionBar implements
 	if (mTel.length() != 11) {
 	    MyToast.makeText(this, "请输入正确的手机号码", Toast.LENGTH_SHORT).show();
 	    etTel.requestFocus();
-	    return false;
-	}
-
-	if (mPass.length() != 6) {
-	    MyToast.makeText(this, "请输入六位数字密码", Toast.LENGTH_SHORT).show();
-	    etPass.requestFocus();
 	    return false;
 	}
 

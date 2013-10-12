@@ -11,6 +11,15 @@
         <item name="titleBarStyle">@style/TitleBarStyle</item>
     </style>
     
+    <style name="BottomTheme" parent="@android:style/Theme.Light">
+        <item name="android:windowBackground">@color/bkg_color</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/BottomAnimation</item>
+        <!-- Widget -->
+        <item name="titleBarStyle">@style/TitleBarStyle</item>
+    </style>
+    
     <style name="Dialog.PushUp" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>

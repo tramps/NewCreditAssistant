@@ -183,10 +183,10 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
     @Override
     public void onClick(View v) {
 	Intent intent = new Intent(this, ChooseOptionActivity.class);
-	if (v == rlSource) {
+//	if (v == rlSource) {
 	    intent.putExtra(ChooseOptionActivity.EXTRA_CHOOSE_TYPE,
 		    ChooseOptionActivity.TYPE_CHECKBOX);
-	}
+//	}
 	intent.putExtra(ChooseOptionActivity.EXTRA_TITLE, mTitleMap.get(v));
 	int index = mQueryIndexMap.get(v);
 	for (int i = 0; i < mIndexer.size(); i++) {
@@ -196,8 +196,9 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
 		String[] segs = key.split(",");
 		if (segs.length > 2)
 		if (index != QueryIndexer.SOURCE) {
-		    intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_INDEX,
-			    Integer.parseInt(segs[1]));
+//		    intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_INDEX,
+//			    Integer.parseInt(segs[1]));
+		    intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_IDS, segs[1]);
 		} else {
 		    intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_IDS, segs[1]);
 		}
@@ -224,7 +225,7 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
 	    }
 	    String[] res = new String[3];
 	    res[0] = mCurrentIndex + "";
-	    if (mCurrentIndex == QueryIndexer.SOURCE) {
+//	    if (mCurrentIndex == QueryIndexer.SOURCE) {
 		int[] ids = data.getIntArrayExtra(EXTRA_RESULT_ID);
 		String[] tis = data.getStringArrayExtra(EXTRA_RESULT_TEXT);
 		String title = "";
@@ -242,22 +243,22 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
 		res[1] = id;
 		res[2] = title;
 
-	    } else {
-		res[1] = "" + data.getIntExtra(EXTRA_RESULT_ID, -1);
-		res[2] = data.getStringExtra(EXTRA_RESULT_TEXT);
-	    }
+//	    } else {
+//		res[1] = "" + data.getIntExtra(EXTRA_RESULT_ID, -1);
+//		res[2] = data.getStringExtra(EXTRA_RESULT_TEXT);
+//	    }
 	    mIndexer.add(mCurrentIndex);
 	    mValues.add(res[0] + "," + res[1] + "," + res[2]);
-	    if (mCurrentIndex == QueryIndexer.SOURCE) {
+//	    if (mCurrentIndex == QueryIndexer.SOURCE) {
 		String source = res[2].replace("#", ", ");
 		if (source.length() > 2) {
 		    mChooseMap.get(rlCurrent).setText(source.substring(0, source.length() - 2));
 		} else {
 		    mChooseMap.get(rlCurrent).setText("");
 		}
-	    } else {
-		mChooseMap.get(rlCurrent).setText(res[2]);
-	    }
+//	    } else {
+//		mChooseMap.get(rlCurrent).setText(res[2]);
+//	    }
 	    Log.i(TAG, "index size:" + mIndexer.size());
 	    Log.i(TAG, "value size:" + mValues.size());
 	}

@@ -29,7 +29,6 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="35dp"
 	        android:textColor="@android:color/white"
-	        android:text="sdf"
 	        android:textSize="18sp"
 	        />
 	
@@ -40,8 +39,11 @@
 	        android:layout_below="@id/tvName"
 	        android:textSize="16sp"
 	        style="@style/cmDetail"
-	        android:maxLength="10"
+	        android:singleLine="true"
 	        android:ellipsize="end"
+	        android:layout_marginRight="15dp"
+	        android:layout_alignLeft="@id/tvName"
+	        android:layout_toLeftOf="@id/tvProgress"
 	        android:layout_marginTop="10dp"
 	        />
 	    
@@ -51,7 +53,6 @@
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/tvComment"
 	        style="@style/cmDetail"
-	        android:text="sdf"
 	        />
 	    
 	    <Button 
@@ -73,8 +74,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_above="@+id/tvLast"
 	        android:layout_alignRight="@+id/btnClose"
-	        android:layout_marginRight="15dp"
-	        android:text="sdf" />
+	        android:layout_marginRight="15dp"/>
 
 	</RelativeLayout>
 

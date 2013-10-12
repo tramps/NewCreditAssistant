@@ -80,7 +80,7 @@ public class ChooseOptionActivity extends BaseActionBar {
 	String title = getIntent().getStringExtra(EXTRA_TITLE);
 	getSupportActionBar(false).setTitle(title);
 	mSelectedIndex = getIntent().getIntExtra(EXTRA_SELECTED_INDEX, -1);
-	if (title.equalsIgnoreCase(TITLE_SOURCE) && mType == TYPE_CHECKBOX) {
+	if (mType == TYPE_CHECKBOX) {
 	    String ids = getIntent().getStringExtra(EXTRA_SELECTED_IDS);
 	    if (ids != null && ids.length() > 0) {
 		String[] idDs = ids.split("#");
@@ -118,20 +118,21 @@ public class ChooseOptionActivity extends BaseActionBar {
 		    }
 		}
 	    } else {
-		mItems = new String[] { "自有客户", "融360导入客户"};
+		mItems = new String[] { "自有客户", "融360导入客户" };
 		for (int i = 0; i < mItems.length; i++) {
 		    if (mItems[i].equalsIgnoreCase(current)) {
 			mSelectedIndex = i;
 		    }
 		}
 	    }
-	    if (mSelectedIds != null)
-		for (int id : mSelectedIds) {
-		    mSelected.put(id, mItems[id]);
-		}
 	} else {
 	    mItems = getResources().getStringArray(mOpRsMap.get(title));
 	}
+
+	if (mSelectedIds != null)
+	    for (int id : mSelectedIds) {
+		mSelected.put(id, mItems[id]);
+	    }
 
 	mAdapter = new OptionAdapter(this, mType, mItems);
 	lvOption.setAdapter(mAdapter);

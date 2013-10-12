@@ -92,10 +92,12 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	    tvName.setText(mTel);
 	    tvTel.setVisibility(View.GONE);
 	    tvCusomter.setText("添加客户");
+	    ivCustomer.setImageResource(R.drawable.ic_add_customer);
 	} else {
 	    tvName.setText(mCustomer.getName());
 	    tvTel.setText(mCustomer.getTel());
 	    tvCusomter.setText("查看客户");
+	    ivCustomer.setImageResource(R.drawable.ic_exist);
 	}
 
 	if (mHistory.size() > 0) {

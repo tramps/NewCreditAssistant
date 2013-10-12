@@ -32,7 +32,7 @@
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:layout_marginTop="12dp"
-    	    android:padding="2dp"
+    	    android:padding="1dp"
     	    android:background="@drawable/bkg_single_round"
     	    >
     	    <TableRow 
@@ -42,7 +42,8 @@
     	            android:layout_height="match_parent"
     	            android:orientation="vertical"
     	            android:layout_gravity="center"
-    	            android:background="@drawable/bkg_section"
+    	            android:layout_marginLeft="1dp"
+    	            android:background="@drawable/bkg_left"
     	            android:descendantFocusability="blocksDescendants"
     	            android:gravity="center"
     	            android:id="@+id/llTel"
@@ -60,6 +61,8 @@
     	                android:layout_height="wrap_content"
     	                android:layout_gravity="center"
     	                android:text="电话"
+    	                style="@style/CustomerDetailLoan"
+                        android:layout_marginTop="4dp"
     	                />
     	            
     	        </LinearLayout>
@@ -93,6 +96,8 @@
     	                android:layout_height="wrap_content"
     	                android:layout_gravity="center"
     	                android:text="短信"
+    	                style="@style/CustomerDetailLoan"
+                        android:layout_marginTop="3dp"
     	                />
     	            
     	        </LinearLayout>
@@ -110,7 +115,8 @@
     	            android:gravity="center"
     	            android:layout_gravity="center"
     	            android:layout_weight="1"
-    	            android:background="@drawable/bkg_section"
+    	            android:layout_marginRight="1dp"
+    	            android:background="@drawable/bkg_right"
     	            android:descendantFocusability="blocksDescendants"
     	            android:orientation="vertical"
     	            >
@@ -127,6 +133,8 @@
     	                android:layout_height="wrap_content"
     	                android:layout_gravity="center"
     	                android:text="添加客户"
+    	                style="@style/CustomerDetailLoan"
+                        android:layout_marginTop="5dp"
     	                />
     	            
     	        </LinearLayout>

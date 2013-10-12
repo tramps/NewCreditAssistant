@@ -265,6 +265,8 @@ public class JsonHelper {
 	    String typeName = fType.getSimpleName();
 	    if (typeName.equals("int") || typeName.equals("Integer")) {
 		return Integer.valueOf(value.toString());
+	    } else if (typeName.equals("long") || typeName.equals("Long")) {
+		return Long.valueOf(value.toString());
 	    } else if (typeName.equals("boolean") || typeName.equals("Boolean")) {
 		return Boolean.valueOf(value.toString());
 	    } else if (typeName.equals("double") || typeName.equals("Double")) {
@@ -333,10 +335,10 @@ public class JsonHelper {
 		discard = containAnnotation(member, Discard.class);
 		if (discard)
 		    continue;
-		key = member.getName().substring(1);
-		String first = key.substring(0, 1).toLowerCase();
-		String left = key.substring(1);
-		key = first + left;
+		key = member.getName().substring(1).toLowerCase();
+//		String first = key.substring(0, 1).toLowerCase();
+//		String left = key.substring(1);
+//		key = first + left;
 		if (member instanceof Field) {
 		    Field field = (Field) member;
 		    value = field.get(instance);
