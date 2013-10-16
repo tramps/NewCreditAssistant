@@ -21,6 +21,8 @@ public abstract class HandleMessageTask extends BaseTask<Void, Object, Object> {
     private static Map<Integer, Object> mDefaultCodeMsg;
 
     protected Callback mCallback;
+    
+    protected boolean mCheckNet = true;
 
     static {
 	mDefaultCodeMsg = new HashMap<Integer, Object>();
@@ -60,7 +62,7 @@ public abstract class HandleMessageTask extends BaseTask<Void, Object, Object> {
 
     @Override
     protected Object doInBackground(Void... params) {
-	if (!NetUtil.isNetworkAvailable(mContext)) {
+	if (mCheckNet && !NetUtil.isNetworkAvailable(mContext)) {
 	    return null;
 	    }
 	return doInBackground();

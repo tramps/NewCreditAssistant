@@ -21,6 +21,8 @@ import com.rong360.creditassitant.model.HistoryMsg;
 import com.rong360.creditassitant.model.HistoryMsgHandler;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.MyToast;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 public class SendGroupSmsActivity extends BaseActionBar implements
 	OnClickListener {
@@ -136,10 +138,13 @@ public class SendGroupSmsActivity extends BaseActionBar implements
     public void onClick(View v) {
 	closeImm();
 	if (v == btnAdd) {
+	    MobclickAgent.onEvent(this, RongStats.SEND_ADD);
 	    addMoreCustomer();
 	} else if (v == btnHistory) {
+	    MobclickAgent.onEvent(this, RongStats.SEND_HTY_SMS);
 	    chooseHistory();
 	} else if (v == btnSend) {
+	    MobclickAgent.onEvent(this, RongStats.SEND_SMS);
 	    if (etMsg.getText().toString().trim().length() == 0) {
 		MyToast.makeText(this, "请输入短信内容~", Toast.LENGTH_SHORT).show();
 		return;

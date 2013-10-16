@@ -228,7 +228,7 @@ public class GlobalValue {
 
 		@Override
 		public int compare(Customer lhs, Customer rhs) {
-		    return rhs.getTime() >= lhs.getTime() ? 1 : -1;
+		    return rhs.getTime() - lhs.getTime() > 0 ? 1 : -1;
 		}
 	    });
 	}

@@ -1,6 +1,9 @@
 package com.rong360.creditassitant.util;
 
+import java.io.IOException;
+
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
@@ -20,7 +23,27 @@ public class MPlayHelper {
 
     public static void playSound(Context context) {
 	// if (player == null || vibrator == null) {
-	player = MediaPlayer.create(context, R.raw.sound);
+	AssetFileDescriptor afd =
+		context.getResources().openRawResourceFd(R.raw.sound);
+	if (afd == null) {
+	    return;
+	}
+	player = new MediaPlayer();
+	try {
+	    player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
+		    afd.getLength());
+	    player.setAudioStreamType(AudioManager.STREAM_RING);
+	    player.prepare();
+	} catch (IllegalArgumentException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (IllegalStateException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (IOException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	vibrator =
 		(Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 	// }
@@ -30,11 +53,11 @@ public class MPlayHelper {
 	    AudioManager am =
 		    (AudioManager) context
 			    .getSystemService(Context.AUDIO_SERVICE);
-	    mUserVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-	    mMaxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-	    am.setStreamVolume(AudioManager.STREAM_MUSIC,
-		    (int) (mMaxVolume * 0.8), 0);
-	    // player.start();
+	    mUserVolume = am.getStreamVolume(AudioManager.STREAM_RING);
+	    mMaxVolume = am.getStreamMaxVolume(AudioManager.STREAM_RING);
+	    am.setStreamVolume(AudioManager.STREAM_RING,
+		    (int) (mMaxVolume * 0.75), 0);
+	    player.start();
 	}
 	if (vibrator != null) {
 	    vibrator.vibrate(MAXIMIUM_DURATION);
@@ -45,22 +68,30 @@ public class MPlayHelper {
 	if (player != null) {
 	    Log.i("AlarmHelper", "silented");
 	    try {
+		if (player.isLooping()) {
+		    player.setLooping(false);
+		}
 		player.pause();
 		player.stop();
 		player.release();
 	    } catch (IllegalStateException e) {
+		AudioManager am =
+			    (AudioManager) context
+				    .getSystemService(Context.AUDIO_SERVICE);
+		    am.setStreamVolume(AudioManager.STREAM_RING, 0, 0);
 	    }
 
 	    // player.setVolume(0, 0);
 	    AudioManager am =
 		    (AudioManager) context
 			    .getSystemService(Context.AUDIO_SERVICE);
-	    am.setStreamVolume(AudioManager.STREAM_MUSIC, mUserVolume, 0);
+	    am.setStreamVolume(AudioManager.STREAM_RING, mUserVolume, 0);
 	} else {
-	    Log.i("AlarmHelper", "new pause");
-	    player = MediaPlayer.create(context, R.raw.sound);
-	    player.pause();
-	    player.stop();
+	    Log.i("AlarmHelper", "ring zero");
+	    AudioManager am =
+		    (AudioManager) context
+			    .getSystemService(Context.AUDIO_SERVICE);
+	    am.setStreamVolume(AudioManager.STREAM_RING, 0, 0);
 	}
 
 	if (vibrator != null) {

@@ -1,19 +1,15 @@
 package com.rong360.creditassitant.util;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.rong360.creditassitant.activity.AlarmActivity;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.receiver.AlarmReceiver;
 

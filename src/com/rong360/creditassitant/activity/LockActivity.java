@@ -13,9 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
-import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 public class LockActivity extends Activity {
 
@@ -24,7 +25,7 @@ public class LockActivity extends Activity {
     private TextView tvLeftTime;
     private Button btnUnlock;
 
-    private final int mTotalTime = 1 * 60;
+    private final int mTotalTime = 10 * 60;
     private final int mMinute = 60;
 
     private long mStartTime;
@@ -41,7 +42,9 @@ public class LockActivity extends Activity {
 	    if (leftTime <= 0) {
 		PreferenceHelper.getHelper(LockActivity.this).removePreference(
 			PRE_KEY_START_LOCK_TIME);
-		Intent intent = new Intent(LockActivity.this, ShowPassAliasActivity.class);
+		Intent intent =
+			new Intent(LockActivity.this,
+				ShowPassAliasActivity.class);
 		startActivity(intent);
 		finish();
 		mStop = true;
@@ -75,22 +78,30 @@ public class LockActivity extends Activity {
 	mStop = false;
 	startTiming();
     }
-    
+
     @Override
     public void onBackPressed() {
-//	stopTiming();
-//	super.onBackPressed();
+	// stopTiming();
+	// super.onBackPressed();
     }
-    
+
     private void stopTiming() {
 	mStop = true;
+	mHandler.removeMessages(0);
+    }
+
+    @Override
+    protected void onResume() {
+	super.onResume();
+	mStop = false;
+	startTiming();
+	MobclickAgent.onResume(this);
     }
     
     @Override
-    protected void onResume() {
-        super.onResume();
-        mStop = false;
-        startTiming();
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onResume(this);
     }
 
     protected CharSequence getDisplay(long leftTime) {
@@ -121,30 +132,41 @@ public class LockActivity extends Activity {
     private void initContent() {
 	tvLeftTime = (TextView) findViewById(R.id.tvLeftTime);
 	btnUnlock = (Button) findViewById(R.id.btnUnlock);
-	btnUnlock.setOnClickListener(new OnClickListener() {
-	    @Override
-	    public void onClick(View v) {
-		Intent intent = new Intent(LockActivity.this, LoginActivity.class);
-		intent.putExtra(EXTRA_LOCK, false);
-		startActivityForResult(intent, 10001);
-		stopTiming();
-	    }
-	});
+	String tel =
+		PreferenceHelper.getHelper(this).readPreference(
+			AuthCodeActivity.EXTRA_TEL);
+	if (tel != null && tel.length() > 0) {
+	    btnUnlock.setOnClickListener(new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+		    MobclickAgent.onEvent(LockActivity.this, RongStats.LOCK_LOGIN);
+		    Intent intent =
+			    new Intent(LockActivity.this, LoginActivity.class);
+		    intent.putExtra(EXTRA_LOCK, false);
+		    startActivityForResult(intent, 10001);
+		    stopTiming();
+		}
+	    });
+	} else {
+	    btnUnlock.setVisibility(View.GONE);
+	}
     }
-    
+
     @Override
     protected void
-            onActivityResult(int requestCode, int resultCode, Intent data) {
+	    onActivityResult(int requestCode, int resultCode, Intent data) {
 	if (resultCode == RESULT_OK) {
 	    stopTiming();
-	    PreferenceHelper.getHelper(this).removePreference(SetPassActivity.PRE_KEY_PASS);
-	    PreferenceHelper.getHelper(this).removePreference(PRE_KEY_START_LOCK_TIME);
+	    PreferenceHelper.getHelper(this).removePreference(
+		    SetPassActivity.PRE_KEY_PASS);
+	    PreferenceHelper.getHelper(this).removePreference(
+		    PRE_KEY_START_LOCK_TIME);
 	    MyToast.displayFeedback(this, R.drawable.ic_right, "密码已关闭");
 	    new Handler().postDelayed(new Runnable() {
-	        @Override
-	        public void run() {
-	    	    LockActivity.this.finish();
-	        }
+		@Override
+		public void run() {
+		    LockActivity.this.finish();
+		}
 	    }, 200);
 	}
     }

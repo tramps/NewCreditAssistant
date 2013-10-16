@@ -12,6 +12,7 @@ import static com.rong360.creditassitant.activity.ChooseOptionActivity.TITLE_PRO
 import static com.rong360.creditassitant.activity.ChooseOptionActivity.TITLE_SOURCE;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import android.content.Intent;
@@ -26,6 +27,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.model.CustomerHandler;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 public class AdvancedFilterActiviy extends BaseActionBar implements
 	OnClickListener {
@@ -74,6 +78,14 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
 
 	super.onCreate(savedInstanceState);
 	getSupportActionBar().setTitle("高级筛选");
+
+	ArrayList<String> query =
+		getIntent().getStringArrayListExtra(
+			AdvancedFilterActiviy.EXTRA_QUERY);
+	if (query != null) {
+	    mValues.addAll(query);
+	    initContent();
+	}
     }
 
     @Override
@@ -172,7 +184,41 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
     }
 
     private void initContent() {
-
+	for (String query : mValues) {
+	    String[] qqqs = query.split(",");
+	    int index = Integer.parseInt(qqqs[0]);
+	    if (index == QueryIndexer.STAR) {
+		mIndexer.add(Integer.valueOf(qqqs[0]));
+		tvStar.setText(qqqs[2].replaceAll("#", ","));
+	    } else if (index == QueryIndexer.TIME) {
+		mIndexer.add(Integer.valueOf(qqqs[0]));
+		tvTime.setText(qqqs[2].replaceAll("#", ","));
+	    } else if (index == QueryIndexer.PROGRESS) {
+		mIndexer.add(Integer.valueOf(qqqs[0]));
+		tvProgress.setText(qqqs[2].replaceAll("#", ","));
+	    } else if (index == QueryIndexer.SOURCE) {
+		mIndexer.add(Integer.valueOf(qqqs[0]));
+		tvSource.setText(qqqs[2].replaceAll("#", ","));
+	    } else if (index == QueryIndexer.BANK) {
+		mIndexer.add(Integer.valueOf(qqqs[0]));
+		tvBank.setText(qqqs[2].replaceAll("#", ","));
+	    } else if (index == QueryIndexer.CASH) {
+		mIndexer.add(Integer.valueOf(qqqs[0]));
+		tvCash.setText(qqqs[2].replaceAll("#", ","));
+	    } else if (index == QueryIndexer.IDENTITY) {
+		mIndexer.add(Integer.valueOf(qqqs[0]));
+		tvId.setText(qqqs[2].replaceAll("#", ","));
+	    } else if (index == QueryIndexer.CREDIT) {
+		mIndexer.add(Integer.valueOf(qqqs[0]));
+		tvCreditRecord.setText(qqqs[2].replaceAll("#", ","));
+	    } else if (index == QueryIndexer.HOUSE) {
+		mIndexer.add(Integer.valueOf(qqqs[0]));
+		tvHouse.setText(qqqs[2].replaceAll("#", ","));
+	    } else if (index == QueryIndexer.CAR) {
+		mIndexer.add(Integer.valueOf(qqqs[0]));
+		tvCar.setText(qqqs[2].replaceAll("#", ","));
+	    }
+	}
     }
 
     @Override
@@ -183,11 +229,14 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
     @Override
     public void onClick(View v) {
 	Intent intent = new Intent(this, ChooseOptionActivity.class);
-//	if (v == rlSource) {
-	    intent.putExtra(ChooseOptionActivity.EXTRA_CHOOSE_TYPE,
-		    ChooseOptionActivity.TYPE_CHECKBOX);
-//	}
+	// if (v == rlSource) {
+	intent.putExtra(ChooseOptionActivity.EXTRA_CHOOSE_TYPE,
+		ChooseOptionActivity.TYPE_CHECKBOX);
+	// }
 	intent.putExtra(ChooseOptionActivity.EXTRA_TITLE, mTitleMap.get(v));
+	HashMap<String, String> evenMap = new HashMap<String, String>();
+	evenMap.put("操作项", mTitleMap.get(v));
+	MobclickAgent.onEvent(this, RongStats.ADV_ITEM, evenMap);
 	int index = mQueryIndexMap.get(v);
 	for (int i = 0; i < mIndexer.size(); i++) {
 	    if (mIndexer.get(i) == index) {
@@ -195,13 +244,17 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
 		Log.i(TAG, key);
 		String[] segs = key.split(",");
 		if (segs.length > 2)
-		if (index != QueryIndexer.SOURCE) {
-//		    intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_INDEX,
-//			    Integer.parseInt(segs[1]));
-		    intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_IDS, segs[1]);
-		} else {
-		    intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_IDS, segs[1]);
-		}
+		    if (index != QueryIndexer.SOURCE) {
+			// intent.putExtra(ChooseOptionActivity.EXTRA_SELECTED_INDEX,
+			// Integer.parseInt(segs[1]));
+			intent.putExtra(
+				ChooseOptionActivity.EXTRA_SELECTED_IDS,
+				segs[1]);
+		    } else {
+			intent.putExtra(
+				ChooseOptionActivity.EXTRA_SELECTED_IDS,
+				segs[1]);
+		    }
 	    }
 	}
 	mCurrentIndex = mQueryIndexMap.get(v);
@@ -225,40 +278,41 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
 	    }
 	    String[] res = new String[3];
 	    res[0] = mCurrentIndex + "";
-//	    if (mCurrentIndex == QueryIndexer.SOURCE) {
-		int[] ids = data.getIntArrayExtra(EXTRA_RESULT_ID);
-		String[] tis = data.getStringArrayExtra(EXTRA_RESULT_TEXT);
-		String title = "";
-		String id = "";
-		if (ids.length > 0) {
-		    for (int idd : ids) {
-			id += idd + "#";
-		    }
-		    id = id.substring(0, id.length() - 1);
-		    for (String t : tis) {
-			title += t + "#";
-		    }
-		    title.substring(0, title.length() - 1);
+	    // if (mCurrentIndex == QueryIndexer.SOURCE) {
+	    int[] ids = data.getIntArrayExtra(EXTRA_RESULT_ID);
+	    String[] tis = data.getStringArrayExtra(EXTRA_RESULT_TEXT);
+	    String title = "";
+	    String id = "";
+	    if (ids.length > 0) {
+		for (int idd : ids) {
+		    id += idd + "#";
 		}
-		res[1] = id;
-		res[2] = title;
+		id = id.substring(0, id.length() - 1);
+		for (String t : tis) {
+		    title += t + "#";
+		}
+		title.substring(0, title.length() - 1);
+	    }
+	    res[1] = id;
+	    res[2] = title;
 
-//	    } else {
-//		res[1] = "" + data.getIntExtra(EXTRA_RESULT_ID, -1);
-//		res[2] = data.getStringExtra(EXTRA_RESULT_TEXT);
-//	    }
+	    // } else {
+	    // res[1] = "" + data.getIntExtra(EXTRA_RESULT_ID, -1);
+	    // res[2] = data.getStringExtra(EXTRA_RESULT_TEXT);
+	    // }
 	    mIndexer.add(mCurrentIndex);
 	    mValues.add(res[0] + "," + res[1] + "," + res[2]);
-//	    if (mCurrentIndex == QueryIndexer.SOURCE) {
-		String source = res[2].replace("#", ", ");
-		if (source.length() > 2) {
-		    mChooseMap.get(rlCurrent).setText(source.substring(0, source.length() - 2));
-		} else {
-		    mChooseMap.get(rlCurrent).setText("");
-		}
-//	    } else {
-//		mChooseMap.get(rlCurrent).setText(res[2]);
-//	    }
+	    // if (mCurrentIndex == QueryIndexer.SOURCE) {
+	    String source = res[2].replace("#", ", ");
+	    if (source.length() > 2) {
+		mChooseMap.get(rlCurrent).setText(
+			source.substring(0, source.length() - 2));
+	    } else {
+		mChooseMap.get(rlCurrent).setText("");
+	    }
+	    // } else {
+	    // mChooseMap.get(rlCurrent).setText(res[2]);
+	    // }
 	    Log.i(TAG, "index size:" + mIndexer.size());
 	    Log.i(TAG, "value size:" + mValues.size());
 	}

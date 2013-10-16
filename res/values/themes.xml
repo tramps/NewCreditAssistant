@@ -38,4 +38,8 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
     
+    <style name="Theme.Dialog.NoFrame" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+    
 </resources>

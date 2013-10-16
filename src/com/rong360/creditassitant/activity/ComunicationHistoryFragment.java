@@ -24,7 +24,9 @@ import com.rong360.creditassitant.model.LocationHelper;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
+import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.widget.TitleBarCenter;
+import com.umeng.analytics.MobclickAgent;
 
 public class ComunicationHistoryFragment extends BaseFragment {
     private static final String TAG = ComunicationHistoryFragment.class
@@ -43,6 +45,8 @@ public class ComunicationHistoryFragment extends BaseFragment {
 	setHasOptionsMenu(true);
 	setReuseOldViewEnable(true);
 	super.onCreate(savedInstanceState);
+	
+	MobclickAgent.onEvent(mContext, RongStats.CMU_HTR);
 
 	TitleBarCenter center = getSupportActionBarCenter(Boolean.FALSE);
 	center.hideLeft();

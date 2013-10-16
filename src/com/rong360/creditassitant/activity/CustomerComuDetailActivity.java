@@ -27,6 +27,8 @@ import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 public class CustomerComuDetailActivity extends BaseActionBar implements
 	OnClickListener {
@@ -156,20 +158,24 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	if (v == llCustomer) {
 	    Intent intent;
 	    if (mCustomer == null) {
+		MobclickAgent.onEvent(this, RongStats.CMU_ADD);
 		Log.i(TAG, "tel:" + mTel);
 		intent = new Intent(this, AddCustomerActivity.class);
 		intent.putExtra(AddCustomerActivity.EXTRA_TEL, mTel);
 		finish();
 	    } else {
+		MobclickAgent.onEvent(this, RongStats.CMU_VIEW);
 		intent = new Intent(this, CustomerDetailActivity.class);
 		intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
 			mCustomerId);
 	    }
 	    IntentUtil.startActivity(this, intent);
 	} else if (v == llTel) {
+	    MobclickAgent.onEvent(this, RongStats.CMU_TEL);
 	    Log.i(TAG, "tel:" + mTel);
 	    IntentUtil.startTel(this, mTel);
 	} else if (v == llMsg) {
+	    MobclickAgent.onEvent(this, RongStats.CMU_MSG);
 	    String customerInfo;
 	    if (mCustomer == null) {
 		customerInfo = mTel + "#" + mTel;

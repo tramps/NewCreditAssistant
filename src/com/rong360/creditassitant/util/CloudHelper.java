@@ -23,6 +23,7 @@ import com.rong360.creditassitant.exception.JsonParseException;
 import com.rong360.creditassitant.json.JsonHelper;
 import com.rong360.creditassitant.model.Action;
 import com.rong360.creditassitant.model.ActionHandler;
+import com.rong360.creditassitant.model.Contact;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
 import com.rong360.creditassitant.model.HistoryMsg;
@@ -38,8 +39,10 @@ import com.rong360.creditassitant.task.BaseHttpsManager.RequestParam;
 import com.rong360.creditassitant.task.DomainHelper;
 import com.rong360.creditassitant.task.HandleMessageTask;
 import com.rong360.creditassitant.task.PostDataTask;
+import com.rong360.creditassitant.task.WaitingTask;
 import com.rong360.creditassitant.task.HandleMessageTask.Callback;
 import com.rong360.creditassitant.task.TransferDataTask;
+import com.umeng.analytics.MobclickAgent;
 
 public class CloudHelper {
     protected static final String TAG = "CloudHelper";
@@ -202,6 +205,7 @@ public class CloudHelper {
 
     public static void syncOrder(final Context context,
 	    final boolean showNotification, final IOnFinished onFinish) {
+	MobclickAgent.onEvent(context, RongStats.IMP_RONG_START);
 	PreferenceHelper helper = PreferenceHelper.getHelper(context);
 	String tel =
 		helper.readPreference(ImportPartnerActivity.PRE_KEY_BD_TEL);
@@ -234,30 +238,20 @@ public class CloudHelper {
 				JsonHelper.parseJSONToObject(SyncResult.class,
 					task.getResult());
 			if (res.mResult.getError() == (ECode.SUCCESS)) {
-			    PreferenceHelper helper =
-				    PreferenceHelper.getHelper(context);
-			    Log.i(TAG, "total count: " + res.mRes_total);
-			    transfer2Customers(res, context);
-			    helper.writePreference(
-				    AuthorisePartnerActivity.PRE_KEY_LAST_SYNC,
-				    "" + System.currentTimeMillis());
-			    if (showNotification) {
-				NotificationHelper.showNotification(context,
-					res.mRes_total);
-			    } else {
-				MyToast.makeText(context,
-					"已同步" + res.mRes_total + "个订单").show();
-			    }
-			    if (onFinish != null)
+			    transfer2Customers(showNotification, res, context, onFinish);
 			    onFinish.onSuccess(res.mRes_total);
+			    MobclickAgent.onEvent(context, RongStats.IMP_RONG_SUC);
 			    // finish();
 			} else if (res.mResult.getError() == 1) {
 			    MyToast.makeText(context, "后端不可用").show();
+			    MobclickAgent.onEvent(context, RongStats.IMP_RONG_FAIL);
 			}
+			
 		    } catch (JsonParseException e) {
 			Log.e(TAG, e.toString());
 			if (onFinish != null)
 			onFinish.onSuccess(0);
+			MobclickAgent.onEvent(context, RongStats.IMP_RONG_FAIL);
 		    }
 		}
 
@@ -265,6 +259,7 @@ public class CloudHelper {
 		public void onFail(HandleMessageTask task, Object t) {
 		    if (onFinish != null)
 		    onFinish.onFail();
+		    MobclickAgent.onEvent(context, RongStats.IMP_RONG_FAIL);
 		}
 	    });
 
@@ -322,61 +317,38 @@ public class CloudHelper {
 	tTask.execute();
     }
 
-    protected static void transfer2Customers(SyncResult res, Context context) {
-	// ArrayList<Customer> allCustomers =
-	// GlobalValue.getIns().getAllCustomers();
-	HashMap<String, Customer> phoneMap =
-		GlobalValue.getIns().getPhoneNameMap();
-	CustomerHandler handler =
-		GlobalValue.getIns().getCustomerHandler(context);
-	int i = 0;
-	int maxId = -1;
+    protected static void transfer2Customers(final boolean showNotification, final SyncResult res, final Context context, final IOnFinished onFinish) {
+	ImportTask task = new ImportTask(context, res);
+	task.setCallback(new Callback() {
+	    
+	    @Override
+	    public void onSuccess(HandleMessageTask task, Object t) {
+		PreferenceHelper helper =
+			    PreferenceHelper.getHelper(context);
+		    Log.i(TAG, "total count: " + res.mRes_total);
+		    helper.writePreference(
+			    AuthorisePartnerActivity.PRE_KEY_LAST_SYNC,
+			    "" + System.currentTimeMillis());
+		    if (showNotification) {
+			NotificationHelper.showNotification(context,
+				res.mRes_total);
+		    } else {
+			MyToast.makeText(context,
+				"已同步" + res.mRes_total + "个订单").show();
+		    }
+		    if (onFinish != null) { 
+			onFinish.onSuccess(res.mRes_total);
+		    }
+	    } 
+	    
+	    @Override
+	    public void onFail(HandleMessageTask task, Object t) {
+		// TODO Auto-generated method stub
+		
+	    }
+	});
 	
-	Calendar calendar = Calendar.getInstance();
-	for (BDCustomer bd : res.mData) {
-	    // Log.i(TAG, "mobile :" + bd.mUser_mobile);
-	    String mobile = TelHelper.getPureTel(bd.mUser_mobile);
-	    Customer c = phoneMap.get(mobile);
-	    if (c != null) {
-		Log.w(TAG, "bd mobile exists" + c.getName());
-		continue;
-	    }
-
-	    c = new Customer();
-	    String name = bd.mUser_name;
-	    if (name != null
-		    && name.length() > AddCustomerActivity.MAX_NAME_LENGTH) {
-		name = name.substring(0, AddCustomerActivity.MAX_NAME_LENGTH);
-	    }
-	    c.setName(name);
-	    c.setTel(mobile);
-	    
-	    c.setTime(bd.mCreate_time * 1000);
-	    calendar.setTimeInMillis(c.getTime());
-	    Log.i(TAG, "create tiem: " + DateUtil.yyyy_MM_dd.format(calendar.getTime()));
-	    
-	    c.setLoan(bd.mLoan_limit);
-	    c.setSource("融360");
-	    c.setOrderNo(bd.mId);
-	    String proger = mProgressMap.get(bd.mStatus);
-	    if (proger != null) {
-		c.setProgress(proger);
-	    }
-	    if (bd.mId > maxId) {
-		maxId = bd.mId;
-	    }
-	    c.setLastFollowComment(bd.mProduct_name + "-"
-		    + mUseMap.get(bd.mApplication_type) + "-"
-		    + mCodeMap.get(bd.mStatus));
-	    handler.insertCustomer(c);
-	    i++;
-	}
-
-	// TODO;
-	Log.i(TAG, "import " + i + " orders");
-	GlobalValue.getIns().init(context);
-	PreferenceHelper.getHelper(context).writePreference(PRE_KEY_MAX_ID,
-		String.valueOf(maxId));
+	task.execute();
     }
 
     protected static void save2db(CustomerModel cModel, Context context) {
@@ -395,6 +367,76 @@ public class CloudHelper {
 	    mHandler.updateSms(msg);
 	}
     }
+    
+    private static class ImportTask extends WaitingTask {
+	private SyncResult mRes;
+	 
+	    public ImportTask(Context context, SyncResult res) {
+		super(context);
+		mRes = res;
+	    }
+
+	    @Override
+	    protected Object doInBackground() {
+		HashMap<String, Customer> phoneMap =
+			GlobalValue.getIns().getPhoneNameMap();
+		CustomerHandler handler =
+			GlobalValue.getIns().getCustomerHandler(mContext);
+		int i = 0;
+		int maxId = -1;
+		
+		int[] im = new int[2];
+		im[1] = mRes.mRes_total;
+		Calendar calendar = Calendar.getInstance();
+		for (BDCustomer bd : mRes.mData) {
+		    // Log.i(TAG, "mobile :" + bd.mUser_mobile);
+		    String mobile = TelHelper.getPureTel(bd.mUser_mobile);
+		    Customer c = phoneMap.get(mobile);
+		    if (c != null) {
+			Log.w(TAG, "bd mobile exists" + c.getName());
+			continue;
+		    }
+
+		    c = new Customer();
+		    String name = bd.mUser_name;
+		    if (name != null
+			    && name.length() > AddCustomerActivity.MAX_NAME_LENGTH) {
+			name = name.substring(0, AddCustomerActivity.MAX_NAME_LENGTH);
+		    }
+		    c.setName(name);
+		    c.setTel(mobile);
+		    
+		    c.setTime(bd.mCreate_time * 1000);
+		    calendar.setTimeInMillis(c.getTime());
+		    Log.i(TAG, "create tiem: " + DateUtil.yyyy_MM_dd.format(calendar.getTime()));
+		    
+		    c.setLoan(bd.mLoan_limit);
+		    c.setSource("融360");
+		    c.setOrderNo(bd.mId);
+		    String proger = mProgressMap.get(bd.mStatus);
+		    if (proger != null) {
+			c.setProgress(proger);
+		    }
+		    if (bd.mId > maxId) {
+			maxId = bd.mId;
+		    }
+		    c.setLastFollowComment(bd.mProduct_name + "-"
+			    + mUseMap.get(bd.mApplication_type) + "-"
+			    + mCodeMap.get(bd.mStatus));
+		    handler.insertCustomer(c);
+		    i++;
+		    im[0] = i;
+		    publishProgress(im);
+		}
+
+		// TODO;
+		Log.i(TAG, "import " + i + " orders");
+		GlobalValue.getIns().init(mContext);
+		PreferenceHelper.getHelper(mContext).writePreference(PRE_KEY_MAX_ID,
+			String.valueOf(maxId));
+		return ECode.SUCCESS;
+	    }
+}
 
     public static void deleteCustomer(Context context) {
 	if (!NetUtil.isNetworkAvailable(context)) {

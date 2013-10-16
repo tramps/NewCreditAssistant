@@ -8,11 +8,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.rong360.creditassitant.R;
-import com.rong360.creditassitant.util.CloudHelper;
 import com.rong360.creditassitant.util.DataBackupHelper;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.widget.TitleBarCenter;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.FeedbackAgent;
 
 public class SettingFragment extends BaseFragment implements OnClickListener {
     private Button btnSafe;
@@ -31,6 +33,8 @@ public class SettingFragment extends BaseFragment implements OnClickListener {
 	TitleBarCenter center = getSupportActionBarCenter(Boolean.FALSE);
 	center.hideLeft();
 	center.setTitle("设置");
+	
+	MobclickAgent.onEvent(mContext, RongStats.SETTING);
     }
 
     @Override
@@ -85,25 +89,38 @@ public class SettingFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onClick(View v) {
 	if (v == btnSafe) {
+	    MobclickAgent.onEvent(mContext, RongStats.SET_SAFE);
 	    Intent intent = new Intent(mContext, CustomerSafeActivity.class);
 	    IntentUtil.startActivity(mContext, intent);
 	} else if (v == btnLock) {
+	    MobclickAgent.onEvent(mContext, RongStats.SET_LOCK);
 	    Intent intent = new Intent(mContext, CustomerLockActivity.class);
 	    IntentUtil.startActivity(mContext, intent);
 	} else if (v == rlSource) {
+	    MobclickAgent.onEvent(mContext, RongStats.SET_SOURCE);
 	    Intent intent = new Intent(mContext, SourceActivity.class);
 	    IntentUtil.startActivity(mContext, intent);
 	} else if (v == rlImportPartner) {
+	    MobclickAgent.onEvent(mContext, RongStats.SET_IMP_PARTER);
 	    Intent intent =
 		    new Intent(mContext, AuthorisePartnerActivity.class);
 	    IntentUtil.startActivity(mContext, intent);
 	} else if (v == rlImportContact) {
+	    MobclickAgent.onEvent(mContext, RongStats.SET_IMP_CTC);
 	    Intent intent = new Intent(mContext, ImportContactActivity.class);
 	    IntentUtil.startActivity(mContext, intent);
 	} else if (v == rlExport) {
+	    MobclickAgent.onEvent(mContext, RongStats.SET_EPT_SD);
 	    DataBackupHelper.backupCustomers(mContext);
 	} else if (v == rlFeedback) {
-	    CloudHelper.back2Server(mContext, true);
+	    MobclickAgent.onEvent(mContext, RongStats.SET_FEEDBACK);
+//	    CloudHelper.back2Server(mContext, true);
+	    FeedbackAgent agent = new FeedbackAgent(mContext);
+	    agent.startFeedbackActivity();
+	} else if (v == rlAbout) {
+	    MobclickAgent.onEvent(mContext, RongStats.SET_ABOUT);
+	    Intent intent = new Intent(mContext, AboutUsActivity.class);
+	    startActivity(intent);
 	}
     }
 }

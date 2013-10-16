@@ -11,6 +11,7 @@ import static com.rong360.creditassitant.widget.ActionItem.TITLE_UPGRADE;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -40,10 +41,12 @@ import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.widget.ActionItem;
 import com.rong360.creditassitant.widget.QuickAction;
 import com.rong360.creditassitant.widget.QuickAction.OnActionItemClickListener;
 import com.rong360.creditassitant.widget.TitleBarCenter;
+import com.umeng.analytics.MobclickAgent;
 
 public class CustomerManagementFragment extends BaseFragment implements
 	OnClickListener {
@@ -92,6 +95,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 
 	@Override
 	public void onClick(View v) {
+	    MobclickAgent.onEvent(mContext, RongStats.CTM_SEND_SMS);
 	    Intent intent = new Intent(mContext, ChooseCustomerActivity.class);
 	    intent.putExtra(ChooseCustomerActivity.EXTRA_INDEX, mFilterIndex);
 	    intent.putExtra(AdvancedFilterActiviy.EXTRA_QUERY, mQueryIndex);
@@ -102,6 +106,7 @@ public class CustomerManagementFragment extends BaseFragment implements
         
         @Override
         public void onClick(View v) {
+            MobclickAgent.onEvent(mContext, RongStats.CTM_NEW_CUSTOMER);
             Intent intent = new Intent(mContext, AddCustomerActivity.class);
 	    startActivity(intent);
         }
@@ -120,6 +125,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    @Override
 	    public void onClick(View v) {
 		mAction.showView(v);
+		 MobclickAgent.onEvent(mContext, RongStats.CTM_FILTER);
 	    }
 	});
 	mTitleCenter.setMsgListener(mMsgListener);
@@ -131,6 +137,8 @@ public class CustomerManagementFragment extends BaseFragment implements
 	mSections = new ArrayList<CustomerManagementFragment.Section>();
 	mAdapter = new CustomerAdapter(mContext, mSections);
 	mQueryIndex = new ArrayList<String>();
+	
+	MobclickAgent.onEvent(mContext, RongStats.CTM_MGR);
     }
 
     private void initQuickAction() {
@@ -162,6 +170,9 @@ public class CustomerManagementFragment extends BaseFragment implements
 		mTitleCenter.setTitle(mFilter[mFilterIndex]);
 		getFilteredCustomers();
 		initContent();
+		HashMap<String, String> fitre = new HashMap<String, String>();
+		fitre.put("选择项", mFilter[mFilterIndex]);
+		MobclickAgent.onEvent(mContext, RongStats.CTM_SECTION, fitre);
 	    }
 	});
 
@@ -174,12 +185,14 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    public void onClick(View v) {
 		setAdvanceFilter();
 		mAction.dismiss();
+		MobclickAgent.onEvent(mContext, RongStats.CTM_ADVANCE);
 	    }
 	});
     }
 
     private void setAdvanceFilter() {
 	Intent intent = new Intent(mContext, AdvancedFilterActiviy.class);
+	intent.putExtra(AdvancedFilterActiviy.EXTRA_QUERY, mQueryIndex);
 	startActivityForResult(intent, 10002);
 	mTitleCenter.setTitle("高级筛选");
 	mFilterIndex = FILTER_INDEX;
@@ -254,6 +267,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    @Override
 	    public void onClick(View v) {
 		setAdvanceFilter();
+		MobclickAgent.onEvent(mContext, RongStats.CTM_EXIST_FILTER);
 	    }
 	});
     }
@@ -608,12 +622,15 @@ public class CustomerManagementFragment extends BaseFragment implements
     @Override
     public void onClick(View v) {
 	if (v == btnImport) {
+	    MobclickAgent.onEvent(mContext, RongStats.CTM_IMP_CTM_CLICK);
 	    Intent intent = new Intent(mContext, ImportContactActivity.class);
 	    startActivity(intent);
 	} else if (v == rlOpen) {
+	    MobclickAgent.onEvent(mContext, RongStats.CTM_OPEN);
 	    Intent intent = new Intent(mContext, CustomerSafeActivity.class);
 	    startActivity(intent);
 	} else if (v == ibClose) {
+	    MobclickAgent.onEvent(mContext, RongStats.CTM_CLOSE);
 	    PreferenceHelper helper = PreferenceHelper.getHelper(mContext);
 	    helper.writePreference(CustomerSafeActivity.PRE_KEY_HAS_HINTED,
 		    "true");
@@ -673,6 +690,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 
 		@Override
 		public void onClick(View v) {
+		    MobclickAgent.onEvent(mContext, RongStats.CTM_DETAIL);
 		    Intent intent =
 			    new Intent(mContext, CustomerDetailActivity.class);
 		    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
@@ -731,6 +749,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 
 		@Override
 		public void onClick(View v) {
+		    MobclickAgent.onEvent(mContext, RongStats.CTM_DETAIL);
 		    Intent intent =
 			    new Intent(mContext, CustomerDetailActivity.class);
 		    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,

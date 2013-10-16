@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="bkg_color">#f2f2f2</color>
     <color name="bkg_import">#202729</color>
     <color name="customer_label">#999999</color>
@@ -11,11 +12,14 @@
     <color name="cp_talked">#1576d5</color>
     <color name="cp_upgraded">#0063cf</color>
     <color name="cp_succeded">#26be62</color>
-     <color name="bkg_imported">#e3f8ff</color>
-     <color name="grey">#e9e9e9</color>
-     <color name="search">#dfeafe</color>
-      <color name="green">#0c95c1</color>
-      <color name="phone">#1f1f1f</color>
-      <color name="level">#2c794b</color>
-       <color name="time">#37b3e2</color>
+    <color name="bkg_imported">#e3f8ff</color>
+    <color name="grey">#e9e9e9</color>
+    <color name="search">#dfeafe</color>
+    <color name="green">#0c95c1</color>
+    <color name="phone">#1f1f1f</color>
+    <color name="level">#2c794b</color>
+    <color name="time">#37b3e2</color>
+    <color name="umeng_fb_color_btn_pressed">#1495F7</color>
+    <color name="umeng_fb_color_btn_normal">#333333</color>
+
 </resources>

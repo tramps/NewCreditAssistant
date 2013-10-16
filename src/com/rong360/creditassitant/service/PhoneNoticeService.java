@@ -105,6 +105,10 @@ public class PhoneNoticeService extends Service {
 	Log.i(TAG, "destroy service******");
     }
 
+    public int getCallState() {
+	return mLastCallState;
+    }
+    
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 	Log.i(TAG, "onStartCommand******");
@@ -300,9 +304,8 @@ public class PhoneNoticeService extends Service {
 	    // TODO
 	    Log.i(TAG, "thread close customer" + mIsAttached);
 	    mIsAttached = WindowManagerHelper.hideContent(getBaseContext());
+	    mLastEffectiveNumber = "";
 	}
     };
-
-    
 
 }

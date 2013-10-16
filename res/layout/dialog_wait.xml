@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+     xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="18dp"
+    android:background="@drawable/bkg_toast"
+    android:orientation="vertical" >
+    
+    <ProgressBar 
+        android:id="@+id/pbCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/circle"
+        android:indeterminateDrawable="@drawable/circle"
+        android:indeterminate="true"
+        android:layout_centerHorizontal="true"
+        />
+    
+    <TextView 
+        android:id="@+id/tvHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/pbCircle"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:layout_marginTop="10dp"
+        android:text="sdf"
+        />
+    
+
+</RelativeLayout>
+
+</LinearLayout>

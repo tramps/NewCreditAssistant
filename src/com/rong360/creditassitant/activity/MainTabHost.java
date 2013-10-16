@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.util.LocCache;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 /**
  * the main tab host and the main activity of this app.
@@ -37,12 +39,9 @@ public class MainTabHost extends BaseTabHost {
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	mBackCount = 0;
-	// com.umeng.common.Log.LOG = true;
-	// MobclickAgent.updateOnlineConfig(this);
-	// UmengUpdateAgent.setUpdateAutoPopup(false);
-	// UmengUpdateAgent.update(this);
-	// UmengUpdateAgent.setUpdateListener(mUpdateCallback);
-	// InitialUtil.registerOnExitListener(mOnExitListener);
+	com.umeng.common.Log.LOG = true;
+	MobclickAgent.updateOnlineConfig(this);
+	UmengUpdateAgent.update(this);
     }
 
     // private UmengUpdateListener mUpdateCallback = new UmengUpdateListener() {
@@ -88,7 +87,7 @@ public class MainTabHost extends BaseTabHost {
     // finish();
     // }
     // };
-
+    
     @Override
     public void onBackPressed() {
 	if (mBackCount < 1) {

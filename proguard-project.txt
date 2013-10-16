@@ -18,3 +18,17 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn com.umeng.**
+
+-keepattributes *Annotation*
+
+-keep class com.umeng*.** {*; }
+
+-keep public class [your_pkg].R$*{
+    public static final int *;
+}
+
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+

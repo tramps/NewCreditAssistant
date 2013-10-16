@@ -47,20 +47,12 @@
             app:visibleItems="6" >
         </com.rong360.creditassitant.widget.wheel.WheelVerticalView>
 
-        <TextView
-            android:id="@+id/tvDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/wvDate"
-            android:padding="8dp"
-            android:text=":" />
-
         <com.rong360.creditassitant.widget.wheel.WheelVerticalView
             android:id="@+id/wvHour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/tvDay"
+            android:layout_toRightOf="@id/wvDate"
+            android:layout_marginLeft="16dp"
             app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
             app:selectionDividerHeight="3dp"
             app:selectionDividerActiveAlpha="10"

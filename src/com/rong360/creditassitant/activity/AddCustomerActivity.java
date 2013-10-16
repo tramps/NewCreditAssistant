@@ -45,10 +45,12 @@ import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
 import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.NetUtil;
 import com.rong360.creditassitant.widget.MySrollview;
+import com.umeng.analytics.MobclickAgent;
 
 public class AddCustomerActivity extends BaseActionBar implements
 	OnClickListener {
@@ -300,7 +302,7 @@ public class AddCustomerActivity extends BaseActionBar implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 	if (item.getItemId() == R.id.finish) {
-
+	    MobclickAgent.onEvent(this, RongStats.ADD_FINISH);
 	    if (!validateInput()) {
 		return false;
 	    }
@@ -405,7 +407,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	mCustomer.setSource(tvSource.getText().toString());
 
 	String progress = tvProgress.getText().toString();
-	if (progress != null
+	if (progress != ""
 		&& !progress.equalsIgnoreCase(mCustomer.getProgress())) {
 	    Action action =
 		    new Action(mCustomerId, ActionHandler.TYPE_PROGRESS);
@@ -613,7 +615,9 @@ public class AddCustomerActivity extends BaseActionBar implements
 
 	    CloudHelper.deleteCustomer(this);
 	    finish();
+	    MobclickAgent.onEvent(this, RongStats.ADD_DELETE);
 	} else if (v == ibDelete) {
+	    MobclickAgent.onEvent(this, RongStats.ADD_CANCEL);
 	    tvAlarm.setText("");
 	    mCustomer.setAlarmTime(0);
 	    mCustomer.setHasChecked(false);

@@ -17,7 +17,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,24 +27,28 @@ import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.Action;
 import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.Customer;
-import com.rong360.creditassitant.model.CustomerAction;
 import com.rong360.creditassitant.model.CustomerHandler;
 import com.rong360.creditassitant.util.AlarmHelper;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
+import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
+import com.rong360.creditassitant.util.DisplayUtils;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.MyToast;
-import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
-import com.rong360.creditassitant.util.DisplayUtils;
+import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.widget.HorizontalListView;
 import com.rong360.creditassitant.widget.MovingBarView;
+import com.rong360.creditassitant.widget.TitleBarLeft;
 import com.rong360.creditassitant.widget.MovingBarView.IProgressChanged;
+import com.umeng.analytics.MobclickAgent;
 
 public class CustomerDetailActivity extends BaseActionBar implements
 	OnClickListener {
     private static final String TAG = "CustomerDetailActivity";
     private static final int REQUEST_CODE = 10001;
+    private static final String PRE_KEY_HINT = "CustomerDetailActivity";
     private int mCustomerId;
     private String[] mState;
     private Customer mCustomer;
@@ -72,11 +75,17 @@ public class CustomerDetailActivity extends BaseActionBar implements
     private LinearLayout llQuality;
     private LinearLayout llDetail;
     private LinearLayout llHistory;
+    
+    private ImageView flHint;
+    
+    private TitleBarLeft mLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//	getSupportActionBar(false).setTitle("客户详情");
 	super.onCreate(savedInstanceState);
-	getSupportActionBar(false).setTitle("客户详情");
+	mLeft = (TitleBarLeft) findViewById(R.id.title);
+	mLeft.setTitle("客户详情");
 	mState = getResources().getStringArray(R.array.progress);
     }
 
@@ -89,6 +98,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 	if (item.getItemId() == R.id.edit) {
+	    MobclickAgent.onEvent(this, RongStats.CDT_EDIT);
 	    Intent intent = new Intent(this, AddCustomerActivity.class);
 	    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID, mCustomerId);
 	    startActivity(intent);
@@ -123,6 +133,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	@Override
 	public void onProgressChanged(int index) {
 	    if (index >= 0 && index < mState.length) {
+		MobclickAgent.onEvent(CustomerDetailActivity.this, RongStats.CDT_PGS_SUCCEED);
 		mCustomer.setProgress(mState[index]);
 		Log.i(TAG, "progress changed: " + mCustomer.getName()
 			+ mCustomer.getProgress());
@@ -190,6 +201,22 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	initDetail();
 
 	initAction();
+	
+	if (PreferenceHelper.getHelper(this).readPreference(PRE_KEY_HINT) == null) {
+	    flHint.setVisibility(View.VISIBLE);
+	} else {
+	    flHint.setVisibility(View.GONE);
+	    removeHint();
+	}
+    }
+    
+    private void removeHint() {
+//	RelativeLayout container = getContainer();
+//	View hint = container.findViewById(R.id.fl_hint);
+//	if (hint != null) {
+//	    container.removeView(hint);
+//	}
+//	flHint.setPadding(0, 200, 0, 0);
     }
 
     private void initAction() {
@@ -281,13 +308,18 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	llQuality = (LinearLayout) findViewById(R.id.llQuality);
 	llDetail = (LinearLayout) findViewById(R.id.llDetail);
 	llHistory = (LinearLayout) findViewById(R.id.llHistory);
+	
+	flHint = (ImageView) findViewById(R.id.fl_hint);
+	flHint.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
 	if (v == rlAlarm) {
+	    MobclickAgent.onEvent(this, RongStats.CDT_SET_ALARM);
 	    DialogUtil.showTimePicker(this, mTimePicker);
 	} else if (v == rlComment) {
+	    MobclickAgent.onEvent(this, RongStats.CDT_SET_COMMENT);
 	    Intent intent = new Intent(this, CommentActivity.class);
 	    intent.putExtra(CommentActivity.EXTRA_ID, mCustomerId);
 	    if (mCustomer.getLastFollowComment() != null
@@ -297,6 +329,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    }
 	    startActivityForResult(intent, REQUEST_CODE);
 	} else if (v == btnClose) {
+	    MobclickAgent.onEvent(this, RongStats.CDT_CANCEL_ALARM);
 	    MyToast.displayFeedback(CustomerDetailActivity.this,
 		    R.drawable.ic_alarm, "取消提醒", hlv);
 	    tvAlarm.setText("");
@@ -316,8 +349,10 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    
 	    btnClose.setVisibility(View.GONE);
 	} else if (v == llTel) {
+	    MobclickAgent.onEvent(this, RongStats.CDT_TEL);
 	    IntentUtil.startTel(this, mCustomer.getTel());
 	} else if (v == llMsg) {
+	    MobclickAgent.onEvent(this, RongStats.CDT_MSG);
 	    String customerInfo =
 		    mCustomer.getName() + "#" + mCustomer.getTel();
 	    Log.i(TAG, "customerinfo: " + customerInfo);
@@ -325,11 +360,13 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    intent.putExtra(SendGroupSmsActivity.EXTRA_CUSTOMER, customerInfo);
 	    IntentUtil.startActivity(this, intent);
 	} else if (v == llComHistory) {
+	    MobclickAgent.onEvent(this, RongStats.CDT_HTR);
 	    Intent intent = new Intent(this, CustomerComuDetailActivity.class);
 	    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID, mCustomerId);
 	    intent.putExtra(CustomerComuDetailActivity.EXTRA_MODE, false);
 	    IntentUtil.startActivity(this, intent);
 	} else if (v == ibStar) {
+	    MobclickAgent.onEvent(this, RongStats.CDT_STAR);
 	    if (mCustomer.isIsFavored()) {
 		ibStar.setBackgroundResource(R.drawable.ic_star_no_checked);
 		mCustomer.setIsFavored(false);
@@ -340,6 +377,10 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    GlobalValue.getIns().putCustomer(mCustomer);
 	    GlobalValue.getIns().getCustomerHandler(getBaseContext())
 		    .updateCustomer(mCustomer);
+	} else if (flHint == v) {
+	    flHint.setVisibility(View.GONE);
+	    PreferenceHelper.getHelper(this).writePreference(PRE_KEY_HINT, "hint");
+	    removeHint();
 	}
     }
 

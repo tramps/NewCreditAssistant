@@ -15,6 +15,7 @@ import com.rong360.creditassitant.util.PassCheckHelper;
 import com.rong360.creditassitant.widget.FitTextView.ITitle;
 import com.rong360.creditassitant.widget.TitleBarCenter;
 import com.rong360.creditassitant.widget.TitleBarLeft;
+import com.umeng.analytics.MobclickAgent;
 
 public abstract class BaseActionBar extends Activity {
     private static final String TAG = BaseActionBar.class.getSimpleName();
@@ -29,6 +30,7 @@ public abstract class BaseActionBar extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
+	if (mContainer == null)
 	mContainer = new RelativeLayout(this);
 	View view = LayoutInflater.from(this).inflate(getLayout(), null);
 	mContainer.addView(view, new RelativeLayout.LayoutParams(
@@ -45,12 +47,16 @@ public abstract class BaseActionBar extends Activity {
     @Override
     protected void onPause() {
 	super.onPause();
-	// MobclickAgent.onPause(this);
+	 MobclickAgent.onPause(this);
 	Log.i(TAG, "base action onPause");
 //	mShallLock = PassCheckHelper.getInstance(this).shouldLock(this);
 	if (!mShallLock) {
 	    PassCheckHelper.getInstance(this).init();
 	}
+    }
+    
+    protected RelativeLayout getContainer() {
+	return mContainer;
     }
 
     @Override
@@ -66,7 +72,7 @@ public abstract class BaseActionBar extends Activity {
 		Intent intent = new Intent(this, ShowPassAliasActivity.class);
 		startActivity(intent);
 	}
-	// MobclickAgent.onResume(this);
+	 MobclickAgent.onResume(this);
     }
     
     @Override
@@ -122,6 +128,9 @@ public abstract class BaseActionBar extends Activity {
 
     public ITitle getSupportActionBar(boolean isCenter) {
 	if (mTitleBar == null) {
+	    if (mContainer == null) {
+		mContainer = new RelativeLayout(this);
+	    }
 	    if (isCenter) {
 		TitleBarCenter view = new TitleBarCenter(this);
 		mContainer.addView(view);

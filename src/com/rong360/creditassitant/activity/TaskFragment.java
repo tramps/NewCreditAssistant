@@ -21,7 +21,9 @@ import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.GlobalValue;
+import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.widget.TitleBarCenter;
+import com.umeng.analytics.MobclickAgent;
 
 public class TaskFragment extends BaseFragment {
     private ArrayList<Customer> mAlarmCustomers;
@@ -40,6 +42,8 @@ public class TaskFragment extends BaseFragment {
 	center.setTitle("提醒");
 	mAlarmCustomers = new ArrayList<Customer>();
 	mAdapter = new AlarmAdapter(mContext, mAlarmCustomers);
+	
+	MobclickAgent.onEvent(mContext, RongStats.TASK);
     }
 
     @Override

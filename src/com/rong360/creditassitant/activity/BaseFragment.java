@@ -17,6 +17,7 @@ import com.rong360.creditassitant.util.PassCheckHelper;
 import com.rong360.creditassitant.widget.FitTextView.ITitle;
 import com.rong360.creditassitant.widget.TitleBarCenter;
 import com.rong360.creditassitant.widget.TitleBarLeft;
+import com.umeng.analytics.MobclickAgent;
 
 public abstract class BaseFragment extends Fragment implements IFragment {
     private static final String TAG = "BaseFragment";
@@ -64,13 +65,13 @@ public abstract class BaseFragment extends Fragment implements IFragment {
 	    Intent intent = new Intent(mContext, ShowPassAliasActivity.class);
 	    startActivity(intent);
 	}
-	// MobclickAgent.onResume(mContext);
+	 MobclickAgent.onResume(mContext);
     }
 
     @Override
     public void onPause() {
 	super.onPause();
-	// MobclickAgent.onPause(mContext);
+	 MobclickAgent.onPause(mContext);
 	Log.i(TAG, "base action pause");
 	if (!mShallLock) {
 	    PassCheckHelper.getInstance(mContext).init();

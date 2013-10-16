@@ -17,6 +17,8 @@ import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.LocationHelper;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.GlobalValue;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 public class WindowManagerHelper {
     private static final String TAG = "PhoneNoticeService";
@@ -81,6 +83,7 @@ public class WindowManagerHelper {
 	initContent(context, tel);
 	try {
 	    createWindowManager(context).addView(createDesktopLayout(context), createLayoutParams());
+	    MobclickAgent.onEvent(context, RongStats.PHONE_POPUP);
 	    Log.i(TAG, "showed:" + tel);
 	    return true;
 	} catch (Exception e) {

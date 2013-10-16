@@ -23,6 +23,7 @@ import com.rong360.creditassitant.activity.CustomerDetailActivity;
 import com.rong360.creditassitant.widget.wheel.WheelVerticalView;
 import com.rong360.creditassitant.widget.wheel.adapter.AbstractWheelTextAdapter;
 import com.rong360.creditassitant.widget.wheel.adapter.NumericWheelAdapter;
+import com.umeng.analytics.MobclickAgent;
 
 public class DialogUtil {
     public static interface ITimePicker {
@@ -95,6 +96,7 @@ public class DialogUtil {
 
 	    @Override
 	    public void onClick(View v) {
+		MobclickAgent.onEvent(context, RongStats.TIME_OK);
 		Calendar alarm = dayAdapter.getDay(wvDate.getCurrentItem());
 		String time = dayAdapter.getFormattedTime(alarm);
 		int hour = hourAdapter.getCurrentItem(wvHour.getCurrentItem());
@@ -121,6 +123,7 @@ public class DialogUtil {
 
 	    @Override
 	    public void onClick(View v) {
+		MobclickAgent.onEvent(context, RongStats.TIME_CANCEL);
 		dialog.dismiss();
 	    }
 	});

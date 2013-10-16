@@ -21,6 +21,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * base class for TabHost.
@@ -61,7 +62,14 @@ public abstract class BaseTabHost extends FragmentActivity {
     @Override
     protected void onResume() {
 	super.onResume();
+	MobclickAgent.onResume(this);
 	initCurrentTab();
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void initCurrentTab() {

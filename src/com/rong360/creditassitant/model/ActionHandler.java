@@ -31,7 +31,7 @@ public class ActionHandler extends BaseDbHandler {
     public static final String PREFIX_QUALITY = "更改客户资质：";
     public static final String PREFIX_PROGRESS = "进度修改为：";
     public static final String PREFIX_SET_ALARM = "设置提醒：";
-    public static final String PREFIX_CANCEL_ALARM = "取消提醒：";
+    public static final String PREFIX_CANCEL_ALARM = "取消提醒";
     public static final String PREFIX_FINISH_ALARM = "完成提醒：";
 
     private static final String ID = "_id";

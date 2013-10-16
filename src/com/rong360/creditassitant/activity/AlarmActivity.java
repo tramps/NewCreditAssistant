@@ -31,6 +31,8 @@ import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.MPlayHelper;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 public class AlarmActivity extends BaseActionBar implements OnClickListener {
     public static final String EXTRA_IDS = "extra_alarm_tels";
@@ -94,6 +96,12 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    mAlarmCustomers.add(c);
 	    Log.i(TAG, "new id:" + c.getId() + c.getName());
 	}
+	
+	if (mAlarmCustomers.size() == 0) {
+	    AlarmHelper.startAlarm(this, true);
+	    finish();
+	    return;
+	}
 	// if (count > 5) {
 	// return;
 	// }
@@ -137,7 +145,14 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	if (null != mLock) {
 	    mLock.release();
 	}
+	
         super.onDestroy();
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MPlayHelper.silentAlarm(AlarmActivity.this);
     }
 
     private void initContent() {
@@ -195,8 +210,10 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
     @Override
     public void onClick(View v) {
 	if (v == btnClose) {
+	    MobclickAgent.onEvent(this, RongStats.ALARM_CLOSE);
 	    finish();
 	} else if (v == btnView) {
+	    MobclickAgent.onEvent(this, RongStats.ALARM_VIEW);
 	    Intent intent;
 	    if (mAlarmCustomers.size() == 1) {
 		intent = new Intent(this, CustomerDetailActivity.class);
@@ -211,6 +228,7 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    clearStatus();
 	    finish();
 	} else if (v == btnContact) {
+	    MobclickAgent.onEvent(this, RongStats.ALARM_CTC);
 	    IntentUtil.startTel(this, mAlarmCustomers.get(0).getTel());
 	    clearStatus();
 	    finish();
@@ -218,10 +236,12 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 //	    if (mIsSliented) {
 //		return;
 //	    }
+	    MobclickAgent.onEvent(this, RongStats.ALARM_SILENT);
 	    mIsSliented = true;
 	    btnSlient.setBackgroundResource(R.drawable.ic_silented);
 	    clearDisplay();
 	} else if (v == parent) {
+	    MobclickAgent.onEvent(this, RongStats.ALARM_PARENT);
 	    // for (Customer c : mAlarmCustomers) {
 	    // c.setIsDisplayed(false);
 	    // GlobalValue.getIns().putCustomer(c);

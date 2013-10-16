@@ -87,7 +87,7 @@ public class ChooseOptionActivity extends BaseActionBar {
 		mSelectedIds = new int[idDs.length];
 		int i = 0;
 		for (String d : idDs) {
-		    mSelectedIds[i] = Integer.parseInt(d);
+		    mSelectedIds[i++] = Integer.parseInt(d);
 		}
 	    }
 	}
@@ -131,6 +131,7 @@ public class ChooseOptionActivity extends BaseActionBar {
 
 	if (mSelectedIds != null)
 	    for (int id : mSelectedIds) {
+		Log.i(TAG, "id: " + id);
 		mSelected.put(id, mItems[id]);
 	    }
 
@@ -268,6 +269,7 @@ public class ChooseOptionActivity extends BaseActionBar {
 		boolean isContained = false;
 		for (int id : mSelected.keySet()) {
 		    if (position == id) {
+			Log.i(TAG, "contained " + id);
 			check.setChecked(true);
 			isContained = true;
 			break;

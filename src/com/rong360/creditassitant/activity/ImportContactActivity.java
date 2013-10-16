@@ -20,18 +20,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
-import com.rong360.creditassitant.model.Action;
-import com.rong360.creditassitant.model.ActionHandler;
+import com.rong360.creditassitant.exception.ECode;
 import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Contact;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
 import com.rong360.creditassitant.model.TelHelper;
+import com.rong360.creditassitant.task.HandleMessageTask;
+import com.rong360.creditassitant.task.HandleMessageTask.Callback;
+import com.rong360.creditassitant.task.WaitingTask;
 import com.rong360.creditassitant.util.CloudHelper;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.ModelHeler;
 import com.rong360.creditassitant.util.MyToast;
+import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.widget.IndexableListView;
+import com.umeng.analytics.MobclickAgent;
 
 public class ImportContactActivity extends BaseActionBar implements
 	OnClickListener {
@@ -55,6 +59,7 @@ public class ImportContactActivity extends BaseActionBar implements
     private ArrayList<Customer> mCustomers;
 
     private boolean mIsPorted = false;
+    private int mImportCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -299,6 +304,7 @@ public class ImportContactActivity extends BaseActionBar implements
     @Override
     public void onClick(View v) {
 	if (v == btnImport) {
+	    MobclickAgent.onEvent(this, RongStats.IMP_OK);
 	    if (mCheckMap.size() == 0) {
 		MyToast.makeText(this, "请选择导入客户", Toast.LENGTH_SHORT).show();
 		return;
@@ -310,6 +316,7 @@ public class ImportContactActivity extends BaseActionBar implements
 	    }
 
 	} else if (v == btnSelect) {
+	    MobclickAgent.onEvent(this, RongStats.IMP_ALL);
 	    if (mCheckMap.size() == mContacts.size()) {
 		return;
 	    }
@@ -324,72 +331,43 @@ public class ImportContactActivity extends BaseActionBar implements
     }
 
     private void save2Customers() {
-	CustomerHandler handler = GlobalValue.getIns().getCustomerHandler(this);
-	if (mCustomers == null) {
-	    mCustomers = GlobalValue.getIns().getAllCustomers();
-	}
-	ArrayList<Contact> removedContacts = new ArrayList<Contact>();
-	int sucCount = 0;
-	for (Contact c : mCheckMap.keySet()) {
-	    if (containSameTel(mCustomers, c)) {
-		removedContacts.add(c);
-		// Log.i(TAG, "same tel: " + c.getName() + c.getTel());
-		continue;
-	    }
-	    Customer customer = new Customer();
-	     Log.i(TAG, "before pure: " + c.getTel());
-	    customer.setTel(TelHelper.getPureTel(c.getTel()));
-	     Log.i(TAG, "after pure: " + customer.getTel());
-	    if (c.getCreateTime() != 0) {
-		customer.setTime(c.getCreateTime());
-	    } else {
-		customer.setTime(System.currentTimeMillis());
-	    }
-	    // TODO name
-	    if (c.getName().length() > AddCustomerActivity.MAX_NAME_LENGTH) {
-		customer.setName(c.getName().substring(0,
-			AddCustomerActivity.MAX_NAME_LENGTH));
-	    } else {
-		customer.setName(c.getName());
-	    }
-	    if (handler.insertCustomer(customer)) {
-		customer = handler.getCustomerByTel(customer.getTel());
-		removedContacts.add(c);
-		if (customer == null) {
-		    Log.e(TAG, "insert error");
-		    continue;
+	
+	ImportTask task = new ImportTask(this);
+	task.setCallback(new Callback() {
+	    
+	    @Override
+	    public void onSuccess(HandleMessageTask task, Object t) {
+		if (mImportCount == mContacts.size()) {
+		    mIsPorted = true;
 		}
-//		Action a = new Action(customer.getId(), ActionHandler.TYPE_NEW);
-//		GlobalValue.getIns().getActionHandler(this).handleAction(a);
-		customer.setIsImported(true);
-		GlobalValue.getIns().putCustomer(customer);
-		mCustomers.add(customer);
-		sucCount++;
+
+		// Log.i(TAG, "before: " + mContacts.size() + " " + mCheckMap.size() +
+		// " " + removedContacts.size());
+		// for (Contact c : removedContacts) {
+		// mContacts.remove(c);
+		// mCheckMap.remove(c);
+		// }
+		// Log.i(TAG, "after: " + mContacts.size() + " " + mCheckMap.size() +
+		// " " + removedContacts.size());
+		// mItems.clear();
+		// transfer2Items(mContacts);
+		// maAdapter.notifyDataSetChanged();
+		MyToast.makeText(ImportContactActivity.this, "成功导入" + mImportCount + "个客户", Toast.LENGTH_LONG)
+			.show();
+		Log.i(TAG, "after insert: " + mCustomers.size());
+		ModelHeler.orderCustomersByTime(mCustomers);
+		finish();
+
+		CloudHelper.back2Server(ImportContactActivity.this, false);
 	    }
-	}
-
-	if (sucCount == mContacts.size()) {
-	    mIsPorted = true;
-	}
-
-	// Log.i(TAG, "before: " + mContacts.size() + " " + mCheckMap.size() +
-	// " " + removedContacts.size());
-	// for (Contact c : removedContacts) {
-	// mContacts.remove(c);
-	// mCheckMap.remove(c);
-	// }
-	// Log.i(TAG, "after: " + mContacts.size() + " " + mCheckMap.size() +
-	// " " + removedContacts.size());
-	// mItems.clear();
-	// transfer2Items(mContacts);
-	// maAdapter.notifyDataSetChanged();
-	MyToast.makeText(this, "成功导入" + sucCount + "个客户", Toast.LENGTH_LONG)
-		.show();
-	Log.i(TAG, "after insert: " + mCustomers.size());
-	ModelHeler.orderCustomersByTime(mCustomers);
-	finish();
-
-	CloudHelper.back2Server(this, false);
+	    
+	    @Override
+	    public void onFail(HandleMessageTask task, Object t) {
+		
+	    }
+	});
+	
+	task.execute();
     }
 
     private boolean containSameTel(ArrayList<Customer> customers, Contact c) {
@@ -399,5 +377,67 @@ public class ImportContactActivity extends BaseActionBar implements
 	    }
 	}
 	return false;
+    }
+    
+    private class ImportTask extends WaitingTask {
+	 
+	    public ImportTask(Context context) {
+		super(context);
+		// TODO Auto-generated constructor stub
+	    }
+
+	    @Override
+	    protected Object doInBackground() {
+		int[] iContact = new int[2];
+		iContact[1] = mCheckMap.size();
+		CustomerHandler handler = GlobalValue.getIns().getCustomerHandler(mContext);
+		if (mCustomers == null) {
+		    mCustomers = GlobalValue.getIns().getAllCustomers();
+		}
+		ArrayList<Contact> removedContacts = new ArrayList<Contact>();
+		for (Contact c : mCheckMap.keySet()) {
+		    if (containSameTel(mCustomers, c)) {
+			removedContacts.add(c);
+			// Log.i(TAG, "same tel: " + c.getName() + c.getTel());
+			continue;
+		    }
+		    Customer customer = new Customer();
+		     Log.i(TAG, "before pure: " + c.getTel());
+		    customer.setTel(TelHelper.getPureTel(c.getTel()));
+		     Log.i(TAG, "after pure: " + customer.getTel());
+		    if (c.getCreateTime() != 0) {
+			customer.setTime(c.getCreateTime());
+		    } else {
+			customer.setTime(System.currentTimeMillis());
+		    }
+		    // TODO name
+		    if (c.getName().length() > AddCustomerActivity.MAX_NAME_LENGTH) {
+			customer.setName(c.getName().substring(0,
+				AddCustomerActivity.MAX_NAME_LENGTH));
+		    } else {
+			customer.setName(c.getName());
+		    }
+		    
+		    customer.setSource("自有客户");
+		    if (handler.insertCustomer(customer)) {
+			customer = handler.getCustomerByTel(customer.getTel());
+			removedContacts.add(c);
+			if (customer == null) {
+			    Log.e(TAG, "insert error");
+			    continue;
+			}
+//			Action a = new Action(customer.getId(), ActionHandler.TYPE_NEW);
+//			GlobalValue.getIns().getActionHandler(this).handleAction(a);
+			customer.setIsImported(true);
+			GlobalValue.getIns().putCustomer(customer);
+			mCustomers.add(customer);
+			mImportCount++;
+			iContact[0] = mImportCount;
+			publishProgress(iContact);
+		    }
+		}
+		return ECode.SUCCESS;
+	    }
+
     }
 }

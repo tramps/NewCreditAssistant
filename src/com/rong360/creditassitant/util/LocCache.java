@@ -44,6 +44,9 @@ public class LocCache {
     
     public void saveCache(Context context) {
 	StringBuilder sb = new StringBuilder();
+	if (mNumCodeMap == null) {
+	    return;
+	}
 	for (int i = 0; i < mNumCodeMap.size(); i++) {
 	    int key = mNumCodeMap.keyAt(i);
 	    String v = mNumCodeMap.valueAt(i);

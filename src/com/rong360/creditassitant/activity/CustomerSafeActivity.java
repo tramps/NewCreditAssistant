@@ -11,6 +11,8 @@ import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -103,6 +105,7 @@ public class CustomerSafeActivity extends BaseActionBar implements
 	    if (mIsSafed) {
 		ConfirmHelper.showSafeDialog(this, mOnClose);
 	    } else {
+		MobclickAgent.onEvent(CustomerSafeActivity.this, RongStats.SAFE_OPEN);
 		boolean isLogined =
 			Boolean.valueOf(PreferenceHelper.getHelper(this)
 				.readPreference(PRE_KEY_IS_LOGINED));
@@ -130,6 +133,7 @@ public class CustomerSafeActivity extends BaseActionBar implements
 			PRE_KEY_IS_SAFED, Boolean.FALSE + "");
 		PreferenceHelper.getHelper(CustomerSafeActivity.this).writePreference(PRE_KEY_HAS_HINTED, "true");
 		initContent();
+		MobclickAgent.onEvent(CustomerSafeActivity.this, RongStats.SAFE_CLOSE);
         }
     };
 

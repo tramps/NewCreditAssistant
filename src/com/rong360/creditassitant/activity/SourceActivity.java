@@ -24,7 +24,9 @@ import com.rong360.creditassitant.util.ConfirmHelper;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.util.ConfirmHelper.OnRefresh;
+import com.umeng.analytics.MobclickAgent;
 
 public class SourceActivity extends BaseActionBar {
     public static final String TAG = "SourceActivity";
@@ -54,6 +56,7 @@ public class SourceActivity extends BaseActionBar {
 	if (item.getItemId() == R.id.finish) {
 	    Intent intent = new Intent(this, AddSourceActivity.class);
 	    IntentUtil.startActivity(this, intent);
+	    MobclickAgent.onEvent(this, RongStats.SOURCE_ADD);
 	}
 	return super.onOptionsItemSelected(item);
     }
@@ -169,10 +172,10 @@ public class SourceActivity extends BaseActionBar {
     }
 
     private OnRefresh mOnDelete = new OnRefresh() {
-
 	@Override
 	public void onRefresh(int pos) {
 	    removeCustomerSource(pos);
+	    MobclickAgent.onEvent(SourceActivity.this, RongStats.SOURCE_DEL);
 	}
     };
 }

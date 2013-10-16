@@ -41,10 +41,12 @@ import com.rong360.creditassitant.model.CustomerHandler;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.ModelHeler;
 import com.rong360.creditassitant.util.MyToast;
+import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.widget.ActionItem;
 import com.rong360.creditassitant.widget.QuickAction;
 import com.rong360.creditassitant.widget.QuickAction.OnActionItemClickListener;
 import com.rong360.creditassitant.widget.TitleBarCenter;
+import com.umeng.analytics.MobclickAgent;
 
 public class ChooseCustomerActivity extends BaseActionBar implements
 	OnClickListener {
@@ -82,7 +84,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
     private TextView tvHeadHint;
     private LinearLayout llHeader;
 
-    private HashMap<Customer, Boolean> mCheckMap;
+    private HashMap<String, Customer> mCheckMap;
     private Button btnSelect;
     private Button btnImport;
     private boolean mIsReturn = false;
@@ -98,7 +100,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	mSections = new ArrayList<ChooseCustomerActivity.Section>();
 	mAdapter = new CustomerAdapter(this, mSections);
 	mQueryIndex = new ArrayList<String>();
-	mCheckMap = new HashMap<Customer, Boolean>();
+	mCheckMap = new HashMap<String, Customer>();
 	super.onCreate(savedInstanceState);
 	mTitleCenter = getSupportActionBarCenter(true);
 	mTitleCenter.showLeft();
@@ -111,6 +113,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    @Override
 	    public void onClick(View v) {
 		mAction.showView(v);
+		MobclickAgent.onEvent(ChooseCustomerActivity.this, RongStats.CCM_FILTER);
 	    }
 	});
 
@@ -130,7 +133,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    String[] singel = c.split("#");
 	    for (Customer customer : mFilteredCustomers) {
 		if (ModelHeler.isTelEqual(customer.getTel(), singel[1])) {
-		    mCheckMap.put(customer, true);
+		    mCheckMap.put(customer.getTel(), customer);
 		    break;
 		}
 	    }
@@ -169,6 +172,8 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		getFilteredCustomers();
 		initCheckMap();
 		initContent();
+		
+		MobclickAgent.onEvent(ChooseCustomerActivity.this, RongStats.CCM_SECTION);
 	    }
 	});
 
@@ -181,12 +186,14 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    public void onClick(View v) {
 		setAdvanceFilter();
 		mAction.dismiss();
+		MobclickAgent.onEvent(ChooseCustomerActivity.this, RongStats.CCM_ADVANCE);
 	    }
 	});
     }
 
     private void setAdvanceFilter() {
 	Intent intent = new Intent(this, AdvancedFilterActiviy.class);
+	intent.putExtra(AdvancedFilterActiviy.EXTRA_QUERY, mQueryIndex);
 	startActivityForResult(intent, 10002);
 	mTitleCenter.setTitle("高级筛选");
 	mFilterIndex = FILTER_INDEX;
@@ -252,6 +259,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    @Override
 	    public void onClick(View v) {
 		setAdvanceFilter();
+		MobclickAgent.onEvent(ChooseCustomerActivity.this, RongStats.CCM_EXIST_FILTER);
 	    }
 	});
 
@@ -271,11 +279,11 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    return;
 		}
 		Customer c = (Customer) view.getTag();
-		if (mCheckMap.containsKey(c)) {
-		    mCheckMap.remove(c);
+		if (mCheckMap.containsKey(c.getTel())) {
+		    mCheckMap.remove(c.getTel());
 		    cbChoose.setChecked(Boolean.FALSE);
 		} else {
-		    mCheckMap.put(c, Boolean.FALSE);
+		    mCheckMap.put(c.getTel(), c);
 		    cbChoose.setChecked(Boolean.TRUE);
 		}
 		btnImport.setText(mChoose + "(" + mCheckMap.size() + ")");
@@ -605,6 +613,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
     @Override
     public void onClick(View v) {
 	if (v == btnImport) {
+	    MobclickAgent.onEvent(ChooseCustomerActivity.this, RongStats.CCM_OK);
 	    boolean isNew = getIntent().getBooleanExtra(EXTRA_NEW, true);
 	    Intent intent;
 	    if (isNew) {
@@ -617,7 +626,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		MyToast.makeText(this, "请选择客户！").show();
 		return;
 	    }
-	    for (Customer c : mCheckMap.keySet()) {
+	    for (Customer c : mCheckMap.values()) {
 		sb.append(c.getName());
 		sb.append("#");
 		sb.append(c.getTel());
@@ -637,12 +646,13 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    finish();
 
 	} else if (v == btnSelect) {
+	    MobclickAgent.onEvent(ChooseCustomerActivity.this, RongStats.CCM_ALL);
 	    if (mCheckMap.size() == mFilteredCustomers.size()) {
 		return;
 	    }
 
 	    for (Customer c : mFilteredCustomers) {
-		mCheckMap.put(c, Boolean.TRUE);
+		mCheckMap.put(c.getTel(), c);
 	    }
 
 	    btnImport.setText(mChoose + "(" + mCheckMap.size() + ")");
@@ -701,7 +711,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    final Customer c = getItem(position).customer;
 	    final CheckBox cbChoose =
 		    (CheckBox) convertView.findViewById(R.id.cb_choose);
-	    if (mCheckMap.containsKey(c)) {
+	    if (mCheckMap.containsKey(c.getTel())) {
 		cbChoose.setChecked(Boolean.TRUE);
 	    } else {
 		cbChoose.setChecked(Boolean.FALSE);
@@ -747,7 +757,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    final Customer c = getItem(position).customer;
 	    final CheckBox cbChoose =
 		    (CheckBox) convertView.findViewById(R.id.cb_choose);
-	    if (mCheckMap.containsKey(c)) {
+	    if (mCheckMap.containsKey(c.getTel())) {
 		cbChoose.setChecked(Boolean.TRUE);
 	    } else {
 		cbChoose.setChecked(Boolean.FALSE);

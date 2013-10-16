@@ -34,7 +34,7 @@ public class Customer implements JSONBean {
     public String mLastFollowComment;
     public long mAlarmTime;
 
-    public String mProgress;
+    public String mProgress="";
     public String mSource;
 
     public long mOrderNo;

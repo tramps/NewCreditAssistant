@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.util.IntentUtil;
 import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 public class CustomerLockActivity extends BaseActionBar implements OnClickListener{
     private RelativeLayout rlOpenPass;
@@ -71,9 +73,13 @@ public class CustomerLockActivity extends BaseActionBar implements OnClickListen
 	if (v == rlOpenPass) {
 	    if (mCanClose) {
 		intent.putExtra(SetPassActivity.EXTRA_MODE, SetPassActivity.MODE_CLOSE);
+		MobclickAgent.onEvent(this, RongStats.LOCK_CLOSE);
+	    } else {
+		MobclickAgent.onEvent(this, RongStats.LOCK_OPEN);
 	    }
 	} else if (v == rlModifyPass) {
 	    intent.putExtra(SetPassActivity.EXTRA_MODE, SetPassActivity.MODE_MODIFY);
+	    MobclickAgent.onEvent(this, RongStats.LOCK_MODIFY);
 	}
 	IntentUtil.startActivity(this, intent);
     }

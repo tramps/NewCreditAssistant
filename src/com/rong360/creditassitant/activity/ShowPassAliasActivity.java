@@ -59,6 +59,11 @@ public class ShowPassAliasActivity extends Activity implements OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+	if (PreferenceHelper.getHelper(this).readPreference(
+			SetPassActivity.PRE_KEY_PASS) == null) {
+	    PassCheckHelper.getInstance(this).init();
+	    finish();
+	}
 	setContentView(R.layout.activity_show_pass_key);
 	super.onCreate(savedInstanceState);
 	mEdits = new ArrayList<EditText>(4);

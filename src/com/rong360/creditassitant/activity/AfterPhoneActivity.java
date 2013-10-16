@@ -17,6 +17,8 @@ import com.rong360.creditassitant.model.LocationHelper;
 import com.rong360.creditassitant.service.PhoneNoticeService;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 public class AfterPhoneActivity extends Activity implements
 	OnClickListener {
@@ -128,11 +130,17 @@ public class AfterPhoneActivity extends Activity implements
 		    finish();
 		    return;
 		}
+		MobclickAgent.onEvent(this, RongStats.AFTER_SAVE);
+	    } else {
+		MobclickAgent.onEvent(this, RongStats.AFTER_VIEW);
 	    }
+	    
 	    
 	    Intent intent = new Intent(this, CustomerDetailActivity.class);
 	    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID, mCustomer.getId());
 	    startActivity(intent);
+	} else {
+	    MobclickAgent.onEvent(this, RongStats.AFTER_CLOSE);
 	}
 
 	finish();

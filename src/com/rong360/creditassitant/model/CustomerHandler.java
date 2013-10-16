@@ -280,7 +280,7 @@ public class CustomerHandler extends BaseDbHandler {
 	cv.put(HAS_CHECKED, customer.isHasChecked());
 	cv.put(LAST_FOLLOW_COMMENT, customer.getLastFollowComment());
 	cv.put(ALARM_TIME, customer.getAlarmTime());
-	if (customer.getProgress() == null) {
+	if (customer.getProgress() == null || customer.getProgress().length() == 0) {
 	    cv.put(PROGRESS, "潜在客户");
 	} else {
 	    cv.put(PROGRESS, customer.getProgress());

@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.R.color;
 import com.rong360.creditassitant.util.DisplayUtils;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 public class MovingBarView extends View {
     private static final String TAG = "MovingBarView";
@@ -226,6 +228,7 @@ public class MovingBarView extends View {
 	case MotionEvent.ACTION_UP:
 	case MotionEvent.ACTION_CANCEL:
 	    // float movingOffset = mLastMotionX;
+	    MobclickAgent.onEvent(getContext(), RongStats.CDT_PROGRESS);
 	    boolean shallMove = false;
 	    int recWidth = (int) mRect.width() / 3;
 	    if (mLastMotionX > mScreenWidth / 2 + recWidth) {

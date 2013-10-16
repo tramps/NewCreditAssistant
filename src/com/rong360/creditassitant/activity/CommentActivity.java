@@ -15,6 +15,8 @@ import com.rong360.creditassitant.model.Comment;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.task.PostDataTask;
 import com.rong360.creditassitant.util.GlobalValue;
+import com.rong360.creditassitant.util.RongStats;
+import com.umeng.analytics.MobclickAgent;
 
 public class CommentActivity extends BaseActionBar {
     private static final String TAG = "CommentActivity";
@@ -84,6 +86,12 @@ public class CommentActivity extends BaseActionBar {
 		CommentActivity.super.onOptionsItemSelected(item);
 	    }
 	}, 200);
+	
+	if (item.getItemId() == R.id.finish) {
+	    MobclickAgent.onEvent(CommentActivity.this, RongStats.COMMENT_OK);
+	} else {
+	    MobclickAgent.onEvent(CommentActivity.this, RongStats.COMMENT_BACK);
+	}
 	
 	return false;
 	

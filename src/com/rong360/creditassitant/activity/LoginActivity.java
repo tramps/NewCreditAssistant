@@ -1,22 +1,5 @@
 package com.rong360.creditassitant.activity;
 
-import com.rong360.creditassitant.R;
-import com.rong360.creditassitant.exception.ECode;
-import com.rong360.creditassitant.exception.JsonParseException;
-import com.rong360.creditassitant.json.JsonHelper;
-import com.rong360.creditassitant.model.result.AuthCode;
-import com.rong360.creditassitant.model.result.Result;
-import com.rong360.creditassitant.model.result.TResult;
-import com.rong360.creditassitant.task.DomainHelper;
-import com.rong360.creditassitant.task.HandleMessageTask;
-import com.rong360.creditassitant.task.TransferDataTask;
-import com.rong360.creditassitant.task.BaseHttpsManager.RequestParam;
-import com.rong360.creditassitant.task.HandleMessageTask.Callback;
-import com.rong360.creditassitant.util.AESUtil;
-import com.rong360.creditassitant.util.IntentUtil;
-import com.rong360.creditassitant.util.MyToast;
-import com.rong360.creditassitant.util.PreferenceHelper;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +9,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.exception.ECode;
+import com.rong360.creditassitant.exception.JsonParseException;
+import com.rong360.creditassitant.json.JsonHelper;
+import com.rong360.creditassitant.model.result.TResult;
+import com.rong360.creditassitant.task.BaseHttpsManager.RequestParam;
+import com.rong360.creditassitant.task.DomainHelper;
+import com.rong360.creditassitant.task.HandleMessageTask;
+import com.rong360.creditassitant.task.HandleMessageTask.Callback;
+import com.rong360.creditassitant.task.TransferDataTask;
+import com.rong360.creditassitant.util.AESUtil;
+import com.rong360.creditassitant.util.IntentUtil;
+import com.rong360.creditassitant.util.MyToast;
+import com.rong360.creditassitant.util.PreferenceHelper;
 
 public class LoginActivity extends BaseActionBar implements OnClickListener {
     protected static final String TAG = "LoginActivity";
@@ -37,9 +35,12 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
     private String mTel;
     private String mPass;
     private String mEpass;
-    
+
+    private boolean mUnLock;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+	mUnLock = getIntent().getBooleanExtra(LockActivity.EXTRA_LOCK, true);
 	super.onCreate(savedInstanceState);
 	getSupportActionBar().setTitle("融易记账号登录");
     }
@@ -51,7 +52,11 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 	btnLogin = (Button) findViewById(R.id.btnLogin);
 	btnLogin.setOnClickListener(this);
 	llForget = (LinearLayout) findViewById(R.id.llForget);
-	llForget.setOnClickListener(this);
+//	if (mUnLock) {
+	    llForget.setOnClickListener(this);
+//	} else {
+//	    llForget.setVisibility(View.GONE);
+//	}
     }
 
     @Override
@@ -72,7 +77,9 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 		params.addNameValuePair("password", mEpass);
 		params.addNameValuePair("app_type", 1);
 		params.addNameValuePair("mobile", mTel);
-		String bdAccount = PreferenceHelper.getHelper(this).readPreference(ImportPartnerActivity.PRE_KEY_BD_TEL);
+		String bdAccount =
+			PreferenceHelper.getHelper(this).readPreference(
+				ImportPartnerActivity.PRE_KEY_BD_TEL);
 		if (bdAccount == null) {
 		    bdAccount = "";
 		}
@@ -108,13 +115,14 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 			    } else if (res.mResult.getError() == 2) {
 				MyToast.makeText(LoginActivity.this, "用户被封禁")
 					.show();
-			    } else if (res.mResult.getError() == 1 || res.mResult.getError() == 110) {
-				MyToast.makeText(LoginActivity.this, "用户不存在或密码错误")
-					.show();
+			    } else if (res.mResult.getError() == 1
+				    || res.mResult.getError() == 110) {
+				MyToast.makeText(LoginActivity.this,
+					"用户不存在或密码错误").show();
 			    } else if (res.mResult.getError() == 4) {
 				MyToast.makeText(LoginActivity.this, "用户已存在")
-				.show();
-		    }
+					.show();
+			    }
 			} catch (JsonParseException e) {
 			    Log.e(TAG, e.toString());
 			}
@@ -134,7 +142,8 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 		tTask.execute();
 	    }
 	} else if (v == llForget) {
-	    Intent intent = new Intent(LoginActivity.this, ForgetPwdActivity.class);
+	    Intent intent =
+		    new Intent(LoginActivity.this, ForgetPwdActivity.class);
 	    IntentUtil.startActivity(LoginActivity.this, intent);
 	    finish();
 	}
@@ -148,6 +157,18 @@ public class LoginActivity extends BaseActionBar implements OnClickListener {
 	    MyToast.makeText(this, "请输入正确的手机号码", Toast.LENGTH_SHORT).show();
 	    etTel.requestFocus();
 	    return false;
+	}
+
+	if (!mUnLock) {
+	    String existTel =
+		    PreferenceHelper.getHelper(this).readPreference(
+			    AuthCodeActivity.EXTRA_TEL);
+	    if (!mTel.equalsIgnoreCase(existTel)) {
+		MyToast.makeText(this, "请用之前登录账号解锁",
+			Toast.LENGTH_SHORT).show();
+		etTel.requestFocus();
+		return false;
+	    }
 	}
 
 	if (mPass.length() != 6) {

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.rong360.creditassitant.activity.AlarmActivity;
-import com.rong360.creditassitant.activity.BaseActionBar;
 import com.rong360.creditassitant.activity.LockActivity;
 import com.rong360.creditassitant.util.IntentUtil;
 
