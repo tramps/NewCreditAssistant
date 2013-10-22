@@ -221,7 +221,7 @@ public class CustomerHandler extends BaseDbHandler {
 	cv.put(HOUSE, customer.getHouse());
 	cv.put(CAR, customer.getCar());
 	cv.put(CREDIT_RECORD, customer.getCreditRecord());
-	cv.put(TIME, System.currentTimeMillis());
+//	cv.put(TIME, System.currentTimeMillis());
 	cv.put(IS_FOLLOW, customer.isIsFollow());
 	cv.put(IS_FAVORED, customer.isIsFavored());
 	cv.put(HAS_CHECKED, customer.isHasChecked());

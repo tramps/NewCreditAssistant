@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,7 +13,6 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.rong360.creditassitant.util.GlobalValue;
-import com.rong360.creditassitant.util.ModelHeler;
 
 public class CommuHandler {
     private static final String TAG = CommuHandler.class.getSimpleName();
@@ -24,6 +24,8 @@ public class CommuHandler {
     private static final String DATE = "date";
     private static final String TYPE = "type";
     private static final String THREAD_ID = "thread_id";
+    private static final String READ = "read";
+    private static final String STATUS = "status";
 
     private static final Uri smsUri = Uri.parse(SMS_URI);
 
@@ -49,7 +51,7 @@ public class CommuHandler {
 	String pureTem = TelHelper.getPureTel(tel);
 	Cursor c =
 		context.getContentResolver().query(smsUri, smsProjection,
-			"address like \'%" + pureTem + "\'", null, "date desc");
+			"address like \'%" + pureTem + "%\'", null, "date desc");
 
 	Communication com;
 	while (c.moveToNext()) {
@@ -80,6 +82,22 @@ public class CommuHandler {
 	com.setContent(c.getString(c.getColumnIndex(BODY)));
 	com.setThreadId(c.getLong(c.getColumnIndex(THREAD_ID)));
 	return com;
+    }
+
+    public static void
+	    insertSms(Context context, String sms, String destination) {
+	ContentValues values = new ContentValues();
+	values.put(ADDRESS, destination);
+	values.put(DATE, System.currentTimeMillis());
+	values.put(READ, 1);
+	values.put(STATUS, 0);
+	values.put(TYPE, 2);
+	values.put(BODY, sms);
+	try {
+	    context.getContentResolver().insert(smsUri, values);
+	} catch (Exception e) {
+	    Log.e(TAG, e.toString());
+	}
     }
 
     public static ArrayList<Communication> getAllCallLog(Context context) {
@@ -116,62 +134,65 @@ public class CommuHandler {
 		com.setId(customer.getId());
 		if (customer.getProgress() != null) {
 		    com.setProgress(customer.getProgress());
-		} 
-//		else {
-//		    com.setLocation(LocationHelper.getAreaByNumber(context,
-//			    com.getTel()));
-//		}
+		}
+		// else {
+		// com.setLocation(LocationHelper.getAreaByNumber(context,
+		// com.getTel()));
+		// }
 	    } else {
 		com.setId(-1);
-//		com.setLocation(LocationHelper.getAreaByNumber(context,
-//			    com.getTel()));
+		// com.setLocation(LocationHelper.getAreaByNumber(context,
+		// com.getTel()));
 	    }
-	    
+
 	    comms.add(com);
 	}
 	c.close();
 
 	Log.i(TAG, "get all call log: " + comms.size());
-	
+
 	GlobalValue.getIns().setNeedUpdateCommunication(false);
 	return comms;
     }
-    
+
     public static void setNewAddName(String tel, Context context) {
 	GlobalValue.getIns().setNeedUpdateCommunication(true);
 	return;
-//	ArrayList<Communication> coms = GlobalValue.getIns().getAllComunication(context);
-//	Communication com = null;
-//	for (Communication c : coms) {
-//	    if (ModelHeler.isTelEqual(tel, c.getTel())) {
-//		com = c;
-//		break;
-//	    }
-//	}
-//	
-//	if (com != null) {
-//	    HashMap<String, Customer> phoneNameMap = GlobalValue.getIns().getPhoneNameMap();
-//	    Customer c = phoneNameMap.get(tel);
-//	    if (c != null) {
-//		com.setName(c.getName());
-//		if (c.getProgress() != null) {
-//		    com.setProgress(c.getProgress());
-//		}
-//		com.setId(c.getId());
-//	    }
-//	}
+	// ArrayList<Communication> coms =
+	// GlobalValue.getIns().getAllComunication(context);
+	// Communication com = null;
+	// for (Communication c : coms) {
+	// if (ModelHeler.isTelEqual(tel, c.getTel())) {
+	// com = c;
+	// break;
+	// }
+	// }
+	//
+	// if (com != null) {
+	// HashMap<String, Customer> phoneNameMap =
+	// GlobalValue.getIns().getPhoneNameMap();
+	// Customer c = phoneNameMap.get(tel);
+	// if (c != null) {
+	// com.setName(c.getName());
+	// if (c.getProgress() != null) {
+	// com.setProgress(c.getProgress());
+	// }
+	// com.setId(c.getId());
+	// }
+	// }
     }
-    
+
     public static void removeNameByPhone(String tel, Context context) {
 	GlobalValue.getIns().setNeedUpdateCommunication(true);
-//	ArrayList<Communication> coms = GlobalValue.getIns().getAllComunication(context);
-//	for (Communication c : coms) {
-//	    if (ModelHeler.isTelEqual(tel, c.getTel())) {
-//		c.setId(-1);
-//		break;
-//	    }
-//	}
-//	coms.remove(com);
+	// ArrayList<Communication> coms =
+	// GlobalValue.getIns().getAllComunication(context);
+	// for (Communication c : coms) {
+	// if (ModelHeler.isTelEqual(tel, c.getTel())) {
+	// c.setId(-1);
+	// break;
+	// }
+	// }
+	// coms.remove(com);
     }
 
     public static ArrayList<Communication> getCallLogByTel(Context context,
@@ -185,7 +206,7 @@ public class CommuHandler {
 	Communication com;
 	while (c.moveToNext()) {
 	    com = buildCallLog(c);
-//	    Log.i(TAG, tel);
+	    // Log.i(TAG, tel);
 	    comms.add(com);
 	}
 	c.close();
@@ -226,7 +247,7 @@ public class CommuHandler {
 	    c.close();
 	}
 
-//	Log.i(TAG, "contacts: " + phones.toString());
+	// Log.i(TAG, "contacts: " + phones.toString());
 	return phones;
     }
 

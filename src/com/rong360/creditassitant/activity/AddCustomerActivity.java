@@ -39,16 +39,18 @@ import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.TelHelper;
-import com.rong360.creditassitant.util.AlarmHelper;
+import com.rong360.creditassitant.service.TimingService;
 import com.rong360.creditassitant.util.CloudHelper;
+import com.rong360.creditassitant.util.ConfirmHelper;
+import com.rong360.creditassitant.util.ConfirmHelper.OnRefresh;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
-import com.rong360.creditassitant.util.GlobalValue;
-import com.rong360.creditassitant.util.PreferenceHelper;
-import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
+import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.MyToast;
 import com.rong360.creditassitant.util.NetUtil;
+import com.rong360.creditassitant.util.PreferenceHelper;
+import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.widget.MySrollview;
 import com.umeng.analytics.MobclickAgent;
 
@@ -310,7 +312,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    save2Db();
 	    // AlarmHelper.startAlarm(this, true);
 	}
-	
+
 	if (mCustomer != null) {
 	    go2Detail();
 	}
@@ -420,8 +422,8 @@ public class AddCustomerActivity extends BaseActionBar implements
 	}
 	// TODO
 	String comment = etComment.getText().toString().trim();
-	if (comment.length() > 0
-		&& !comment.equalsIgnoreCase(mCustomer.getLastFollowComment())) {
+	String olderComment = mCustomer.getLastFollowComment();
+	if (olderComment != null && olderComment.length() > 0 && !comment.equalsIgnoreCase(olderComment)) {
 	    mCustomer.setLastFollowComment(comment);
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_COMMENT);
 	    action.setContent(mCustomer.getLastFollowComment());
@@ -596,26 +598,8 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    closeImm();
 	    DialogUtil.showTimePicker(this, mTimePickListener);
 	} else if (v == btnDelete) {
-	    GlobalValue.getIns().getCustomerHandler(this)
-		    .deleteCustomer(mCustomerId);
-	    GlobalValue.getIns().removeCustomer(mCustomerId);
-	    GlobalValue.getIns().getActionHandler(this)
-		    .deleteAction(mCustomerId);
-	    CommuHandler.removeNameByPhone(mCustomer.getTel(), this);
-	    String ids =
-		    PreferenceHelper.getHelper(this).readPreference(
-			    CloudHelper.PRE_KEY_DELETE_IDS);
-	    if (ids == null || ids.length() == 0) {
-		ids = String.valueOf(mCustomerId);
-	    } else {
-		ids += ", " + mCustomerId;
-	    }
-	    PreferenceHelper.getHelper(this).writePreference(
-		    CloudHelper.PRE_KEY_DELETE_IDS, ids);
-
-	    CloudHelper.deleteCustomer(this);
-	    finish();
-	    MobclickAgent.onEvent(this, RongStats.ADD_DELETE);
+	    ConfirmHelper
+		    .showCustomerDialog(this, mCustomer.getName(), 0, mOnDelete);
 	} else if (v == ibDelete) {
 	    MobclickAgent.onEvent(this, RongStats.ADD_CANCEL);
 	    tvAlarm.setText("");
@@ -631,7 +615,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 			    ActionHandler.TYPE_CANCEL_ALARM);
 	    GlobalValue.getIns().getActionHandler(AddCustomerActivity.this)
 		    .handleAction(action);
-	    AlarmHelper.startAlarm(AddCustomerActivity.this, true);
+	    TimingService.startAlarm(AddCustomerActivity.this, true);
 
 	    ibDelete.setVisibility(View.GONE);
 	}
@@ -657,7 +641,7 @@ public class AddCustomerActivity extends BaseActionBar implements
 		GlobalValue.getIns().getCustomerHandler(getBaseContext())
 			.updateCustomer(mCustomer);
 
-		AlarmHelper.startAlarm(AddCustomerActivity.this, true);
+		TimingService.startAlarm(AddCustomerActivity.this, true);
 	    }
 
 	    Action action =
@@ -684,5 +668,33 @@ public class AddCustomerActivity extends BaseActionBar implements
 	    mCurrentEditV.setText(title);
 	}
     }
+
+    private OnRefresh mOnDelete = new OnRefresh() {
+	@Override
+	public void onRefresh(int pos) {
+	    GlobalValue.getIns().getCustomerHandler(AddCustomerActivity.this)
+		    .deleteCustomer(mCustomerId);
+	    GlobalValue.getIns().removeCustomer(mCustomerId);
+	    GlobalValue.getIns().getActionHandler(AddCustomerActivity.this)
+		    .deleteAction(mCustomerId);
+	    CommuHandler.removeNameByPhone(mCustomer.getTel(),
+		    AddCustomerActivity.this);
+	    String ids =
+		    PreferenceHelper.getHelper(AddCustomerActivity.this)
+			    .readPreference(CloudHelper.PRE_KEY_DELETE_IDS);
+	    if (ids == null || ids.length() == 0) {
+		ids = String.valueOf(mCustomerId);
+	    } else {
+		ids += ", " + mCustomerId;
+	    }
+	    PreferenceHelper.getHelper(AddCustomerActivity.this)
+		    .writePreference(CloudHelper.PRE_KEY_DELETE_IDS, ids);
+
+	    CloudHelper.deleteCustomer(AddCustomerActivity.this);
+	    finish();
+	    MobclickAgent.onEvent(AddCustomerActivity.this,
+		    RongStats.ADD_DELETE);
+	}
+    };
 
 }

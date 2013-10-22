@@ -1,6 +1,7 @@
 package com.rong360.creditassitant.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,11 +26,17 @@ public abstract class BaseActionBar extends Activity {
     private RelativeLayout mContainer;
     private TitleBarCenter mCenter;
     
-    private boolean mShallLock;
+    protected boolean mShallLock;
+    protected boolean mForceAhead;
+    
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
+	
+	mContext = getBaseContext();
+	
 	if (mContainer == null)
 	mContainer = new RelativeLayout(this);
 	View view = LayoutInflater.from(this).inflate(getLayout(), null);
@@ -47,7 +54,7 @@ public abstract class BaseActionBar extends Activity {
     @Override
     protected void onPause() {
 	super.onPause();
-	 MobclickAgent.onPause(this);
+	 MobclickAgent.onPause(mContext);
 	Log.i(TAG, "base action onPause");
 //	mShallLock = PassCheckHelper.getInstance(this).shouldLock(this);
 	if (!mShallLock) {
@@ -64,7 +71,8 @@ public abstract class BaseActionBar extends Activity {
 	super.onResume();
 	Log.i(TAG, "base action start:");
 	mShallLock = getIntent().getBooleanExtra(LockActivity.EXTRA_LOCK, true);
-	if (!mShallLock) {
+	
+	if (!mShallLock || mForceAhead) {
 	    return;
 	}
 	mShallLock = PassCheckHelper.getInstance(this).shouldLock(this);
@@ -72,7 +80,7 @@ public abstract class BaseActionBar extends Activity {
 		Intent intent = new Intent(this, ShowPassAliasActivity.class);
 		startActivity(intent);
 	}
-	 MobclickAgent.onResume(this);
+	 MobclickAgent.onResume(mContext);
     }
     
     @Override

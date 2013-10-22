@@ -177,13 +177,14 @@ public class CustomerComuDetailActivity extends BaseActionBar implements
 	} else if (v == llMsg) {
 	    MobclickAgent.onEvent(this, RongStats.CMU_MSG);
 	    String customerInfo;
+	    Intent intent = new Intent(this, SendGroupSmsActivity.class);
 	    if (mCustomer == null) {
 		customerInfo = mTel + "#" + mTel;
+		intent.putExtra(SendGroupSmsActivity.EXTRA_UNKNOWN, true);
 	    } else {
 		customerInfo = mCustomer.getName() + "#" + mCustomer.getTel();
 	    }
 	    Log.i(TAG, "customerinfo: " + customerInfo);
-	    Intent intent = new Intent(this, SendGroupSmsActivity.class);
 	    intent.putExtra(SendGroupSmsActivity.EXTRA_CUSTOMER, customerInfo);
 	    IntentUtil.startActivity(this, intent);
 	}

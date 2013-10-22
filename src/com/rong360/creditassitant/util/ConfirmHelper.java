@@ -51,6 +51,46 @@ public class ConfirmHelper {
 	dialog.setContentView(content);
     }
     
+    public static void showCustomerDialog(final Context context, final String title,
+	    final int pos, final OnRefresh cancel) {
+	final AlertDialog dialog = new AlertDialog.Builder(context).create();
+
+	View content =
+		LayoutInflater.from(context).inflate(
+			R.layout.dialog_confirm, null);
+	
+	TextView tvTitle = (TextView) content.findViewById(R.id.tvTitle);
+	TextView tvHint = (TextView) content.findViewById(R.id.tvHint);
+	
+	Button btnDelete = (Button) content.findViewById(R.id.btnDelete);
+	Button btnCancel = (Button) content.findViewById(R.id.btnCancel);
+	
+	btnDelete.setOnClickListener(new OnClickListener() {
+	    
+	    public void onClick(View v) {
+		if (cancel != null) {
+		    cancel.onRefresh(pos);
+		}
+		dialog.cancel();
+	    }
+	});
+	
+	btnCancel.setOnClickListener(new OnClickListener() {
+	    
+	    @Override
+	    public void onClick(View v) {
+		dialog.cancel();
+	    }
+	});
+	
+	tvTitle.setText("确定删除[" + title + "]？");
+	tvHint.setText("删除的客户将无法恢复");
+	
+	dialog.show();
+	dialog.setCanceledOnTouchOutside(true);
+	dialog.setContentView(content);
+    }
+    
     public static void showSafeDialog(final Context context, final OnRefresh cancel) {
 	final AlertDialog dialog = new AlertDialog.Builder(context).create();
 

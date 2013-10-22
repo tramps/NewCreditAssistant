@@ -172,8 +172,9 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		getFilteredCustomers();
 		initCheckMap();
 		initContent();
-		
-		MobclickAgent.onEvent(ChooseCustomerActivity.this, RongStats.CCM_SECTION);
+		HashMap<String, String> fitre = new HashMap<String, String>();
+		fitre.put("选择项", mFilter[mFilterIndex]);
+		MobclickAgent.onEvent(ChooseCustomerActivity.this, RongStats.CCM_SECTION, fitre);
 	    }
 	});
 
@@ -335,7 +336,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		String[] qqqs = query.split(",");
 		int index = Integer.parseInt(qqqs[0]);
 		if (index == QueryIndexer.STAR) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -355,8 +356,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.TIME) {
-		    String queryTime = qqqs[2].substring(qqqs[2].lastIndexOf("#"), qqqs[2].length() -1);
-		    head.append(queryTime).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -364,22 +364,27 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    filter.append(CustomerHandler.TIME);
 		    filter.append(">");
 		    Calendar t = Calendar.getInstance();
-		    int ix = Integer.parseInt(qqqs[1].substring(qqqs[1].length() -3, qqqs[1].length()-2));
-		    int dn = 0;
-		    if (ix == 0) {
-			dn = -1;
-		    } else if (ix == 1) {
-			dn = -3;
-		    } else if (ix == 2) {
-			dn = -6;
-		    } else if (ix == 3) {
-			dn = -12;
+		    String timeIndex = qqqs[1];
+		    int ix = 0;
+		    if (timeIndex.length() > 2) {
+			ix = Integer.parseInt(timeIndex.substring(timeIndex.length() -3, timeIndex.length()-2));
+		    } else {
+			ix = Integer.parseInt(qqqs[1]);
 		    }
-		    t.roll(Calendar.MONTH, dn);
+		    int month = t.get(Calendar.MONTH);
+		    if (ix == 0) {
+			t.set(Calendar.MONTH, month-1);
+		    } else if (ix == 1) {
+			t.set(Calendar.MONTH, month-3);
+		    } else if (ix == 2) {
+			t.set(Calendar.MONTH, month-6);
+		    } else if (ix == 3) {
+			t.set(Calendar.MONTH, month-12);
+		    }
 		    filter.append(t.getTimeInMillis());
 		    filter.append(" ");
 		} else if (index == QueryIndexer.PROGRESS) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -399,7 +404,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.SOURCE) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -419,7 +424,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.BANK) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -439,7 +444,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.CASH) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -459,7 +464,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.IDENTITY) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -479,7 +484,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.CREDIT) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -499,7 +504,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.HOUSE) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -519,7 +524,7 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.CAR) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -557,6 +562,9 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 
 	    return;
 	}
+	
+	mQueryIndex.clear();
+	mQueryHint = "";
 	String filter = mFilter[mFilterIndex];
 	if (filter.equalsIgnoreCase(TITLE_ALL)) {
 	    mFilteredCustomers.addAll(mCustomers);
@@ -583,11 +591,17 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	}
 
 	Log.i(TAG, "customer size: " + mCustomers.size());
+	Calendar now = Calendar.getInstance();
 	Calendar lastCalc = Calendar.getInstance(Locale.CHINA);
 	Customer lastCustomer = customers.get(0);
 	lastCalc.setTimeInMillis(lastCustomer.getTime());
-	mSections.add(new Section(TYPE_HEAD, CustomerManagementFragment.MONTHS[lastCalc.get(Calendar.MONTH)]
-		+ "月"));
+	if (now.get(Calendar.YEAR) == lastCalc.get(Calendar.YEAR)) {
+	    mSections.add(new Section(TYPE_HEAD, CustomerManagementFragment.MONTHS[lastCalc
+	                                                .get(Calendar.MONTH)] + "月 "));
+	} else {
+	    mSections.add(new Section(TYPE_HEAD, lastCalc.get(Calendar.YEAR) + CustomerManagementFragment.MONTHS[lastCalc
+	                                                .get(Calendar.MONTH)] + "月 ")); 
+	}
 	mSections.add(new Section(TYPE_CUSTOMER, lastCustomer));
 	Calendar nextCalc = Calendar.getInstance();
 	for (int i = 1; i < customers.size(); i++) {
@@ -732,6 +746,15 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 		    }
 		}
 	    }
+	    
+	    ImageView ivStar =
+		    (ImageView) convertView.findViewById(R.id.ivStar);
+	    if (c.isIsFavored()) {
+		ivStar.setVisibility(View.VISIBLE);
+	    } else {
+		ivStar.setVisibility(View.GONE);
+	    }
+	    
 	    return convertView;
 	}
 

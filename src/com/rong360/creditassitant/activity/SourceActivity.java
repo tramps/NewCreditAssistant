@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -133,7 +134,7 @@ public class SourceActivity extends BaseActionBar {
 
 	    TextView tvSource =
 		    (TextView) convertView.findViewById(R.id.tvSource);
-	    Button btnClose = (Button) convertView.findViewById(R.id.btnClose);
+	    ImageButton btnClose = (ImageButton) convertView.findViewById(R.id.btnClose);
 	    final String title = getItem(position);
 	    btnClose.setOnClickListener(new OnClickListener() {
 		@Override

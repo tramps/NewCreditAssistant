@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="20dp"
-        android:background="@drawable/bkg_dialog"
+        android:background="@drawable/bkg_pop_alam"
         android:gravity="center" >
 
         <TextView
@@ -36,14 +36,14 @@
             android:layout_centerHorizontal="true"
             />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/ic_close" />
+            android:background="@drawable/ic_pop_close" />
 
         <RelativeLayout
             android:layout_width="wrap_content"

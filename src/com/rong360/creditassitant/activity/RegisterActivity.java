@@ -29,7 +29,7 @@ public class RegisterActivity extends BaseActionBar implements OnClickListener {
     private Button btnLogin;
     private Button btnLoginCA;
     private Button btnLoginBD;
-    
+
     private String mTel;
     private String mPass;
 
@@ -75,16 +75,26 @@ public class RegisterActivity extends BaseActionBar implements OnClickListener {
 			    AuthCode authCode =
 				    JsonHelper.parseJSONToObject(
 					    AuthCode.class, task.getResult());
-			    if (authCode.getResult().getError()
-				    == (ECode.SUCCESS)) {
+			    if (authCode.getResult().getError() == (ECode.SUCCESS)) {
 				Intent intent =
 					new Intent(RegisterActivity.this,
 						AuthCodeActivity.class);
 				intent.putExtra(
 					AuthCodeActivity.EXTRA_AUTH_CODE,
 					authCode.getAuth_Code());
-				intent.putExtra(AuthCodeActivity.EXTRA_TEL, mTel);
-				intent.putExtra(AuthCodeActivity.EXTRA_PASS, mPass);
+				intent.putExtra(AuthCodeActivity.EXTRA_TEL,
+					mTel);
+				intent.putExtra(AuthCodeActivity.EXTRA_PASS,
+					mPass);
+				IntentUtil.startActivity(RegisterActivity.this,
+					intent);
+				finish();
+			    } else if (authCode.getResult().getError() == 4) {
+				MyToast.makeText(RegisterActivity.this, "用户已存在")
+					.show();
+				Intent intent =
+					new Intent(RegisterActivity.this,
+						LoginActivity.class);
 				IntentUtil.startActivity(RegisterActivity.this,
 					intent);
 				finish();
@@ -113,7 +123,8 @@ public class RegisterActivity extends BaseActionBar implements OnClickListener {
 	    finish();
 	} else if (v == btnLoginBD) {
 	    Intent intent = new Intent(this, ImportPartnerActivity.class);
-	    intent.putExtra(ImportPartnerActivity.EXTRA_MODE, ImportPartnerActivity.MODE_LOGIN);
+	    intent.putExtra(ImportPartnerActivity.EXTRA_MODE,
+		    ImportPartnerActivity.MODE_LOGIN);
 	    IntentUtil.startActivity(this, intent);
 	    finish();
 	}

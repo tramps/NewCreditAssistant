@@ -1,7 +1,7 @@
 package com.rong360.creditassitant.activity;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -11,15 +11,29 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.util.PreferenceHelper;
 
 public class GuideActivity extends BaseActionBar {
 
     private ViewPager vp;
     private ImageAdapter mAdapter;
 
+    private static final String PRE_KEY_FIRST = "pre_key_first";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
+	String first =
+		PreferenceHelper.getHelper(this).readPreference(PRE_KEY_FIRST);
+	if (first != null) {
+	    Intent intent = new Intent(this, MainTabHost.class);
+	    startActivity(intent);
+	    finish();
+	    return;
+	} else {
+	    PreferenceHelper.getHelper(this).writePreference(PRE_KEY_FIRST,
+		    "first");
+	}
 
 	mAdapter = new ImageAdapter(this);
 	vp.setAdapter(mAdapter);
@@ -33,13 +47,6 @@ public class GuideActivity extends BaseActionBar {
     @Override
     protected int getLayout() {
 	return R.layout.activity_guide;
-    }
-
-    @Override
-    public void onBackPressed() {
-	super.onBackPressed();
-	// setResult(RESULT_OK);
-	// finish();
     }
 
     public class ImageAdapter extends PagerAdapter {
@@ -74,7 +81,10 @@ public class GuideActivity extends BaseActionBar {
 		@Override
 		public void onClick(View v) {
 		    if (position == images.length - 1) {
-			setResult(Activity.RESULT_OK);
+			Intent intent =
+				new Intent(GuideActivity.this,
+					MainTabHost.class);
+			startActivity(intent);
 			finish();
 		    }
 		}

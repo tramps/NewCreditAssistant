@@ -2,14 +2,17 @@ package com.rong360.creditassitant.util;
 
 import java.io.IOException;
 
+import android.app.ActionBar.Tab;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.service.PhoneNoticeService;
 
 public class MPlayHelper {
     private static MediaPlayer player;
@@ -22,6 +25,11 @@ public class MPlayHelper {
     private static int mMaxVolume;
 
     public static void playSound(Context context) {
+	Log.i("AlarmHelper", "play sound");
+	if (PhoneNoticeService.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
+		|| PhoneNoticeService.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
+	    return;
+	}
 	// if (player == null || vibrator == null) {
 	AssetFileDescriptor afd =
 		context.getResources().openRawResourceFd(R.raw.sound);
@@ -32,7 +40,7 @@ public class MPlayHelper {
 	try {
 	    player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
 		    afd.getLength());
-	    player.setAudioStreamType(AudioManager.STREAM_RING);
+	    player.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
 	    player.prepare();
 	} catch (IllegalArgumentException e) {
 	    // TODO Auto-generated catch block
@@ -53,10 +61,13 @@ public class MPlayHelper {
 	    AudioManager am =
 		    (AudioManager) context
 			    .getSystemService(Context.AUDIO_SERVICE);
-	    mUserVolume = am.getStreamVolume(AudioManager.STREAM_RING);
-	    mMaxVolume = am.getStreamMaxVolume(AudioManager.STREAM_RING);
-	    am.setStreamVolume(AudioManager.STREAM_RING,
+	    mUserVolume = am.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+	    mMaxVolume = am.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
+	    am.setStreamVolume(AudioManager.STREAM_NOTIFICATION,
 		    (int) (mMaxVolume * 0.75), 0);
+	    if (mUserVolume == 0) {
+		mUserVolume = (int) (mMaxVolume * 0.5);
+	    }
 	    player.start();
 	}
 	if (vibrator != null) {
@@ -76,22 +87,22 @@ public class MPlayHelper {
 		player.release();
 	    } catch (IllegalStateException e) {
 		AudioManager am =
-			    (AudioManager) context
-				    .getSystemService(Context.AUDIO_SERVICE);
-		    am.setStreamVolume(AudioManager.STREAM_RING, 0, 0);
+			(AudioManager) context
+				.getSystemService(Context.AUDIO_SERVICE);
+		am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, 0);
 	    }
 
 	    // player.setVolume(0, 0);
 	    AudioManager am =
 		    (AudioManager) context
 			    .getSystemService(Context.AUDIO_SERVICE);
-	    am.setStreamVolume(AudioManager.STREAM_RING, mUserVolume, 0);
+	    am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, mUserVolume, 0);
 	} else {
 	    Log.i("AlarmHelper", "ring zero");
 	    AudioManager am =
 		    (AudioManager) context
 			    .getSystemService(Context.AUDIO_SERVICE);
-	    am.setStreamVolume(AudioManager.STREAM_RING, 0, 0);
+	    am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, 0);
 	}
 
 	if (vibrator != null) {

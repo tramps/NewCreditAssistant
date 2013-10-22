@@ -300,8 +300,10 @@ public class AdvancedFilterActiviy extends BaseActionBar implements
 	    // res[1] = "" + data.getIntExtra(EXTRA_RESULT_ID, -1);
 	    // res[2] = data.getStringExtra(EXTRA_RESULT_TEXT);
 	    // }
-	    mIndexer.add(mCurrentIndex);
-	    mValues.add(res[0] + "," + res[1] + "," + res[2]);
+	    if (ids.length > 0) {
+		mIndexer.add(mCurrentIndex);
+		mValues.add(res[0] + "," + res[1] + "," + res[2]);
+	    }
 	    // if (mCurrentIndex == QueryIndexer.SOURCE) {
 	    String source = res[2].replace("#", ", ");
 	    if (source.length() > 2) {

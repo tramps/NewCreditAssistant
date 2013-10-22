@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.util.MyToast;
+import com.rong360.creditassitant.util.PassCheckHelper;
 import com.rong360.creditassitant.util.PreferenceHelper;
 import com.rong360.creditassitant.util.RongStats;
 import com.umeng.analytics.MobclickAgent;
@@ -156,6 +157,7 @@ public class LockActivity extends Activity {
     protected void
 	    onActivityResult(int requestCode, int resultCode, Intent data) {
 	if (resultCode == RESULT_OK) {
+	    PassCheckHelper.clearLock();
 	    stopTiming();
 	    PreferenceHelper.getHelper(this).removePreference(
 		    SetPassActivity.PRE_KEY_PASS);

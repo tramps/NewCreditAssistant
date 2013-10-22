@@ -26,7 +26,7 @@ import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Communication;
 import com.rong360.creditassitant.model.Customer;
-import com.rong360.creditassitant.util.AlarmHelper;
+import com.rong360.creditassitant.service.TimingService;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.IntentUtil;
@@ -36,12 +36,12 @@ import com.umeng.analytics.MobclickAgent;
 
 public class AlarmActivity extends BaseActionBar implements OnClickListener {
     public static final String EXTRA_IDS = "extra_alarm_tels";
-    private static final String TAG = "AlarmActivity";
+    private static final String TAG = "AlarmHelper";
 
     private static final int LAYOUT_SINGLE = R.layout.activity_alarm_single;
     private static final int LAYOUT_MORE = R.layout.activity_alarm_more;
 
-    private Button btnClose;
+    private ImageButton btnClose;
     private Button btnView;
     private ImageButton btnSlient;
     private View parent;
@@ -63,7 +63,6 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
     private AlarmAdatper mAdapter;
 
     private Handler mHandler = new Handler();
-    
     private WakeLock mLock;
 
     // private int count = 0;
@@ -73,10 +72,28 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	mAlarmCustomers = new ArrayList<Customer>();
 	mAdapter = new AlarmAdatper(this, mAlarmCustomers);
 	setAlarm();
+
+	mForceAhead = true;
 	super.onCreate(savedInstanceState);
+	playAlarm();
 	
-	PowerManager pm = (PowerManager)getSystemService(POWER_SERVICE);
-	mLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP|PowerManager.SCREEN_BRIGHT_WAKE_LOCK,"alarm");
+	if (mLock != null) {
+	    mLock.acquire();
+	}
+	initContent();
+    }
+    
+    private void playAlarm() {
+	PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+	mLock =
+		pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP
+			| PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "alarm");
+	
+	mIsSliented = false;
+	MPlayHelper.playSound(this);
+	mHandler.removeCallbacks(mSilentThread);
+	mHandler.postDelayed(mSilentThread, MPlayHelper.MAXIMIUM_DURATION);
+	Log.i(TAG, "started alarm");
     }
 
     private void setAlarm() {
@@ -96,9 +113,9 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    mAlarmCustomers.add(c);
 	    Log.i(TAG, "new id:" + c.getId() + c.getName());
 	}
-	
+
 	if (mAlarmCustomers.size() == 0) {
-	    AlarmHelper.startAlarm(this, true);
+	    TimingService.startAlarm(this, true);
 	    finish();
 	    return;
 	}
@@ -106,14 +123,24 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	// return;
 	// }
 	// count++;
-	AlarmHelper.startAlarm(this, true);
+	TimingService.startAlarm(this, true);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
 	super.onNewIntent(intent);
+//	finish();
+//	Intent inte = new Intent(this, AlarmActivity.class);
+//	startActivity(inte);
+	playAlarm();
 	setAlarm();
+	
+	if (mLock != null) {
+	    mLock.acquire();
+	}
+	initContent();
 	Log.i(TAG, "new intent");
+	return ;
     }
 
     @Override
@@ -126,36 +153,25 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
     }
 
     @Override
-    protected void onResume() {
-	super.onResume();
-	if (mLock != null) {
-	    mLock.acquire();
-	}
-	if (!mIsSliented) {
-	    MPlayHelper.playSound(this);
-	}
-	mHandler.removeCallbacks(mSilentThread);
-	mHandler.postDelayed(mSilentThread, MPlayHelper.MAXIMIUM_DURATION);
-	Log.i(TAG, "resumed, alarm");
-	initContent();
-    }
-    
-    @Override
     protected void onDestroy() {
 	if (null != mLock) {
 	    mLock.release();
 	}
-	
-        super.onDestroy();
+
+	Log.i(TAG, "alarm pause silented");
+	MPlayHelper.silentAlarm(AlarmActivity.this);
+	super.onDestroy();
     }
-    
+
     @Override
     protected void onPause() {
-        super.onPause();
-        MPlayHelper.silentAlarm(AlarmActivity.this);
+	super.onPause();
+
     }
 
     private void initContent() {
+	setContentView(getLayout());
+	initElements();
 	if (mAlarmCustomers.size() == 1) {
 	    Customer c = mAlarmCustomers.get(0);
 	    tvTime.setText(DateUtil.getExactTime(c.getAlarmTime()));
@@ -184,7 +200,7 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 
     @Override
     protected void initElements() {
-	btnClose = (Button) findViewById(R.id.btnClose);
+	btnClose = (ImageButton) findViewById(R.id.btnClose);
 	btnView = (Button) findViewById(R.id.btnView);
 	btnSlient = (ImageButton) findViewById(R.id.btnSound);
 	parent = findViewById(R.id.pop_parent);
@@ -211,6 +227,7 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
     public void onClick(View v) {
 	if (v == btnClose) {
 	    MobclickAgent.onEvent(this, RongStats.ALARM_CLOSE);
+	    clearDisplay();
 	    finish();
 	} else if (v == btnView) {
 	    MobclickAgent.onEvent(this, RongStats.ALARM_VIEW);
@@ -225,21 +242,22 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 			MainTabHost.TAG_FOLLOW);
 	    }
 	    IntentUtil.startActivity(this, intent);
-	    clearStatus();
+//	    clearStatus();
+	    clearDisplay();
 	    finish();
 	} else if (v == btnContact) {
 	    MobclickAgent.onEvent(this, RongStats.ALARM_CTC);
 	    IntentUtil.startTel(this, mAlarmCustomers.get(0).getTel());
-	    clearStatus();
+//	    clearStatus();
+	    clearDisplay();
 	    finish();
 	} else if (v == btnSlient) {
-//	    if (mIsSliented) {
-//		return;
-//	    }
+	    // if (mIsSliented) {
+	    // return;
+	    // }
 	    MobclickAgent.onEvent(this, RongStats.ALARM_SILENT);
-	    mIsSliented = true;
 	    btnSlient.setBackgroundResource(R.drawable.ic_silented);
-	    clearDisplay();
+//	    clearDisplay();
 	} else if (v == parent) {
 	    MobclickAgent.onEvent(this, RongStats.ALARM_PARENT);
 	    // for (Customer c : mAlarmCustomers) {
@@ -250,8 +268,10 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    // finish();
 	}
 
+	mIsSliented = true;
+	clearStatus();
+	MPlayHelper.silentAlarm(AlarmActivity.this);
 	mHandler.removeCallbacks(mSilentThread);
-	mHandler.post(mSilentThread);
     }
 
     private void clearDisplay() {
@@ -263,7 +283,7 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 
     private void clearStatus() {
 	for (Customer c : mAlarmCustomers) {
-	    c.setIsDisplayed(false);
+//	    c.setIsDisplayed(false);
 	    c.setHasChecked(true);
 	    GlobalValue.getIns().getCustomerHandler(this).updateCustomer(c);
 	    GlobalValue.getIns().putCustomer(c);
@@ -274,7 +294,7 @@ public class AlarmActivity extends BaseActionBar implements OnClickListener {
 	    GlobalValue.getIns().getActionHandler(AlarmActivity.this)
 		    .handleAction(action);
 	}
-	mAlarmCustomers.clear();
+//	mAlarmCustomers.clear();
     }
 
     private class AlarmAdatper extends BaseAdapter {

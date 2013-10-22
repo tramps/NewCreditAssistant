@@ -11,14 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="45dp"
-        android:layout_marginTop="54dp"
         android:orientation="vertical"
         android:paddingBottom="45dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="64dp"
             android:background="@drawable/bkg_round"
             android:orientation="vertical" >
 
@@ -67,7 +66,7 @@
             <View
                 android:id="@+id/divider_loan"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/divider_horizontal" />
 
             <RelativeLayout
@@ -172,7 +171,7 @@
             <View
                 android:id="@+id/divider_loan"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/divider_horizontal" />
 
             <RelativeLayout
@@ -275,7 +274,7 @@
             <View
                 android:id="@+id/divider_loan_option_bank"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvBank"
                 android:background="@drawable/divider_horizontal" />
 
@@ -326,7 +325,7 @@
             <View
                 android:id="@+id/divider_loan_optional_cash"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvCash"
                 android:background="@drawable/divider_horizontal" />
 
@@ -377,7 +376,7 @@
             <View
                 android:id="@+id/divider_loan_optional_id"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvIdentity"
                 android:background="@drawable/divider_horizontal" />
 
@@ -428,7 +427,7 @@
             <View
                 android:id="@+id/divider_loan_optional_cr"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvCreditRecord"
                 android:background="@drawable/divider_horizontal" />
 
@@ -479,7 +478,7 @@
             <View
                 android:id="@+id/divider_loan_optional_house"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvHouse"
                 android:background="@drawable/divider_horizontal" />
 

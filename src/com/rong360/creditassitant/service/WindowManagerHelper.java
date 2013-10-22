@@ -30,7 +30,7 @@ public class WindowManagerHelper {
     private static final String TIME_SUFFIX = "联系过";
     private static final String NO_CONTENT = "暂无备注";
     
-    public static boolean mShallShow = true;
+    public static boolean mShallShow = false;
     
     public static DesktopLayout createDesktopLayout(Context context) {
 	if (mDesktopLayout == null) {
@@ -96,6 +96,7 @@ public class WindowManagerHelper {
 	try {
 	    createWindowManager(context).removeView(createDesktopLayout(context));
 	    Log.i(TAG, "hided:");
+	    return true;
 	} catch (Exception e) {
 	    Log.e(TAG, e.toString());
 	}

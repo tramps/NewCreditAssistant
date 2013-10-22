@@ -11,10 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="260dp"
         android:layout_gravity="center"
-        android:paddingBottom="20dp"
         android:layout_margin="20dp"
-        android:background="@drawable/bkg_dialog"
-        android:gravity="center" >
+        android:background="@drawable/bkg_pop_alam"
+        android:gravity="center"
+        android:paddingBottom="10dp" >
 
         <TextView
             android:id="@+id/tvNumber"
@@ -25,21 +25,37 @@
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/ic_close" />
+            android:background="@drawable/ic_pop_close" />
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@id/tvNumber"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/divider_dialog" />
+        
         <Button
             android:id="@+id/btnView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="25dp"
             android:background="@drawable/bkg_white"
+            android:padding="15dp"
+            android:textSize="12sp"
+            android:textColor="@color/customer_label"
             android:text="查看客户" />
 
         <ListView
@@ -47,11 +63,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/btnView"
-            android:layout_margin="15dp"
-            android:divider="@null"
-            android:layout_below="@id/tvNumber"
-            android:layout_marginTop="20dp" >
+            android:layout_below="@id/view"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="15dp"
+            android:divider="@null" >
         </ListView>
+
     </RelativeLayout>
 
     <ImageButton
@@ -59,9 +77,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:padding="12dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/ic_silent" />
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/ic_silent"
+        android:padding="12dp" />
 
 </FrameLayout>

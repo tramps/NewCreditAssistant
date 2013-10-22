@@ -14,9 +14,10 @@
 		android:layout_marginTop="8dp"
 		android:layout_width="150dp" 
 		android:layout_height="fill_parent"
-		android:paddingTop="8dp"
-		android:paddingBottom="8dp" 
+		android:paddingTop="6dp"
+		android:paddingBottom="6dp" 
 		android:gravity="center"
+		android:duplicateParentState="true"
 		android:text="Chart"
 		android:background="@drawable/bkg_pressed"
 		android:textColor="#fff"/>

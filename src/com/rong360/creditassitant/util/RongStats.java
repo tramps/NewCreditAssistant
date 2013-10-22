@@ -13,7 +13,7 @@ public class RongStats {
     public static final String CTM_SEND_SMS = "ctm_send_smg"; //群发短信
     public static final String CTM_NEW_CUSTOMER = "ctm_new_customer"; //添加客户
     public static final String CTM_DETAIL = "ctm_detail"; //点击客户列表项
-    public static final String CTM_OPEN = "ctm_open"; //点击客户列表项
+    public static final String CTM_OPEN = "ctm_open"; //点击立即开启
     public static final String CTM_CLOSE = "ctm_close";	//点击×
     public static final String CTM_FILTER = "ctm_filter"; //点击出现分组栏
     public static final String CTM_SECTION = "ctm_section"; //点击客户列表项
@@ -81,7 +81,7 @@ public class RongStats {
     public static final String SET_EPT_SD = "set_export_sd_card";//点击导出客户到SD卡
     public static final String SET_FEEDBACK = "set_feedback";//点击问题反馈
     public static final String SET_ABOUT = "set_about";//点击关于我们
-    public static final String SET_SOURCE = "set_source";
+    public static final String SET_SOURCE = "set_source"; //点击客户来源
     
     //customer safe;
     public static final String SAFE_OPEN = "safe_open";//点击开启客户保险箱
@@ -108,8 +108,8 @@ public class RongStats {
     public static final String ALARM_VIEW = "alarm_view"; //点击查看客户
     public static final String ALARM_CTC = "alarm_contact"; //点击联系客户
     public static final String ALARM_SILENT = "alarm_silent"; //点击静音按钮
-    public static final String ALARM_CLOSE = "alarm_close";
-    public static final String ALARM_PARENT = "alarm_parent";
+    public static final String ALARM_CLOSE = "alarm_close";  //关闭
+    public static final String ALARM_PARENT = "alarm_parent"; //整体
     
     //import rong360
     public static final String IMP_RONG_START = "import_rong_start"; //融360导入启动次数

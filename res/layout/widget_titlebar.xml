@@ -35,10 +35,6 @@
 	        android:layout_height="wrap_content"
 	        android:gravity="center"
 	        android:lines="1"
-	        android:shadowColor="@android:color/black"
-	        android:shadowDx="1"
-	        android:shadowDy="0"
-	        android:shadowRadius="1"
 	        android:textSize="19sp"
 	        android:textColor="@android:color/white" />
 	    

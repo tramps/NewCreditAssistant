@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
-import com.rong360.creditassitant.activity.CustomerDetailActivity;
 import com.rong360.creditassitant.widget.wheel.WheelVerticalView;
 import com.rong360.creditassitant.widget.wheel.adapter.AbstractWheelTextAdapter;
 import com.rong360.creditassitant.widget.wheel.adapter.NumericWheelAdapter;
@@ -41,6 +40,7 @@ public class DialogUtil {
 	lp.x = 0;
 	final int cMakeBottom = -1000;
 	lp.y = cMakeBottom;
+	lp.width = WindowManager.LayoutParams.MATCH_PARENT;
 	lp.gravity = Gravity.BOTTOM;
 	dlg.onWindowAttributesChanged(lp);
 	dlg.setCanceledOnTouchOutside(true);
@@ -69,7 +69,7 @@ public class DialogUtil {
 	wvHour.setViewAdapter(hourAdapter);
 
 	final NumericWheelAdapter minAdapter =
-		new NumericWheelAdapter(context, 0, 59, "%02d");
+		new NumericWheelAdapter(context, 0, 58, "%02d");
 	minAdapter.setItemResource(R.layout.wheel_text_centered);
 	minAdapter.setItemTextResource(R.id.text);
 	wvMin.setViewAdapter(minAdapter);
@@ -139,14 +139,15 @@ public class DialogUtil {
 
 	// Calendar
 	Calendar calendar;
-
+	
+	private int color;
 	/**
 	 * Constructor
 	 */
 	protected DayArrayAdapter(Context context, Calendar calendar) {
 	    super(context, R.layout.time_picker_custom_day, NO_RESOURCE);
 	    this.calendar = calendar;
-
+	    color = context.getResources().getColor(R.color.dialog);
 	    setItemTextResource(R.id.time2_monthday);
 	}
 
@@ -173,8 +174,8 @@ public class DialogUtil {
 	    TextView monthday =
 		    (TextView) view.findViewById(R.id.time2_monthday);
 	    if (day == 0) {
-		monthday.setText("Today");
-		monthday.setTextColor(0xFF0000F0);
+		monthday.setText("今天");
+		monthday.setTextColor(color);
 	    } else {
 		DateFormat format = new SimpleDateFormat("MMM dd");
 		monthday.setText(format.format(newCalendar.getTime()));
@@ -189,7 +190,7 @@ public class DialogUtil {
 	    String title = "";
 	    if (calc.get(Calendar.DAY_OF_MONTH) == Calendar.getInstance().get(
 		    Calendar.DAY_OF_MONTH)) {
-		title = "Today ";
+		title = "今天 ";
 	    } else {
 		DateFormat format = new SimpleDateFormat("MMM dd");
 		title = format.format(calc.getTime());

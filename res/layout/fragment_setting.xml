@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/btnSafe"
                 android:layout_below="@id/btnSafe"
+                android:textSize="14sp"
                 android:textColor="@color/customer_label"
                 android:text="客户保险箱" />
 
@@ -43,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/btnLock"
                 android:layout_below="@id/btnLock"
+                android:textSize="14sp"
                 android:textColor="@color/customer_label"
                 android:text="客户密码锁" />
         </RelativeLayout>
@@ -87,7 +89,7 @@
             <View
                 android:id="@+id/divider_loan_option_bank"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvBank"
                 android:background="@drawable/divider_horizontal" />
 
@@ -119,7 +121,7 @@
             <View
                 android:id="@+id/divider_loan_optional_cash"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvCash"
                 android:background="@drawable/divider_horizontal" />
 
@@ -151,7 +153,7 @@
             <View
                 android:id="@+id/divider_loan_optional_id"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvIdentity"
                 android:background="@drawable/divider_horizontal" />
 
@@ -219,7 +221,7 @@
             <View
                 android:id="@+id/divider_loan_option_bank"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvBank"
                 android:background="@drawable/divider_horizontal" />
 

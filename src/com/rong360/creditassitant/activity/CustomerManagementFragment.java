@@ -165,7 +165,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 
 	    @Override
 	    public void onItemClick(QuickAction source, int pos, int actionId) {
-		Log.i(TAG, "action id:" + actionId);
+//		Log.i(TAG, "action id:" + actionId);
 		mFilterIndex = actionId;
 		mTitleCenter.setTitle(mFilter[mFilterIndex]);
 		getFilteredCustomers();
@@ -336,10 +336,11 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    StringBuilder head = new StringBuilder();
 	    boolean isAdd = false;
 	    for (String query : mQueryIndex) {
+		Log.i(TAG, "query:" + query);
 		String[] qqqs = query.split(",");
 		int index = Integer.parseInt(qqqs[0]);
 		if (index == QueryIndexer.STAR) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -359,8 +360,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.TIME) {
-		    String queryTime = qqqs[2].substring(qqqs[2].lastIndexOf("#"), qqqs[2].length() -1);
-		    head.append(queryTime).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -368,22 +368,29 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    filter.append(CustomerHandler.TIME);
 		    filter.append(">");
 		    Calendar t = Calendar.getInstance();
-		    int ix = Integer.parseInt(qqqs[1].substring(qqqs[1].length() -3, qqqs[1].length()-2));
-		    int dn = 0;
-		    if (ix == 0) {
-			dn = -1;
-		    } else if (ix == 1) {
-			dn = -3;
-		    } else if (ix == 2) {
-			dn = -6;
-		    } else if (ix == 3) {
-			dn = -12;
+		    String timeIndex = qqqs[1];
+		    int ix = 0;
+		    if (timeIndex.length() > 2) {
+			ix = Integer.parseInt(timeIndex.substring(timeIndex.length() -3, timeIndex.length()-2));
+		    } else {
+			ix = Integer.parseInt(qqqs[1]);
 		    }
-		    t.roll(Calendar.MONTH, dn);
+//		    int dn = 0;
+		    int month = t.get(Calendar.MONTH);
+		    if (ix == 0) {
+			t.set(Calendar.MONTH, month-1);
+		    } else if (ix == 1) {
+			t.set(Calendar.MONTH, month-3);
+		    } else if (ix == 2) {
+			t.set(Calendar.MONTH, month-6);
+		    } else if (ix == 3) {
+			t.set(Calendar.MONTH, month-12);
+		    }
+		    Log.i(TAG, "before: " + t.getTimeInMillis() + " " + t.get(Calendar.MONTH));
 		    filter.append(t.getTimeInMillis());
 		    filter.append(" ");
 		} else if (index == QueryIndexer.PROGRESS) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -403,7 +410,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.SOURCE) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -423,7 +430,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.BANK) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -443,7 +450,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.CASH) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -463,7 +470,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.IDENTITY) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -483,7 +490,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.CREDIT) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -503,7 +510,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.HOUSE) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -523,7 +530,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 		    }
 		    filter.append(" ) ");
 		} else if (index == QueryIndexer.CAR) {
-		    head.append(qqqs[2].replace("#", ", ")).append(", ");
+		    head.append(qqqs[2].replace("#", ", "));
 		    if (isAdd) {
 			filter.append(" and ");
 		    }
@@ -562,6 +569,8 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    return;
 	}
 
+//	mQueryHint = "";
+	mQueryIndex.clear();
 	mCustomers = GlobalValue.getIns().getAllCustomers();
 	if (mCustomers.size() == 0) {
 	    GlobalValue.getIns().loadAllCustomerFromDb(mCustomers, mContext);
@@ -591,12 +600,18 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    return;
 	}
 
-	Log.i(TAG, "customer size: " + mCustomers.size());
+	Calendar now = Calendar.getInstance();
+//	Log.i(TAG, "customer size: " + mCustomers.size());
 	Calendar lastCalc = Calendar.getInstance(Locale.CHINA);
 	Customer lastCustomer = customers.get(0);
 	lastCalc.setTimeInMillis(lastCustomer.getTime());
-	mSections.add(new Section(TYPE_HEAD, MONTHS[lastCalc
-		.get(Calendar.MONTH)] + "月 "));
+	if (now.get(Calendar.YEAR) == lastCalc.get(Calendar.YEAR)) {
+	    mSections.add(new Section(TYPE_HEAD, MONTHS[lastCalc
+	                                                .get(Calendar.MONTH)] + "月 "));
+	} else {
+	    mSections.add(new Section(TYPE_HEAD, lastCalc.get(Calendar.YEAR) + MONTHS[lastCalc
+	                                                .get(Calendar.MONTH)] + "月 ")); 
+	}
 	mSections.add(new Section(TYPE_CUSTOMER, lastCustomer));
 	Calendar nextCalc = Calendar.getInstance();
 	for (int i = 1; i < customers.size(); i++) {
@@ -611,7 +626,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 	    mSections.add(new Section(TYPE_CUSTOMER, c));
 	}
 
-	Log.i(TAG, "sections size: " + mSections.size());
+//	Log.i(TAG, "sections size: " + mSections.size());
     }
 
     @Override
@@ -695,7 +710,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 			    new Intent(mContext, CustomerDetailActivity.class);
 		    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
 			    c.getId());
-		    Log.i(TAG, c.getId() + c.getName());
+//		    Log.i(TAG, c.getId() + c.getName());
 		    startActivity(intent);
 		}
 	    });
@@ -720,6 +735,14 @@ public class CustomerManagementFragment extends BaseFragment implements
 			break;
 		    }
 		}
+	    }
+	    
+	    ImageView ivStar =
+		    (ImageView) convertView.findViewById(R.id.ivStar);
+	    if (c.isIsFavored()) {
+		ivStar.setVisibility(View.VISIBLE);
+	    } else {
+		ivStar.setVisibility(View.GONE);
 	    }
 
 	    return convertView;
@@ -754,7 +777,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 			    new Intent(mContext, CustomerDetailActivity.class);
 		    intent.putExtra(AddCustomerActivity.EXTRA_CUSTOMER_ID,
 			    c.getId());
-		    Log.i(TAG, c.getId() + c.getName());
+//		    Log.i(TAG, c.getId() + c.getName());
 		    startActivity(intent);
 		}
 	    });

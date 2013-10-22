@@ -5,16 +5,11 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.LinearGradient;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -61,7 +56,6 @@ public class ShowPassAliasActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
 	if (PreferenceHelper.getHelper(this).readPreference(
 			SetPassActivity.PRE_KEY_PASS) == null) {
-	    PassCheckHelper.getInstance(this).init();
 	    finish();
 	}
 	setContentView(R.layout.activity_show_pass_key);
@@ -187,7 +181,9 @@ public class ShowPassAliasActivity extends Activity implements OnClickListener {
 	public void run() {
 	    if (validatePass()) {
 		finish();
+		PassCheckHelper.clearLock();
 		PassCheckHelper.getInstance(ShowPassAliasActivity.this).init();
+		
 	    } else {
 		reInput();
 	    }

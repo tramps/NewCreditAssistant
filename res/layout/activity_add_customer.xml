@@ -57,7 +57,7 @@
 	    <View 
 	        android:id="@+id/divider_necessary"
 	        android:layout_width="match_parent"
-	        android:layout_height="1dp"
+	        android:layout_height="wrap_content"
 	        android:background="@drawable/divider_section"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginBottom="10dp"
@@ -140,7 +140,7 @@
 	    <View 
 	        android:id="@+id/divider_loan"
 	        android:layout_width="match_parent"
-	        android:layout_height="1dp"
+	        android:layout_height="wrap_content"
 	        android:background="@drawable/divider_horizontal"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginBottom="10dp"
@@ -235,7 +235,7 @@
 	    <View 
 	        android:id="@+id/divider_loan"
 	        android:layout_width="match_parent"
-	        android:layout_height="1dp"
+	        android:layout_height="wrap_content"
 	        android:background="@drawable/divider_horizontal"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginBottom="10dp"
@@ -367,7 +367,7 @@
 	    <View 
 	        android:id="@+id/divider_loan_option_bank"
 	        android:layout_width="match_parent"
-	        android:layout_height="1dp"
+	        android:layout_height="wrap_content"
 	        android:background="@drawable/divider_horizontal"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginBottom="10dp"
@@ -415,7 +415,7 @@
 	       <View 
 	        android:id="@+id/divider_loan_optional_cash"
 	        android:layout_width="match_parent"
-	        android:layout_height="1dp"
+	        android:layout_height="wrap_content"
 	        android:background="@drawable/divider_horizontal"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginBottom="10dp"
@@ -463,7 +463,7 @@
 	       <View 
 	        android:id="@+id/divider_loan_optional_id"
 	        android:layout_width="match_parent"
-	        android:layout_height="1dp"
+	        android:layout_height="wrap_content"
 	        android:background="@drawable/divider_horizontal"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginBottom="10dp"
@@ -512,7 +512,7 @@
 	       <View 
 	        android:id="@+id/divider_loan_optional_cr"
 	        android:layout_width="match_parent"
-	        android:layout_height="1dp"
+	        android:layout_height="wrap_content"
 	        android:background="@drawable/divider_horizontal"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginBottom="10dp"
@@ -560,7 +560,7 @@
 	       <View 
 	        android:id="@+id/divider_loan_optional_house"
 	        android:layout_width="match_parent"
-	        android:layout_height="1dp"
+	        android:layout_height="wrap_content"
 	        android:background="@drawable/divider_horizontal"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginBottom="10dp"
@@ -612,6 +612,7 @@
 	    android:id="@+id/btnDelete"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
+	    android:layout_marginTop="25dp"
 	    android:layout_marginBottom="45dp"
 	    android:layout_gravity="center_horizontal"
 	    android:text="删除该客户"

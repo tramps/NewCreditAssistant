@@ -1,4 +1,4 @@
-package com.rong360.creditassitant.util;
+package com.rong360.creditassitant.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,15 +6,29 @@ import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.IBinder;
 import android.util.Log;
 
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.receiver.AlarmReceiver;
+import com.rong360.creditassitant.util.GlobalValue;
 
-public class AlarmHelper {
-    private static final String TAG = "AlarmHelper";
+public class TimingService extends Service {
+    @Override
+    public IBinder onBind(Intent intent) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+    
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
+    
+    private static final String TAG = "TimingService";
     
     private static Timer mTimer = new Timer();
     private static AlarmTask mTask;
@@ -60,8 +74,8 @@ public class AlarmHelper {
 		}
 	    }
 	} else {
-	    long max = c.getAlarmTime() + 60;
-	    long min = c.getAlarmTime() - 60;
+	    long max = c.getAlarmTime() + 60000;
+	    long min = c.getAlarmTime() - 60000;
 	    for (int i = 1; i < alarmCustomers.size(); i++) {
 		Customer nextCustomer = alarmCustomers.get(i);
 		if (max > nextCustomer.getAlarmTime() && min < nextCustomer.getAlarmTime()) {
@@ -139,4 +153,5 @@ public class AlarmHelper {
 //	    IntentUtil.startActivity(mContext, displya);
 	}
     }
+
 }

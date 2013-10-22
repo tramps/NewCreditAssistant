@@ -4,31 +4,34 @@
     android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:gravity="center"
+	android:layout_gravity="center"
 	android:layout_margin="20dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 	<RelativeLayout 
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:background="@android:color/black"
+	    android:background="@drawable/bkg_pop_alam"
 	   	android:layout_gravity="center"
 	   	android:gravity="center"
-	   	android:padding="15dp"
+	   	android:paddingLeft="15dp"
+	   	android:paddingBottom="15dp"
 	    >
 	    
-	    <Button 
+	    <ImageButton 
 	        android:id="@+id/btnClose"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
-	        android:background="@drawable/ic_close"
+	        android:background="@drawable/ic_pop_close"
 	        />
 	    
 	    <TextView 
 	        android:id="@+id/tvName"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="35dp"
+	        android:layout_marginTop="10dp"
 	        android:textColor="@android:color/white"
+	        android:text="sdf"
 	        android:textSize="18sp"
 	        />
 	
@@ -45,14 +48,27 @@
 	        android:layout_alignLeft="@id/tvName"
 	        android:layout_toLeftOf="@id/tvProgress"
 	        android:layout_marginTop="10dp"
+	        android:text="sdf"
+	        />
+	    
+	    <View 
+	        android:id="@+id/divider"
+	        android:layout_width="wrap_content"
+	        android:layout_height="1dp"
+	        android:background="@drawable/divider_popup"
+	        android:layout_below="@id/tvComment"
+	        android:layout_toLeftOf="@id/btnClose"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="10dp"
 	        />
 	    
 	    <TextView 
 	        android:id="@+id/tvLast"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@id/tvComment"
+	        android:layout_below="@id/divider"
 	        style="@style/cmDetail"
+	        android:text="sdf"
 	        />
 	    
 	    <Button 
@@ -60,10 +76,11 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:padding="10dp"
-	        android:layout_marginTop="15dp"
+	        android:layout_marginTop="10dp"
 	        android:background="@drawable/bkg_white"
 	        android:layout_below="@id/tvLast"
-	        android:layout_toLeftOf="@id/btnClose"
+	        android:layout_marginRight="25dp"
+	        android:layout_centerVertical="true"
 	        android:text="查看该客户"
 	        />
 
@@ -72,9 +89,10 @@
 	        style="@style/cmDetail"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_above="@+id/tvLast"
+	        android:layout_alignTop="@id/tvComment"
+	        android:text="sdf"
 	        android:layout_alignRight="@+id/btnClose"
-	        android:layout_marginRight="15dp"/>
+	        android:layout_marginRight="20dp"/>
 
 	</RelativeLayout>
 

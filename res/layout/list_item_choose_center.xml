@@ -31,6 +31,15 @@
             android:duplicateParentState="true"
             android:gravity="center"
             android:text="sdf" />
+        
+        <ImageView
+            android:id="@+id/ivStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/tvName"
+            android:background="@drawable/ic_single_star" />
 
         <TextView
             android:id="@+id/tvProgress"

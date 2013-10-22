@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.rong360.creditassitant.R;
@@ -27,7 +28,7 @@ public class AfterPhoneActivity extends Activity implements
     private String mTel;
     private Customer mCustomer;
 
-    private Button btnClose;
+    private ImageButton btnClose;
     private Button btnAction;
     private TextView tvLast;
     private TextView tvProgress;
@@ -55,7 +56,7 @@ public class AfterPhoneActivity extends Activity implements
     }
 
     protected void initElements() {
-	btnClose = (Button) findViewById(R.id.btnClose);
+	btnClose = (ImageButton) findViewById(R.id.btnClose);
 	btnAction = (Button) findViewById(R.id.btnAction);
 	btnClose.setOnClickListener(this);
 	btnAction.setOnClickListener(this);

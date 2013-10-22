@@ -1,7 +1,5 @@
 package com.rong360.creditassitant.model;
 
-import java.io.Serializable;
-
 import com.rong360.creditassitant.json.JSONBean;
 
 public class Customer implements JSONBean {

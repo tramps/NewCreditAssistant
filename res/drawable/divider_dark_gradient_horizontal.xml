@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient
-            android:startColor="#2fb7b8"
-            android:centerColor="#2fb7b8"
-            android:endColor="#2fb7b8"/>
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/dialog"/>
+</selector>

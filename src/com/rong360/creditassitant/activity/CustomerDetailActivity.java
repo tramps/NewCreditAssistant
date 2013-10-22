@@ -28,7 +28,7 @@ import com.rong360.creditassitant.model.Action;
 import com.rong360.creditassitant.model.ActionHandler;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
-import com.rong360.creditassitant.util.AlarmHelper;
+import com.rong360.creditassitant.service.TimingService;
 import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.DialogUtil;
 import com.rong360.creditassitant.util.DialogUtil.ITimePicker;
@@ -40,8 +40,8 @@ import com.rong360.creditassitant.util.PreferenceHelper;
 import com.rong360.creditassitant.util.RongStats;
 import com.rong360.creditassitant.widget.HorizontalListView;
 import com.rong360.creditassitant.widget.MovingBarView;
-import com.rong360.creditassitant.widget.TitleBarLeft;
 import com.rong360.creditassitant.widget.MovingBarView.IProgressChanged;
+import com.rong360.creditassitant.widget.TitleBarLeft;
 import com.umeng.analytics.MobclickAgent;
 
 public class CustomerDetailActivity extends BaseActionBar implements
@@ -173,8 +173,16 @@ public class CustomerDetailActivity extends BaseActionBar implements
 
 	tvName.setText(mCustomer.getName());
 	tvTel.setText(mCustomer.getTel());
-	tvLoan.setText(mCustomer.getLoan() + "万");
-	tvSource.setText(mCustomer.getSource());
+	if (mCustomer.getLoan() > 0) {
+	    tvLoan.setText(mCustomer.getLoan() + "万");
+	} else {
+	    tvLoan.setText("无金额");
+	}
+	if (mCustomer.getSource() != null) {
+	    tvSource.setText(mCustomer.getSource());
+	} else {
+	    tvSource.setText("无来源");
+	}
 	if (mCustomer.isIsFavored()) {
 	    ibStar.setBackgroundResource(R.drawable.ic_star_checked);
 	} else {
@@ -345,7 +353,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 			    ActionHandler.TYPE_CANCEL_ALARM);
 	    GlobalValue.getIns().getActionHandler(CustomerDetailActivity.this)
 		    .handleAction(action);
-	    AlarmHelper.startAlarm(CustomerDetailActivity.this, true);
+	    TimingService.startAlarm(CustomerDetailActivity.this, true);
 	    
 	    btnClose.setVisibility(View.GONE);
 	} else if (v == llTel) {
@@ -426,7 +434,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    GlobalValue.getIns().getActionHandler(CustomerDetailActivity.this)
 		    .handleAction(action);
 
-	    AlarmHelper.startAlarm(CustomerDetailActivity.this, true);
+	    TimingService.startAlarm(CustomerDetailActivity.this, true);
 
 	    MyToast.displayFeedback(CustomerDetailActivity.this,
 		    R.drawable.ic_alarm, "设置提醒", hlv);

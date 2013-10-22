@@ -11,6 +11,7 @@
         android:name="com.rong360.creditassitant.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.rong360.creditassitant.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -26,6 +27,7 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS"/>  
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -51,7 +53,6 @@
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -63,6 +64,7 @@
         </activity>
         <activity
             android:name=".activity.GuideActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -108,12 +110,8 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.ShowPassActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateAlwaysVisible" >
-        </activity>
-        <activity
             android:name=".activity.ShowPassAliasActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -184,7 +182,14 @@
             android:name=".activity.AlarmActivity"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"
-            android:taskAffinity=""
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.Translucent" >
+        </activity>
+        <activity
+            android:name=".activity.AlarmMoreActivity"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.Translucent" >
         </activity>
         <activity
@@ -204,6 +209,11 @@
 
         <service
             android:name=".service.PhoneNoticeService"
+            android:enabled="true" >
+        </service>
+        
+        <service
+            android:name=".service.TimingService"
             android:enabled="true" >
         </service>
 

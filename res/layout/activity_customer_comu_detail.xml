@@ -32,7 +32,6 @@
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:layout_marginTop="12dp"
-    	    android:padding="1dp"
     	    android:background="@drawable/bkg_single_round"
     	    >
     	    <TableRow 
@@ -54,6 +53,7 @@
     	                android:layout_height="wrap_content"
     	                android:background="@drawable/ic_tel"
     	                android:duplicateParentState="true"
+    	                android:layout_marginTop="4dp"
     	                android:layout_gravity="center"
     	                />
     	            <TextView 
@@ -61,8 +61,8 @@
     	                android:layout_height="wrap_content"
     	                android:layout_gravity="center"
     	                android:text="电话"
-    	                style="@style/CustomerDetailLoan"
-                        android:layout_marginTop="4dp"
+    	                style="@style/Login"
+                        android:layout_marginTop="2dp"
     	                />
     	            
     	        </LinearLayout>
@@ -78,6 +78,8 @@
     	            android:layout_width="0dp"
     	            android:layout_height="match_parent"
     	            android:layout_weight="1"
+    	            android:layout_marginTop="1dp"
+    	            android:layout_marginBottom="1dp"
     	            android:background="@drawable/bkg_section"
     	            android:descendantFocusability="blocksDescendants"
     	            android:layout_gravity="center"
@@ -89,6 +91,7 @@
     	                android:layout_height="wrap_content"
     	                android:background="@drawable/ic_msg"
     	                android:duplicateParentState="true"
+    	                android:layout_marginTop="4dp"
     	                android:layout_gravity="center"
     	                />
     	            <TextView 
@@ -96,8 +99,8 @@
     	                android:layout_height="wrap_content"
     	                android:layout_gravity="center"
     	                android:text="短信"
-    	                style="@style/CustomerDetailLoan"
-                        android:layout_marginTop="3dp"
+    	                style="@style/Login"
+                        android:layout_marginTop="2dp"
     	                />
     	            
     	        </LinearLayout>
@@ -125,6 +128,7 @@
     	                android:layout_width="wrap_content"
     	                android:layout_height="wrap_content"
     	                android:background="@drawable/ic_add_customer"
+    	                android:layout_marginTop="4dp"
     	                android:layout_gravity="center"
     	                />
     	            <TextView 
@@ -133,8 +137,8 @@
     	                android:layout_height="wrap_content"
     	                android:layout_gravity="center"
     	                android:text="添加客户"
-    	                style="@style/CustomerDetailLoan"
-                        android:layout_marginTop="5dp"
+    	                style="@style/Login"
+                        android:layout_marginTop="2dp"
     	                />
     	            
     	        </LinearLayout>

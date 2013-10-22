@@ -2,52 +2,88 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:orientation="vertical" >
-    
-    <LinearLayout 
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bkg_single_round"
         android:layout_marginTop="64dp"
-        android:orientation="vertical"
         android:gravity="center_vertical"
-        >
-        <LinearLayout 
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/llHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="已自动生成融易记账号   "
+                    android:textColor="@color/customer_content"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/telHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="23423"
+                    android:textColor="#ff4444"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="请设置密码"
+                android:textColor="@color/customer_content"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            >
-            <EditText 
+            android:layout_marginRight="1dp"
+            android:background="@drawable/bkg_single_round"
+            android:gravity="center_vertical" >
+
+            <EditText
                 android:id="@+id/etPass"
+                style="@style/Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:background="@android:color/white"
                 android:drawableLeft="@drawable/ic_pinch"
                 android:drawablePadding="10dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:hint="请输入新密码"
                 android:inputType="phone"
                 android:maxLength="6"
-                style="@style/Login"
-                android:background="@android:color/white"
-                />
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp" />
         </LinearLayout>
-        
     </LinearLayout>
-    
-    <Button 
+
+    <Button
         android:id="@+id/btnOk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bkg_green"
         android:layout_marginTop="15dp"
-        android:text="确定"
+        android:background="@drawable/bkg_green"
         android:padding="10dp"
-        />
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        android:text="确定" />
 
 </LinearLayout>

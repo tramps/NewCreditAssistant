@@ -102,12 +102,12 @@ public class ChooseOptionActivity extends BaseActionBar {
 		    helper.readPreference(AddSourceActivity.PRE_KEY_SOURCES);
 	    if (source != null && source.length() > 0) {
 		String[] sources = source.split(";");
-		mItems = new String[sources.length + 2];
+		mItems = new String[sources.length + 1];
 		mItems[0] = "自有客户";
-		mItems[1] = "融360导入客户";
+//		mItems[1] = "融360导入客户";
 		for (int i = 0; i < sources.length; i++) {
 		    if (sources[i] != null) {
-			mItems[i + 2] = sources[i];
+			mItems[i + 1] = sources[i];
 		    } else {
 			break;
 		    }
@@ -118,7 +118,7 @@ public class ChooseOptionActivity extends BaseActionBar {
 		    }
 		}
 	    } else {
-		mItems = new String[] { "自有客户", "融360导入客户" };
+		mItems = new String[] { "自有客户"};
 		for (int i = 0; i < mItems.length; i++) {
 		    if (mItems[i].equalsIgnoreCase(current)) {
 			mSelectedIndex = i;

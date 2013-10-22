@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
+import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.HistoryMsg;
 import com.rong360.creditassitant.model.HistoryMsgHandler;
 import com.rong360.creditassitant.util.GlobalValue;
@@ -28,6 +29,7 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 	OnClickListener {
     private static final String TAG = "SendGroupSmsActivity";
     public static final String EXTRA_CUSTOMER = "extra_customer";
+    public static final String EXTRA_UNKNOWN = "extra_unknown";
 
     private TextView tvPeaple;
     private Button btnAdd;
@@ -44,6 +46,7 @@ public class SendGroupSmsActivity extends BaseActionBar implements
     private String mHistoryMsg;
 
     private HistoryMsgHandler mHandler;
+    private String mUnknown = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,25 +55,42 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 	setReciver(getIntent());
 
 	mHandler = new HistoryMsgHandler(this);
-	mFilterIndex = getIntent().getIntExtra(ChooseCustomerActivity.EXTRA_INDEX, 0);
-	mQueryIndex = getIntent().getStringArrayListExtra(AdvancedFilterActiviy.EXTRA_QUERY);
-	Log.i(TAG, "mquery size: " + (mQueryIndex == null? 0 : mQueryIndex.size()));
+	mFilterIndex =
+		getIntent().getIntExtra(ChooseCustomerActivity.EXTRA_INDEX, 0);
+	mQueryIndex =
+		getIntent().getStringArrayListExtra(
+			AdvancedFilterActiviy.EXTRA_QUERY);
+	Log.i(TAG,
+		"mquery size: "
+			+ (mQueryIndex == null ? 0 : mQueryIndex.size()));
     }
 
     private void closeImm() {
-   	InputMethodManager imm =
-   		(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-   	imm.hideSoftInputFromWindow(etMsg.getWindowToken(), 0);
-       }
+	InputMethodManager imm =
+		(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+	imm.hideSoftInputFromWindow(etMsg.getWindowToken(), 0);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 	closeImm();
-        return super.onOptionsItemSelected(item);
+	return super.onOptionsItemSelected(item);
     }
-    
+
     private void setReciver(Intent intent) {
+	boolean isUnknonwn = intent.getBooleanExtra(EXTRA_UNKNOWN, false);
 	mCustomerInfo = intent.getStringExtra(EXTRA_CUSTOMER);
+	if (isUnknonwn) {
+	    String[] cuses = mCustomerInfo.split("%");
+	    for (String c : cuses) {
+		String[] singel = c.split("#");
+		if (singel[0].equalsIgnoreCase(singel[1])) {
+		    mUnknown += c + "%";
+		}
+	    }
+	} else {
+	    mCustomerInfo = mUnknown + mCustomerInfo;
+	}
 	Log.i(TAG, "customerinfo: " + mCustomerInfo);
 	// Log.i(TAG, mCustomerInfo);
 	mReceiver = new ArrayList<String[]>();
@@ -186,9 +206,13 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 	} else if (requestCode == 10001) {
 	    setReciver(data);
 	    initContent();
-	    mFilterIndex = data.getIntExtra(ChooseCustomerActivity.EXTRA_INDEX, 0);
-	    mQueryIndex = data.getStringArrayListExtra(AdvancedFilterActiviy.EXTRA_QUERY);
-	    Log.i(TAG, "mquery size: " + (mQueryIndex == null? 0 : mQueryIndex.size()));
+	    mFilterIndex =
+		    data.getIntExtra(ChooseCustomerActivity.EXTRA_INDEX, 0);
+	    mQueryIndex =
+		    data.getStringArrayListExtra(AdvancedFilterActiviy.EXTRA_QUERY);
+	    Log.i(TAG,
+		    "mquery size: "
+			    + (mQueryIndex == null ? 0 : mQueryIndex.size()));
 	}
     }
 
@@ -198,17 +222,27 @@ public class SendGroupSmsActivity extends BaseActionBar implements
 	intent.putExtra(EXTRA_CUSTOMER, mCustomerInfo);
 	intent.putExtra(ChooseCustomerActivity.EXTRA_NEW, false);
 	intent.putExtra(AdvancedFilterActiviy.EXTRA_QUERY, mQueryIndex);
-	Log.i(TAG, "mquery size: " + (mQueryIndex == null? 0 : mQueryIndex.size()));
+	Log.i(TAG,
+		"mquery size: "
+			+ (mQueryIndex == null ? 0 : mQueryIndex.size()));
 	startActivityForResult(intent, 10001);
     }
 
     private void sendMsg() {
-	 SmsManager manager = SmsManager.getDefault();
-	 for (String[] re : mReceiver) {
-	 String msg = etMsg.getText().toString();
-	 ArrayList<String> dMsg = manager.divideMessage(msg);
-	 manager.sendMultipartTextMessage(re[1], null, dMsg, null, null);
-	 }
+	SmsManager manager = SmsManager.getDefault();
+	String msg = etMsg.getText().toString();
+	ArrayList<String> dMsg = manager.divideMessage(msg);
+	StringBuilder recErs = new StringBuilder();
+	for (String[] re : mReceiver) {
+	    manager.sendMultipartTextMessage(re[1], null, dMsg, null, null);
+	    recErs.append(re[1]).append(",");
+	    
+	}
+	if (recErs.length() > 1) {
+	    String dest = recErs.substring(0, recErs.length() - 1);
+	    Log.i(TAG, "des: " + dest);
+	    CommuHandler.insertSms(this, msg, dest);
+	}
 	MyToast.makeText(this, "已给" + mReceiver.size() + "人发送消息",
 		Toast.LENGTH_LONG).show();
     }

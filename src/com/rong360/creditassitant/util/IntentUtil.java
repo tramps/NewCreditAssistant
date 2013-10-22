@@ -65,7 +65,7 @@ public class IntentUtil {
 	Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tel));
 	startActivity(context, intent);
 
-//	WindowManagerHelper.mShallShow = false;
+	WindowManagerHelper.mShallShow = false;
 	
 	ArrayList<Communication> coms =
 		GlobalValue.getIns().getAllComunication(context);

@@ -14,10 +14,16 @@ public class PassCheckHelper {
     private static PassCheckHelper mhelper = null;
     private static SharedPreferences mSharePref = null;
     private static final long THRESH_HOLD = 60000;
+    
+    private static boolean isLocked = false;
 
     private PassCheckHelper(Context context) {
 	mSharePref =
 		context.getSharedPreferences("PassCheck", Context.MODE_PRIVATE);
+    }
+    
+    public static void clearLock() {
+	isLocked = false;
     }
 
     public static synchronized PassCheckHelper getInstance(Context context) {
@@ -45,7 +51,11 @@ public class PassCheckHelper {
 	Log.i(TAG, "period" + period);
 
 	if (period > THRESH_HOLD) {
-	    return true;
+	    if (isLocked) {
+		return false;
+	    } else {
+		return isLocked = true;
+	    }
 	}
 	return false;
     }

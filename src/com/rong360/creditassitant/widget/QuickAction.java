@@ -216,7 +216,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	// mRootView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
 	// LayoutParams.WRAP_CONTENT));
 
-	mRootView.measure(LayoutParams.WRAP_CONTENT, 250);
+	mRootView.measure(LayoutParams.WRAP_CONTENT, 320);
 
 	int rootHeight = mRootView.getMeasuredHeight();
 

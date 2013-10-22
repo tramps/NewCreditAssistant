@@ -4,15 +4,14 @@ import java.util.ArrayList;
 
 import android.content.Intent;
 import android.util.Log;
-
 import cn.jpush.android.api.JPushInterface;
 
 import com.rong360.creditassitant.model.CommuHandler;
 import com.rong360.creditassitant.model.Communication;
 import com.rong360.creditassitant.model.LocationHelper;
 import com.rong360.creditassitant.service.PhoneNoticeService;
+import com.rong360.creditassitant.service.TimingService;
 import com.rong360.creditassitant.task.BaseHttpsManager;
-import com.rong360.creditassitant.util.AlarmHelper;
 import com.rong360.creditassitant.util.CloudHelper;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.LocCache;
@@ -63,8 +62,10 @@ public class Application extends android.app.Application {
 
 	LocCache.getInstance().restoreCache(getApplicationContext());
 
-	AlarmHelper.startAlarm(getApplicationContext());
-
+	TimingService.startAlarm(getApplicationContext());
+	Intent timService = new Intent(getApplicationContext(), TimingService.class);
+	startService(timService);
+	
 	BaseHttpsManager.init(getApplicationContext());
 
 	removePreference();

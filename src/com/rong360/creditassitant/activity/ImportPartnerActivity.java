@@ -37,6 +37,8 @@ public class ImportPartnerActivity extends BaseActionBar implements
     private String mTel;
     private String mPass;
 
+    private int mMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -54,8 +56,8 @@ public class ImportPartnerActivity extends BaseActionBar implements
 	etPass = (EditText) findViewById(R.id.etPass);
 	btnOk = (Button) findViewById(R.id.btnLogin);
 	btnOk.setOnClickListener(this);
-	int mode = getIntent().getIntExtra(EXTRA_MODE, 0);
-	if (mode == MODE_LOGIN) {
+	mMode = getIntent().getIntExtra(EXTRA_MODE, 0);
+	if (mMode == MODE_LOGIN) {
 	    btnOk.setText("登录");
 	}
     }
@@ -106,12 +108,25 @@ public class ImportPartnerActivity extends BaseActionBar implements
 			    MyToast.makeText(ImportPartnerActivity.this,
 				    "用户被封禁").show();
 			} else if (tResult.mResult.getError() == 120) {
-			    Intent intent =
-				    new Intent(ImportPartnerActivity.this,
-					    ResetPwdActivity.class);
-			    intent.putExtra(AuthCodeActivity.EXTRA_TEL, mTel);
-			    IntentUtil.startActivity(ImportPartnerActivity.this,
-				    intent);
+			    PreferenceHelper.getHelper(
+				    ImportPartnerActivity.this)
+				    .writePreference(PRE_KEY_BD_TEL, mTel);
+			    PreferenceHelper.getHelper(
+				    ImportPartnerActivity.this)
+				    .writePreference(PRE_KEY_BD_PASS, mPass);
+
+			    if (mMode == MODE_LOGIN) {
+				Intent intent =
+					new Intent(ImportPartnerActivity.this,
+						ResetPwdActivity.class);
+				intent.putExtra(AuthCodeActivity.EXTRA_TEL,
+					mTel);
+				intent.putExtra(ResetPwdActivity.EXTRA_FIRST, true);
+				IntentUtil.startActivity(
+					ImportPartnerActivity.this, intent);
+			    } else {
+				setResult(RESULT_OK);
+			    }
 			    finish();
 			}
 		    } catch (JsonParseException e) {

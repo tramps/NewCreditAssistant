@@ -8,11 +8,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.view.View.OnSystemUiVisibilityChangeListener;
 
 import com.rong360.creditassitant.activity.AddCustomerActivity;
 import com.rong360.creditassitant.activity.AuthCodeActivity;
@@ -23,7 +21,6 @@ import com.rong360.creditassitant.exception.JsonParseException;
 import com.rong360.creditassitant.json.JsonHelper;
 import com.rong360.creditassitant.model.Action;
 import com.rong360.creditassitant.model.ActionHandler;
-import com.rong360.creditassitant.model.Contact;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
 import com.rong360.creditassitant.model.HistoryMsg;
@@ -31,17 +28,16 @@ import com.rong360.creditassitant.model.HistoryMsgHandler;
 import com.rong360.creditassitant.model.TelHelper;
 import com.rong360.creditassitant.model.result.BDCustomer;
 import com.rong360.creditassitant.model.result.CustomerModel;
-import com.rong360.creditassitant.model.result.Result;
 import com.rong360.creditassitant.model.result.SyncResult;
 import com.rong360.creditassitant.model.result.TResult;
 import com.rong360.creditassitant.service.NotificationHelper;
 import com.rong360.creditassitant.task.BaseHttpsManager.RequestParam;
 import com.rong360.creditassitant.task.DomainHelper;
 import com.rong360.creditassitant.task.HandleMessageTask;
-import com.rong360.creditassitant.task.PostDataTask;
-import com.rong360.creditassitant.task.WaitingTask;
 import com.rong360.creditassitant.task.HandleMessageTask.Callback;
+import com.rong360.creditassitant.task.PostDataTask;
 import com.rong360.creditassitant.task.TransferDataTask;
+import com.rong360.creditassitant.task.WaitingTask;
 import com.umeng.analytics.MobclickAgent;
 
 public class CloudHelper {
@@ -237,7 +233,7 @@ public class CloudHelper {
 			SyncResult res =
 				JsonHelper.parseJSONToObject(SyncResult.class,
 					task.getResult());
-			if (res.mResult.getError() == (ECode.SUCCESS)) {
+			if (res.mResult.getError() == (ECode.SUCCESS) || res.mResult.getError() == (ECode.SUCCESS)) {
 			    transfer2Customers(showNotification, res, context, onFinish);
 			    onFinish.onSuccess(res.mRes_total);
 			    MobclickAgent.onEvent(context, RongStats.IMP_RONG_SUC);
@@ -405,10 +401,10 @@ public class CloudHelper {
 		    }
 		    c.setName(name);
 		    c.setTel(mobile);
-		    
-		    c.setTime(bd.mCreate_time * 1000);
+		    long time = bd.mCreate_time;
+		    c.setTime(time * 1000);
 		    calendar.setTimeInMillis(c.getTime());
-		    Log.i(TAG, "create tiem: " + DateUtil.yyyy_MM_dd.format(calendar.getTime()));
+		    Log.i(TAG, "create tiem: " + DateUtil.yyyy_MM_dd.format(calendar.getTime()) + "  mills:" + c.getTime());
 		    
 		    c.setLoan(bd.mLoan_limit);
 		    c.setSource("融360");

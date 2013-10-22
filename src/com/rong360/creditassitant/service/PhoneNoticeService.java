@@ -38,13 +38,12 @@ public class PhoneNoticeService extends Service {
     private TeleListener mListener;
     private boolean mIsDestroyed = false;
     private long mLastChangeStateTime;
-    private int mLastCallState = -1;
+    private static int mLastCallState = -1;
 
     private boolean mIsAttached;
 
     private ShowCustomerScreenThread mThread;
     private Handler mHandler;
-    private boolean mShallShown;
     private boolean mIsOutGoing = false;
 
     public static String mLast = "";
@@ -54,7 +53,6 @@ public class PhoneNoticeService extends Service {
 	super.onCreate();
 	Log.i(TAG, "**start service**");
 	mIsAttached = false;
-	mShallShown = false;
     }
 
     // private BroadcastReceiver mTaskChangeReceiver = new BroadcastReceiver() {
@@ -81,6 +79,7 @@ public class PhoneNoticeService extends Service {
 //		Log.i(TAG, "out going" + mLastEffectiveNumber);
 		mIsOutGoing = true;
 		showCustomedScreen();
+		closePopUp(15000);
 	    }
 	}
 
@@ -89,7 +88,7 @@ public class PhoneNoticeService extends Service {
     private void showCustomedScreen() {
 	mHandler.removeCallbacks(mThread);
 	mHandler.postDelayed(mThread, 1000);
-	closePopUp(15000);
+//	closePopUp(15000);
     }
 
     @Override
@@ -105,7 +104,7 @@ public class PhoneNoticeService extends Service {
 	Log.i(TAG, "destroy service******");
     }
 
-    public int getCallState() {
+    public static int getCallState() {
 	return mLastCallState;
     }
     
@@ -188,6 +187,7 @@ public class PhoneNoticeService extends Service {
 
 	    if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK
 		    && state == TelephonyManager.CALL_STATE_IDLE) {
+		Log.i(TAG, "show");
 		closePopUp(2000);
 		if (mLastEffectiveNumber.length() == 0) {
 		    return;
@@ -195,10 +195,11 @@ public class PhoneNoticeService extends Service {
 		if (!WindowManagerHelper.mShallShow) {
 //		    Log.i(TAG, "shall show is false");
 		    WindowManagerHelper.mShallShow = true;
+		    mLastEffectiveNumber = "";
 		    return;
 		}
 		
-		mShallShown = false;
+		WindowManagerHelper.mShallShow = false;
 		// if (SystemClock.uptimeMillis() - mLastChangeStateTime >=
 		// MIN_DURATION) {
 		Log.i(TAG, "show option");
@@ -211,6 +212,7 @@ public class PhoneNoticeService extends Service {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		startActivity(intent);
+		mLastEffectiveNumber = "";
 		// } else {
 		// Log.i(TAG, "less then 1 minute");
 		// }
@@ -295,7 +297,7 @@ public class PhoneNoticeService extends Service {
 	}
 	
 	mIsAttached = WindowManagerHelper.showContent(getBaseContext(), tel);
-	mShallShown = mIsAttached;
+//	WindowManagerHelper.mShallShow = !mIsAttached;
     }
 
     private Runnable mCloseWindowRunnable = new Runnable() {
@@ -304,7 +306,7 @@ public class PhoneNoticeService extends Service {
 	    // TODO
 	    Log.i(TAG, "thread close customer" + mIsAttached);
 	    mIsAttached = WindowManagerHelper.hideContent(getBaseContext());
-	    mLastEffectiveNumber = "";
+//	    mLastEffectiveNumber = "";
 	}
     };
 
