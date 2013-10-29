@@ -2,11 +2,13 @@ package com.rong360.creditassitant.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.util.LocCache;
+import com.rong360.creditassitant.util.PreferenceHelper;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
@@ -72,7 +74,26 @@ public class MainTabHost extends BaseTabHost {
     @Override
     public void onResume() {
 	super.onResume();
+	
+	if (PreferenceHelper.getHelper(this).readPreference("shortcut") == null) {
+	    createShortCut();
+	    PreferenceHelper.getHelper(this).writePreference("shortcut", "cuted");
+	}
 	// MobclickAgent.onResume(this);
+    }
+    
+    private void createShortCut() {
+        Intent shortcutintent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");   
+        shortcutintent.putExtra("duplicate", false); 
+        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "融易记");             
+        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.ic_launcher);      
+        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon); 
+        Intent pIntent = new Intent(Intent.ACTION_MAIN);  
+        pIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        pIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        pIntent.setClassName(this, LoadingActivity.class.getName());  
+        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, pIntent);  
+        sendBroadcast(shortcutintent);
     }
 
     @Override

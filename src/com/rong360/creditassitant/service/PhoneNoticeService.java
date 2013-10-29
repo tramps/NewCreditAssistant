@@ -195,27 +195,23 @@ public class PhoneNoticeService extends Service {
 		if (!WindowManagerHelper.mShallShow) {
 //		    Log.i(TAG, "shall show is false");
 		    WindowManagerHelper.mShallShow = true;
-		    mLastEffectiveNumber = "";
-		    return;
+//		    mLastEffectiveNumber = "";
+//		    return;
+		} else {
+		    Log.i(TAG, "show option");
+			Intent intent =
+				new Intent(PhoneNoticeService.this,
+					AfterPhoneActivity.class);
+			intent.putExtra(EXTRA_CALL_NUMBER, mLastEffectiveNumber);
+			intent.putExtra(EXTRA_LAST, mLast);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			startActivity(intent);
 		}
 		
 		WindowManagerHelper.mShallShow = false;
-		// if (SystemClock.uptimeMillis() - mLastChangeStateTime >=
-		// MIN_DURATION) {
-		Log.i(TAG, "show option");
-		Intent intent =
-			new Intent(PhoneNoticeService.this,
-				AfterPhoneActivity.class);
-		intent.putExtra(EXTRA_CALL_NUMBER, mLastEffectiveNumber);
-		intent.putExtra(EXTRA_LAST, mLast);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-		startActivity(intent);
 		mLastEffectiveNumber = "";
-		// } else {
-		// Log.i(TAG, "less then 1 minute");
-		// }
 	    }
 
 	    mIncomingNumber = TelHelper.getPureTel(incomingNumber);

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -31,7 +30,6 @@ import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.util.DisplayUtils;
 import com.rong360.creditassitant.widget.FitTextView.ITitle;
 
-@TargetApi(14)
 public class TitleBarLeft extends RelativeLayout implements OnClickListener,
 	ITitle {
     private static final String TAG = TitleBarLeft.class.getSimpleName();

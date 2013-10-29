@@ -39,6 +39,7 @@ import com.rong360.creditassitant.R;
 import com.rong360.creditassitant.activity.AdvancedFilterActiviy.QueryIndexer;
 import com.rong360.creditassitant.model.Customer;
 import com.rong360.creditassitant.model.CustomerHandler;
+import com.rong360.creditassitant.util.DateUtil;
 import com.rong360.creditassitant.util.GlobalValue;
 import com.rong360.creditassitant.util.PreferenceHelper;
 import com.rong360.creditassitant.util.RongStats;
@@ -322,8 +323,8 @@ public class CustomerManagementFragment extends BaseFragment implements
 	} else {
 	    if (mQueryHint.length() > 0) {
 		tvHeadHint.setText(mQueryHint);
+		llHeader.setVisibility(View.VISIBLE);
 	    }
-	    llHeader.setVisibility(View.VISIBLE);
 	    rlOpen.setVisibility(View.GONE);
 	    rlClose.setVisibility(View.GONE);
 	}
@@ -564,6 +565,8 @@ public class CustomerManagementFragment extends BaseFragment implements
 
 	    if (head.length() > 2) {
 		mQueryHint = head.toString().substring(0, head.length() - 2);
+	    } else {
+		mQueryHint = "";
 	    }
 
 	    return;
@@ -601,7 +604,7 @@ public class CustomerManagementFragment extends BaseFragment implements
 	}
 
 	Calendar now = Calendar.getInstance();
-//	Log.i(TAG, "customer size: " + mCustomers.size());
+	Log.i(TAG, "customer size: " + mCustomers.size());
 	Calendar lastCalc = Calendar.getInstance(Locale.CHINA);
 	Customer lastCustomer = customers.get(0);
 	lastCalc.setTimeInMillis(lastCustomer.getTime());
@@ -617,16 +620,23 @@ public class CustomerManagementFragment extends BaseFragment implements
 	for (int i = 1; i < customers.size(); i++) {
 	    Customer c = customers.get(i);
 	    nextCalc.setTimeInMillis(c.getTime());
+	    Log.i(TAG, "create tiem: " + DateUtil.yyyy_MM_dd.format(nextCalc.getTime()) + "  mills:" + c.getTime());
 	    if (lastCalc.get(Calendar.MONTH) != nextCalc.get(Calendar.MONTH)) {
-		mSections.add(new Section(TYPE_HEAD, MONTHS[nextCalc
-			.get(Calendar.MONTH)] + "月 "));
-		lastCalc = nextCalc;
+		Log.i(TAG, "section" + nextCalc.get(Calendar.MONTH));
+		if (now.get(Calendar.YEAR) == nextCalc.get(Calendar.YEAR)) {
+		    mSections.add(new Section(TYPE_HEAD, MONTHS[nextCalc
+		                                                .get(Calendar.MONTH)] + "月 "));
+		} else {
+		    mSections.add(new Section(TYPE_HEAD, nextCalc.get(Calendar.YEAR) + MONTHS[nextCalc
+		                                                .get(Calendar.MONTH)] + "月 ")); 
+		}
+		lastCalc.setTimeInMillis(c.getTime());
 	    }
 
 	    mSections.add(new Section(TYPE_CUSTOMER, c));
 	}
 
-//	Log.i(TAG, "sections size: " + mSections.size());
+	Log.i(TAG, "sections size: " + mSections.size());
     }
 
     @Override

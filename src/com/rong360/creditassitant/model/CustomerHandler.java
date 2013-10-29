@@ -1,6 +1,8 @@
 package com.rong360.creditassitant.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -31,6 +33,7 @@ public class CustomerHandler extends BaseDbHandler {
 
     public static final String TIME = "time";
     public static final String ALARM_TIME = "alarm_time";
+    public static final String UPDATE_TIME = "update_time";
 
     public static final String PROGRESS = "progress";
     public static final String SOURCE = "source";
@@ -50,7 +53,7 @@ public class CustomerHandler extends BaseDbHandler {
 	    + IS_FOLLOW + " INTEGER, " + IS_FAVORED
 	    + " INTEGER, " + HAS_CHECKED + " INTEGER, " + PROGRESS + " TEXT, "
 	    + SOURCE + " TEXT, " + ORDER_NO + " TEXT, " + LAST_FOLLOW_COMMENT
-	    + " TEXT, " + ALARM_TIME + " LONG, "
+	    + " TEXT, " + ALARM_TIME + " LONG, " + UPDATE_TIME + " LONG, "
 
 	    + " UNIQUE (" + ID + ")" + "); ";
 
@@ -97,6 +100,8 @@ public class CustomerHandler extends BaseDbHandler {
 	customer.setProgress(c.getString(c.getColumnIndex(PROGRESS)));
 	customer.setSource(c.getString(c.getColumnIndex(SOURCE)));
 	customer.setOrderNo(c.getInt(c.getColumnIndex(ORDER_NO)));
+	
+	customer.setUpdateTime(c.getLong(c.getColumnIndex(UPDATE_TIME)));
 
 	return customer;
     }
@@ -127,6 +132,14 @@ public class CustomerHandler extends BaseDbHandler {
 		cuses.add(customer);
 	    }
 	}
+	
+	Collections.sort(cuses, new Comparator<Customer>() {
+
+		@Override
+		public int compare(Customer lhs, Customer rhs) {
+		    return rhs.getTime() - lhs.getTime() > 0 ? 1 : -1;
+		}
+	    });
 	
 	return cuses;
     }
@@ -221,7 +234,7 @@ public class CustomerHandler extends BaseDbHandler {
 	cv.put(HOUSE, customer.getHouse());
 	cv.put(CAR, customer.getCar());
 	cv.put(CREDIT_RECORD, customer.getCreditRecord());
-//	cv.put(TIME, System.currentTimeMillis());
+	cv.put(UPDATE_TIME, System.currentTimeMillis());
 	cv.put(IS_FOLLOW, customer.isIsFollow());
 	cv.put(IS_FAVORED, customer.isIsFavored());
 	cv.put(HAS_CHECKED, customer.isHasChecked());
@@ -231,6 +244,12 @@ public class CustomerHandler extends BaseDbHandler {
 	cv.put(SOURCE, customer.getSource());
 	cv.put(ORDER_NO, customer.getOrderNo());
 
+	if (customer.getTime() <= 0) {
+	    cv.put(TIME, System.currentTimeMillis());
+	} else {
+	    cv.put(TIME, customer.getTime());
+	}
+	
 	try {
 	    SQLiteDatabase db = mHelper.getWritableDatabase();
 	    return db.replace(TABLE_NAME, "", cv) != -1;
@@ -270,11 +289,12 @@ public class CustomerHandler extends BaseDbHandler {
 	cv.put(HOUSE, customer.getHouse());
 	cv.put(CAR, customer.getCar());
 	cv.put(CREDIT_RECORD, customer.getCreditRecord());
-	if (customer.getTime() == 0) {
+	if (customer.getTime() <= 0) {
 	    cv.put(TIME, System.currentTimeMillis());
 	} else {
 	    cv.put(TIME, customer.getTime());
 	}
+	cv.put(UPDATE_TIME, System.currentTimeMillis());
 	cv.put(IS_FOLLOW, customer.isIsFollow());
 	cv.put(IS_FAVORED, customer.isIsFavored());
 	cv.put(HAS_CHECKED, customer.isHasChecked());

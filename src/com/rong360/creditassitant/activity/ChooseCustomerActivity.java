@@ -320,8 +320,8 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	} else {
 	    if (mQueryHint.length() > 0) {
 		tvHeadHint.setText(mQueryHint);
+		llHeader.setVisibility(View.VISIBLE);
 	    }
-	    llHeader.setVisibility(View.VISIBLE);
 	}
     }
 
@@ -558,6 +558,8 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 
 	    if (head.length() > 2) {
 		mQueryHint = head.toString().substring(0, head.length() - 2);
+	    } else {
+		mQueryHint = "";
 	    }
 
 	    return;
@@ -608,11 +610,16 @@ public class ChooseCustomerActivity extends BaseActionBar implements
 	    Customer c = customers.get(i);
 	    nextCalc.setTimeInMillis(c.getTime());
 	    if (lastCalc.get(Calendar.MONTH) != nextCalc.get(Calendar.MONTH)) {
-		mSections.add(new Section(TYPE_HEAD, CustomerManagementFragment.MONTHS[nextCalc
-			.get(Calendar.MONTH)] + "月"));
-		lastCalc = nextCalc;
+		Log.i(TAG, "section" + nextCalc.get(Calendar.MONTH));
+		if (now.get(Calendar.YEAR) == nextCalc.get(Calendar.YEAR)) {
+		    mSections.add(new Section(TYPE_HEAD, CustomerManagementFragment.MONTHS[nextCalc
+		                                                .get(Calendar.MONTH)] + "月 "));
+		} else {
+		    mSections.add(new Section(TYPE_HEAD, nextCalc.get(Calendar.YEAR) + CustomerManagementFragment.MONTHS[nextCalc
+		                                                .get(Calendar.MONTH)] + "月 ")); 
+		}
+		lastCalc.setTimeInMillis(c.getTime());
 	    }
-
 	    mSections.add(new Section(TYPE_CUSTOMER, c));
 	}
 

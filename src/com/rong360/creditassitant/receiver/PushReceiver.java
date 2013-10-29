@@ -23,15 +23,16 @@ public class PushReceiver extends BroadcastReceiver {
 	Log.d(TAG, "onreceiver : " + action);
 
 	if (JPushInterface.ACTION_MESSAGE_RECEIVED.equalsIgnoreCase(action)) {
-	    Log.d(TAG, "msg: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
+//	    Log.d(TAG, "msg: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
 	    CloudHelper.syncOrder(context, true);
 	} else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equalsIgnoreCase(action)) {
 	    String msg = bundle.getString("n_title");
-	    Log.d(TAG, "msg: " + msg);
-	    int notificationId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-	    Log.d(TAG, "id: " + notificationId);
 	    if (msg != null) {
+		int notificationId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
+		Log.d(TAG, "id: " + notificationId);
 		NotificationHelper.cancelNotification(context, notificationId);
+	    } else {
+		Log.d(TAG, "msg: " + msg);
 	    }
 	    CloudHelper.syncOrder(context, true);
 	} else if (JPushInterface.ACTION_NOTIFICATION_OPENED
@@ -39,7 +40,7 @@ public class PushReceiver extends BroadcastReceiver {
 	    Log.d(TAG, "opened: ");
 	    Intent notificationIntent = new Intent(context, MainTabHost.class);
 	    notificationIntent.putExtra(MainTabHost.EXTRA_INDEX_TAG,
-		    MainTabHost.TAG_FOLLOW);
+		    MainTabHost.TAG_CUSTOMER);
 	    notificationIntent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
 	    notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 	    context.startActivity(notificationIntent);

@@ -172,7 +172,7 @@ public class ResetPwdActivity extends BaseActionBar implements OnClickListener {
 				} else if (res.mResult.getError() == 2) {
 				    MyToast.makeText(ResetPwdActivity.this, "验证码错误")
 					    .show();
-				} else if (res.mResult.getError() == 3) {
+				} else if (res.mResult.getError() == 110) {
 				    MyToast.makeText(ResetPwdActivity.this, "用户不存在")
 				    .show();
 			}

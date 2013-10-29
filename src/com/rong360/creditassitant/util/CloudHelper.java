@@ -100,7 +100,7 @@ public class CloudHelper {
 		GlobalValue.getIns().getAllCustomers();
 	ArrayList<Customer> updateCustomers = new ArrayList<Customer>();
 	for (Customer c : allCustomers) {
-	    if (c.getTime() > lastUpdateTime) {
+	    if (c.getUpdateTime() > lastUpdateTime) {
 		updateCustomers.add(c);
 	    }
 	}
@@ -136,6 +136,7 @@ public class CloudHelper {
 	    jArray.put("action", objec);
 	    Log.i(TAG, "action:" + objec.toString());
 	    Log.i(TAG, "update action size :" + updateActions.size());
+	    Log.i(TAG, objec.toString());
 	} catch (JSONException e1) {
 	    // TODO Auto-generated catch block
 	    e1.printStackTrace();
@@ -235,6 +236,7 @@ public class CloudHelper {
 					task.getResult());
 			if (res.mResult.getError() == (ECode.SUCCESS) || res.mResult.getError() == (ECode.SUCCESS)) {
 			    transfer2Customers(showNotification, res, context, onFinish);
+			    if (onFinish != null)
 			    onFinish.onSuccess(res.mRes_total);
 			    MobclickAgent.onEvent(context, RongStats.IMP_RONG_SUC);
 			    // finish();
@@ -275,6 +277,7 @@ public class CloudHelper {
 	TransferDataTask tTask =
 		new TransferDataTask(context, DomainHelper.getFullUrl(
 			DomainHelper.SUFFIX_RECOVER, params));
+	tTask.setShowProgressDialog(false);
 	tTask.setCallback(new Callback() {
 
 	    @Override
@@ -289,15 +292,16 @@ public class CloudHelper {
 				PreferenceHelper.getHelper(context);
 			Log.i(TAG, "total customer: "
 				+ res.mData.mCustomer.length);
-			save2db(res, context);
+			int count = save2db(res, context);
 			// helper.writePreference(PRE_KEY_BACK_UP,
 			// "" + System.currentTimeMillis());
+			if (count > 0) 
 			MyToast.makeText(context,
-				"已恢复" + res.mData.mCustomer.length + "个客户")
+				"已恢复" + count + "个客户")
 				.show();
 			// context.finish();
 		    } else if (res.mResult.getError() == 1) {
-			MyToast.makeText(context, "后端不可用").show();
+//			MyToast.makeText(context, "后端不可用").show();
 		    }
 		} catch (JsonParseException e) {
 		    Log.e(TAG, e.toString());
@@ -326,6 +330,7 @@ public class CloudHelper {
 			    AuthorisePartnerActivity.PRE_KEY_LAST_SYNC,
 			    "" + System.currentTimeMillis());
 		    if (showNotification) {
+			if (res.mRes_total > 0)
 			NotificationHelper.showNotification(context,
 				res.mRes_total);
 		    } else {
@@ -347,21 +352,35 @@ public class CloudHelper {
 	task.execute();
     }
 
-    protected static void save2db(CustomerModel cModel, Context context) {
+    protected static int save2db(CustomerModel cModel, Context context) {
 	CustomerHandler cHandler =
 		GlobalValue.getIns().getCustomerHandler(context);
+	HashMap<String, Customer> phoneMap =
+		GlobalValue.getIns().getPhoneNameMap();
+	int i = 0;
 	for (Customer c : cModel.mData.mCustomer) {
+	    String mobile = TelHelper.getPureTel(c.getTel());
+	    Customer cc = phoneMap.get(mobile);
+	    if (cc != null) {
+		Log.w(TAG, "bd mobile exists" + c.getName());
+		continue;
+	    }
+	    c.setTime(c.getTime() * 1000);
+	    c.setAlarmTime(0);
 	    cHandler.insertCustomer(c);
+	    i++;
 	}
 	GlobalValue.getIns().init(context);
 	ActionHandler aHandler = GlobalValue.getIns().getActionHandler(context);
 	for (Action a : cModel.mData.mAction) {
-	    aHandler.updateAction(a);
+	    aHandler.insertSameAction(a);
 	}
 	HistoryMsgHandler mHandler = new HistoryMsgHandler(context);
 	for (HistoryMsg msg : cModel.mData.mHistory_msg) {
 	    mHandler.updateSms(msg);
 	}
+	
+	return i;
     }
     
     private static class ImportTask extends WaitingTask {

@@ -69,7 +69,7 @@ public class DialogUtil {
 	wvHour.setViewAdapter(hourAdapter);
 
 	final NumericWheelAdapter minAdapter =
-		new NumericWheelAdapter(context, 0, 58, "%02d");
+		new NumericWheelAdapter(context, 0, 59, "%02d");
 	minAdapter.setItemResource(R.layout.wheel_text_centered);
 	minAdapter.setItemTextResource(R.id.text);
 	wvMin.setViewAdapter(minAdapter);

@@ -37,6 +37,16 @@ public class Customer implements JSONBean {
 
     public long mOrderNo;
     public boolean mIsImported; // type
+    
+    private long mUpdateTime;
+    
+    public long getUpdateTime() {
+   	return mUpdateTime;
+       }
+
+       public void setUpdateTime(long alarm) {
+	   mUpdateTime = alarm;
+       }
 
     public boolean IsDisplayed() {
 	return mIsDisplayed;

@@ -25,6 +25,7 @@ public class RongStats {
     //add customer;
     public static final String ADD_CANCEL = "add_cancel"; //点击取消提醒
     public static final String ADD_DELETE = "add_delete"; //点击删除
+    public static final String ADD_FIRST_DELETE = "add_first_delete"; //点击删除
     public static final String ADD_FINISH = "add_finish"; //点击完成
     
     

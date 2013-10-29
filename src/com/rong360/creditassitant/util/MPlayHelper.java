@@ -18,7 +18,7 @@ public class MPlayHelper {
     private static MediaPlayer player;
     private static Vibrator vibrator;
 
-    public static final int MAXIMIUM_DURATION = 60000;
+    public static final int MAXIMIUM_DURATION = 25000;
     private static final float volume = 0.75f;
 
     private static int mUserVolume = -1;
@@ -40,7 +40,7 @@ public class MPlayHelper {
 	try {
 	    player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
 		    afd.getLength());
-	    player.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
+	    player.setAudioStreamType(AudioManager.STREAM_ALARM);
 	    player.prepare();
 	} catch (IllegalArgumentException e) {
 	    // TODO Auto-generated catch block
@@ -61,9 +61,9 @@ public class MPlayHelper {
 	    AudioManager am =
 		    (AudioManager) context
 			    .getSystemService(Context.AUDIO_SERVICE);
-	    mUserVolume = am.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
-	    mMaxVolume = am.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
-	    am.setStreamVolume(AudioManager.STREAM_NOTIFICATION,
+	    mUserVolume = am.getStreamVolume(AudioManager.STREAM_ALARM);
+	    mMaxVolume = am.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+	    am.setStreamVolume(AudioManager.STREAM_ALARM,
 		    (int) (mMaxVolume * 0.75), 0);
 	    if (mUserVolume == 0) {
 		mUserVolume = (int) (mMaxVolume * 0.5);
@@ -89,20 +89,20 @@ public class MPlayHelper {
 		AudioManager am =
 			(AudioManager) context
 				.getSystemService(Context.AUDIO_SERVICE);
-		am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, 0);
+		am.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
 	    }
 
 	    // player.setVolume(0, 0);
 	    AudioManager am =
 		    (AudioManager) context
 			    .getSystemService(Context.AUDIO_SERVICE);
-	    am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, mUserVolume, 0);
+	    am.setStreamVolume(AudioManager.STREAM_ALARM, mUserVolume, 0);
 	} else {
 	    Log.i("AlarmHelper", "ring zero");
 	    AudioManager am =
 		    (AudioManager) context
 			    .getSystemService(Context.AUDIO_SERVICE);
-	    am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, 0);
+	    am.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
 	}
 
 	if (vibrator != null) {

@@ -19,16 +19,46 @@
 #   public *;
 #}
 
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+-verbose
+-dontwarn
+-dontskipnonpubliclibraryclassmembers
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
 -dontwarn com.umeng.**
 
 -keepattributes *Annotation*
 
+-keep interface com.rong360.creditassitant.json.JSONBean { *; }
+
+-keep class * implements com.rong360.creditassitant.json.JSONBean {
+	*;
+}
+
+-keep interface com.rong360.creditassitant.json.JSONArrayBean { *; }
+
+-keep class * implements com.rong360.creditassitant.json.JSONArrayBean {
+	*;
+}
+
 -keep class com.umeng*.** {*; }
 
--keep public class [your_pkg].R$*{
-    public static final int *;
+-keep class **.R$* {
+ *;
 }
+
+-keep class com.rong360.creditassitant.service.TimingService { *; }
+-keep class com.rong360.creditassitant.service.PhoneNoticeService { *; }
 
 -dontwarn cn.jpush.**
 -keep class cn.jpush.** { *; }
+
+-dontwarn android.support.v4.**
+-keep class android.support.v4.** { *; }
+
+-dontwarn org.apache.commons.**
+-keep class org.apache.commons.** { *; }
 

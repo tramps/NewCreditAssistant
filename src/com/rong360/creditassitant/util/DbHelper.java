@@ -17,7 +17,7 @@ import com.rong360.creditassitant.model.HistoryMsgHandler;
 
 public class DbHelper extends SQLiteOpenHelper {
     private static final String TAG = DbHelper.class.getSimpleName();
-    private static final int mVersion = 1;
+    private static final int mVersion = 2;
     private static final String mDBName = "Rong";
     private static List<TableInfo> mInfos = new ArrayList<TableInfo>();
 
@@ -38,6 +38,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	for (TableInfo info : mInfos) {
 	    try {
 		Log.i(TAG, "create table: " + info.tableName);
+//		db.execSQL("DROP TABLE IF EXISTS " + info.tableName);
 		db.execSQL(info.createSql);
 	    } catch (SQLException e) {
 		Log.w(TAG, "oncreate", e);

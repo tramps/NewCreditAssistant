@@ -423,8 +423,8 @@ public class AddCustomerActivity extends BaseActionBar implements
 	// TODO
 	String comment = etComment.getText().toString().trim();
 	String olderComment = mCustomer.getLastFollowComment();
-	if (olderComment != null && olderComment.length() > 0 && !comment.equalsIgnoreCase(olderComment)) {
-	    mCustomer.setLastFollowComment(comment);
+	mCustomer.setLastFollowComment(comment);
+	if ((mCustomerId != -1) || (olderComment != null && olderComment.length() > 0 && !comment.equalsIgnoreCase(olderComment))) {
 	    Action action = new Action(mCustomerId, ActionHandler.TYPE_COMMENT);
 	    action.setContent(mCustomer.getLastFollowComment());
 	    mActions.add(action);
@@ -600,6 +600,8 @@ public class AddCustomerActivity extends BaseActionBar implements
 	} else if (v == btnDelete) {
 	    ConfirmHelper
 		    .showCustomerDialog(this, mCustomer.getName(), 0, mOnDelete);
+	    MobclickAgent.onEvent(AddCustomerActivity.this,
+		    RongStats.ADD_DELETE);
 	} else if (v == ibDelete) {
 	    MobclickAgent.onEvent(this, RongStats.ADD_CANCEL);
 	    tvAlarm.setText("");

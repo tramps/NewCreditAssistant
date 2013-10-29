@@ -95,6 +95,9 @@ public class ImportPartnerActivity extends BaseActionBar implements
 			    PreferenceHelper.getHelper(
 				    ImportPartnerActivity.this)
 				    .writePreference(PRE_KEY_BD_PASS, mPass);
+			    if (mMode == MODE_LOGIN) {
+				MyToast.displayFeedback(ImportPartnerActivity.this, R.drawable.ic_alert, "请使用融易记账号登录");
+			    }
 			    finish();
 			    setResult(RESULT_OK);
 			} else if (tResult.mResult.getError() == 1
@@ -104,7 +107,7 @@ public class ImportPartnerActivity extends BaseActionBar implements
 			} else if (tResult.mResult.getError() == 2) {
 			    MyToast.makeText(ImportPartnerActivity.this,
 				    "用户名或密码错误").show();
-			} else if (tResult.mResult.getError() == 3) {
+			} else if (tResult.mResult.getError() == 110) {
 			    MyToast.makeText(ImportPartnerActivity.this,
 				    "用户被封禁").show();
 			} else if (tResult.mResult.getError() == 120) {

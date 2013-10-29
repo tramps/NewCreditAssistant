@@ -1,17 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:paddingBottom="15dp"
+    android:gravity="center"
     android:orientation="vertical" >
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        >
+    
+    <ImageView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_ryj"
+        android:layout_gravity="center_horizontal"
+        />
     
     <TextView 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:text="融易记V1.0"
-        android:textSize="18sp"
+        android:layout_marginTop="18dp"
+        android:text="官方网站:  www.91rongyiji.com"
+        android:textSize="12sp"
         android:textStyle="bold"
+        android:textColor="#1a5b70"
         android:layout_gravity="center_horizontal"
         />
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="信贷经理开单QQ群: 179588452"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="#1a5b70"
+        android:layout_gravity="center_horizontal"
+        />
+    </LinearLayout>
     
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="版本号:V1.0"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/customer_label"
+        />
+    
+</RelativeLayout>
 </LinearLayout>

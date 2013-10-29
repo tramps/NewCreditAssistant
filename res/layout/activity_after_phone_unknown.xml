@@ -76,7 +76,7 @@
 	        android:layout_marginRight="25dp"
 	        android:background="@drawable/bkg_white"
 	        android:layout_below="@id/tvLast"
-	        android:text="保存为联系人"
+	        android:text="保存为客戶"
 	        />
 	</RelativeLayout>
 

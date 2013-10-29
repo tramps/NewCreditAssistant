@@ -55,9 +55,9 @@ public class ActionHandler extends BaseDbHandler {
 
     private static final String TABLE_NAME = "action";
     private static final String CREATE_SQL = "CREATE TABLE " + TABLE_NAME
-	    + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT , "
-	    + CUSTOMER_ID + " INTEGER, " +  CONTENT + " TEXT, " + TIME
-	    + " LONG, " + TYPE + " INTEGER, " + " UNIQUE (" + ID + ")" + "); ";
+	    + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " + CUSTOMER_ID
+	    + " INTEGER, " + CONTENT + " TEXT, " + TIME + " LONG, " + TYPE
+	    + " INTEGER, " + " UNIQUE (" + ID + ")" + "); ";
 
     public static TableInfo TABLE_INFO = new TableInfo(TABLE_NAME, CREATE_SQL);
 
@@ -76,7 +76,8 @@ public class ActionHandler extends BaseDbHandler {
     }
 
     public ArrayList<Action> getAllActionById(int customerId) {
-	String sql = "select * from action where customer_id = ? order by time desc";
+	String sql =
+		"select * from action where customer_id = ? order by time desc";
 	ArrayList<Action> actions = new ArrayList<Action>();
 	Cursor c =
 		mHelper.getReadableDatabase().rawQuery(sql,
@@ -92,7 +93,7 @@ public class ActionHandler extends BaseDbHandler {
 
 	return actions;
     }
-    
+
     public ArrayList<Action> getUpdateActions(long updateTime) {
 	String sql = "select * from action where time > ?";
 	ArrayList<Action> actions = new ArrayList<Action>();
@@ -143,6 +144,23 @@ public class ActionHandler extends BaseDbHandler {
 	return false;
     }
 
+    public boolean insertSameAction(Action action) {
+	ContentValues cv = new ContentValues();
+	cv.put(ID, action.getId());
+	cv.put(TYPE, action.getType());
+	cv.put(CUSTOMER_ID, action.getCustomerId());
+	cv.put(CONTENT, action.getContent());
+	cv.put(TIME, action.getTime());
+	try {
+	    SQLiteDatabase db = mHelper.getWritableDatabase();
+	    return db.insert(TABLE_NAME, "", cv) != -1;
+	} catch (Exception e) {
+	    Log.w(TAG, e.toString());
+	}
+
+	return false;
+    }
+
     public boolean updateAction(Action action) {
 	ContentValues cv = new ContentValues();
 	cv.put(ID, action.getId());
@@ -166,7 +184,7 @@ public class ActionHandler extends BaseDbHandler {
 	    return null;
 	}
 	Calendar calc = Calendar.getInstance();
-//	calc.setTimeInMillis(action.getTime());
+	// calc.setTimeInMillis(action.getTime());
 	calc.set(Calendar.HOUR_OF_DAY, 0);
 	calc.set(Calendar.MINUTE, 0);
 	calc.set(Calendar.MILLISECOND, 0);
@@ -177,10 +195,10 @@ public class ActionHandler extends BaseDbHandler {
 		"select * from action where customer_id = ? and type = ? and (time > ? and time < ?)";
 	SQLiteDatabase db = mHelper.getReadableDatabase();
 	Cursor c =
-		db.rawQuery(
-			sql,
-			new String[] { String.valueOf(action.getCustomerId()), String.valueOf(type),
-				String.valueOf(small), String.valueOf(big) });
+		db.rawQuery(sql,
+			new String[] { String.valueOf(action.getCustomerId()),
+				String.valueOf(type), String.valueOf(small),
+				String.valueOf(big) });
 	if (c.moveToNext()) {
 	    return makeAction(c);
 	}

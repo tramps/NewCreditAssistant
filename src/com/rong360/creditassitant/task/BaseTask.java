@@ -144,7 +144,9 @@ public abstract class BaseTask<A, B, C> extends AsyncTask<A, B, C> {
 
     public void setLoadingMessage(String message) {
 	mMessage = message;
-	mProgressDialog.setMessage(message);
+	if (mProgressDialog != null) {
+	    mProgressDialog.setMessage(message);
+	}
     }
 
     private Context getTopParent(Activity context) {

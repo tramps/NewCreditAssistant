@@ -75,14 +75,14 @@ public class CustomerDetailActivity extends BaseActionBar implements
     private LinearLayout llQuality;
     private LinearLayout llDetail;
     private LinearLayout llHistory;
-    
+
     private ImageView flHint;
-    
+
     private TitleBarLeft mLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//	getSupportActionBar(false).setTitle("客户详情");
+	// getSupportActionBar(false).setTitle("客户详情");
 	super.onCreate(savedInstanceState);
 	mLeft = (TitleBarLeft) findViewById(R.id.title);
 	mLeft.setTitle("客户详情");
@@ -133,7 +133,8 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	@Override
 	public void onProgressChanged(int index) {
 	    if (index >= 0 && index < mState.length) {
-		MobclickAgent.onEvent(CustomerDetailActivity.this, RongStats.CDT_PGS_SUCCEED);
+		MobclickAgent.onEvent(CustomerDetailActivity.this,
+			RongStats.CDT_PGS_SUCCEED);
 		mCustomer.setProgress(mState[index]);
 		Log.i(TAG, "progress changed: " + mCustomer.getName()
 			+ mCustomer.getProgress());
@@ -195,13 +196,16 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    tvAlarm.setText(DateUtil.yyyyMMddHHmm.format(instance.getTime()));
 	} else {
 	    tvAlarm.setText("点击设置提醒");
-	    tvAlarm.setTextColor(getResources().getColor(R.color.customer_label));
+	    tvAlarm.setTextColor(getResources()
+		    .getColor(R.color.customer_label));
 	    btnClose.setVisibility(View.GONE);
 	}
 
-	if (mCustomer.getLastFollowComment() == null || mCustomer.getLastFollowComment().length() == 0) {
+	if (mCustomer.getLastFollowComment() == null
+		|| mCustomer.getLastFollowComment().length() == 0) {
 	    tvComment.setText("点击添加备注");
-	    tvComment.setTextColor(getResources().getColor(R.color.customer_label));
+	    tvComment.setTextColor(getResources().getColor(
+		    R.color.customer_label));
 	} else {
 	    tvComment.setText(mCustomer.getLastFollowComment());
 	}
@@ -209,7 +213,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	initDetail();
 
 	initAction();
-	
+
 	if (PreferenceHelper.getHelper(this).readPreference(PRE_KEY_HINT) == null) {
 	    flHint.setVisibility(View.VISIBLE);
 	} else {
@@ -217,14 +221,14 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    removeHint();
 	}
     }
-    
+
     private void removeHint() {
-//	RelativeLayout container = getContainer();
-//	View hint = container.findViewById(R.id.fl_hint);
-//	if (hint != null) {
-//	    container.removeView(hint);
-//	}
-//	flHint.setPadding(0, 200, 0, 0);
+	// RelativeLayout container = getContainer();
+	// View hint = container.findViewById(R.id.fl_hint);
+	// if (hint != null) {
+	// container.removeView(hint);
+	// }
+	// flHint.setPadding(0, 200, 0, 0);
     }
 
     private void initAction() {
@@ -316,7 +320,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	llQuality = (LinearLayout) findViewById(R.id.llQuality);
 	llDetail = (LinearLayout) findViewById(R.id.llDetail);
 	llHistory = (LinearLayout) findViewById(R.id.llHistory);
-	
+
 	flHint = (ImageView) findViewById(R.id.fl_hint);
 	flHint.setOnClickListener(this);
     }
@@ -354,7 +358,7 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    GlobalValue.getIns().getActionHandler(CustomerDetailActivity.this)
 		    .handleAction(action);
 	    TimingService.startAlarm(CustomerDetailActivity.this, true);
-	    
+
 	    btnClose.setVisibility(View.GONE);
 	} else if (v == llTel) {
 	    MobclickAgent.onEvent(this, RongStats.CDT_TEL);
@@ -387,7 +391,8 @@ public class CustomerDetailActivity extends BaseActionBar implements
 		    .updateCustomer(mCustomer);
 	} else if (flHint == v) {
 	    flHint.setVisibility(View.GONE);
-	    PreferenceHelper.getHelper(this).writePreference(PRE_KEY_HINT, "hint");
+	    PreferenceHelper.getHelper(this).writePreference(PRE_KEY_HINT,
+		    "hint");
 	    removeHint();
 	}
     }
@@ -398,19 +403,21 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	if (resultCode == RESULT_OK) {
 	    String comment =
 		    data.getStringExtra(CommentActivity.RESULT_COMMENT);
-	    if (!comment.equalsIgnoreCase(mCustomer
-			    .getLastFollowComment())) {
-		mCustomer.setLastFollowComment(comment);
-		GlobalValue.getIns().getCustomerHandler(this)
-			.updateCustomer(mCustomer);
-		GlobalValue.getIns().putCustomer(mCustomer);
+	    tvComment.setText(comment);
+		tvComment.setTextColor(getResources().getColor(
+			R.color.customer_content));
+	    String olderComment = mCustomer.getLastFollowComment();
+	    mCustomer.setLastFollowComment(comment);
+	    GlobalValue.getIns().getCustomerHandler(this)
+		    .updateCustomer(mCustomer);
+	    GlobalValue.getIns().putCustomer(mCustomer);
+	    if (olderComment == null
+		    || !comment.equalsIgnoreCase(olderComment)) {
 		Action action =
 			new Action(mCustomerId, ActionHandler.TYPE_COMMENT);
 		action.setContent(mCustomer.getLastFollowComment());
 		GlobalValue.getIns().getActionHandler(this)
 			.handleAction(action);
-		tvComment.setText(comment);
-		tvComment.setTextColor(getResources().getColor(R.color.customer_content));
 	    }
 	}
     }
@@ -420,7 +427,8 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	@Override
 	public void onTimePicked(String time, Calendar alarm) {
 	    tvAlarm.setText(time);
-	    tvAlarm.setTextColor(getResources().getColor(R.color.customer_content));
+	    tvAlarm.setTextColor(getResources().getColor(
+		    R.color.customer_content));
 	    mCustomer.setAlarmTime(alarm.getTimeInMillis());
 	    mCustomer.setHasChecked(false);
 	    mCustomer.setIsDisplayed(false);
@@ -537,14 +545,15 @@ public class CustomerDetailActivity extends BaseActionBar implements
 	    TextView tvTime = (TextView) convertView.findViewById(R.id.tvTime);
 	    TextView tvContent =
 		    (TextView) convertView.findViewById(R.id.tvContent);
-	    TextView tvDetail = (TextView) convertView.findViewById(R.id.tvDetailTime);
+	    TextView tvDetail =
+		    (TextView) convertView.findViewById(R.id.tvDetailTime);
 
 	    Action a = getItem(position);
 	    // Calendar calc = Calendar.getInstance();
 	    // calc.setTimeInMillis(a.getTime());
 	    tvTime.setText(DateUtil.getDisplayTimeForDetail(a.getTime()));
 	    tvContent.setText(a.getContent());
-//	    tvDetail.setText(DateUtil.getExactTime(a.getTime()));
+	    // tvDetail.setText(DateUtil.getExactTime(a.getTime()));
 	    return convertView;
 	}
 

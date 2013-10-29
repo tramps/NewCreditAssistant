@@ -76,7 +76,7 @@ public class CustomerSafeActivity extends BaseActionBar implements
 	    llSafeNo.setVisibility(View.GONE);
 	    
 	    ArrayList<Customer> customers = GlobalValue.getIns().getAllCustomers();
-	    if (customers.size() == 0) {
+	    if (customers.size() < 10) {
 		CloudHelper.restoreFromCloud(this);
 	    }
 	    

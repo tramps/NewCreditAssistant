@@ -18,7 +18,7 @@ public class NotificationHelper {
 			System.currentTimeMillis());
 	Intent notificationIntent = new Intent(context, MainTabHost.class);
 	notificationIntent.putExtra(MainTabHost.EXTRA_INDEX_TAG,
-		MainTabHost.TAG_FOLLOW);
+		MainTabHost.TAG_CUSTOMER);
 	notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 	PendingIntent pendingIntent =
